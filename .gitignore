@@ -10,3 +10,8 @@
 *.lai
 *.la
 *.a
+
+# Required third-parties
+
+llvm-3.0/
+build/
