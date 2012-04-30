@@ -1,5 +1,7 @@
 #!/bin/bash
 
+LLVM_CLANG_BUILD_DIR = llvm-clang-build
+
 function exit_if_error {
     if [ $1 -gt 0 ]; then
         echo "[-] $2"
@@ -9,11 +11,11 @@ function exit_if_error {
 
 ##### Check if not ran before ##########################
 
-if [ -d "llvm-3.0" ] || [ -d "build" ]; then
-    exit_if_error 1 "Try to delete 'llvm-3.0' and 'build' directories and then run 'setup.sh' again"
+if [ -d "llvm-3.0" ] || [ -d $LLVM_CLANG_BUILD_DIR  ]; then
+    exit_if_error 1 "Try to delete 'llvm-3.0' and '${LLVM_CLANG_BUILD_DIR}' directories and then run 'setup.sh' again"
 fi
 
-mkdir build
+mkdir $LLVM_CLANG_BUILD_DIR 
 
 ########################################################
 
@@ -49,7 +51,7 @@ cd ../
 
 echo "[~] Configuring llvm && clang"
 
-./configure --prefix `cd ../build/;pwd` --enable-optimized 1> /dev/null
+./configure --prefix `cd ../$LLVM_CLANG_BUILD_DIR/;pwd` --enable-optimized 1> /dev/null
 
 exit_if_error $? "Failed to configure 'llvm'"
 
