@@ -1,6 +1,6 @@
 #!/bin/bash
 
-LLVM_CLANG_BUILD_DIR = llvm-clang-build
+LLVM_CLANG_BUILD_DIR=llvm-clang-build
 
 function exit_if_error {
     if [ $1 -gt 0 ]; then
