@@ -1,5 +1,5 @@
-include_directories (${PROJECT_SOURCE_DIR}/build/include)
-link_directories (${PROJECT_SOURCE_DIR}/build/lib)
+include_directories (${PROJECT_SOURCE_DIR}/llvm-clang-build/include)
+link_directories (${PROJECT_SOURCE_DIR}/llvm-clang-build/lib)
 
 add_library (objclint SHARED objclint.cc)
 
