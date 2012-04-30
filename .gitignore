@@ -16,3 +16,4 @@
 llvm-3.0/
 build/
 llvm-clang-build/
+lib/
