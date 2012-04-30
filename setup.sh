@@ -11,8 +11,8 @@ function exit_if_error {
 
 ##### Check if not ran before ##########################
 
-if [ -d "llvm-3.0" ] || [ -d $LLVM_CLANG_BUILD_DIR  ]; then
-    exit_if_error 1 "Try to delete 'llvm-3.0' and '${LLVM_CLANG_BUILD_DIR}' directories and then run 'setup.sh' again"
+if [ -d "llvm-3.1" ] || [ -d $LLVM_CLANG_BUILD_DIR  ]; then
+    exit_if_error 1 "Try to delete 'llvm-3.1' and '${LLVM_CLANG_BUILD_DIR}' directories and then run 'setup.sh' again"
 fi
 
 mkdir $LLVM_CLANG_BUILD_DIR 
@@ -23,7 +23,7 @@ mkdir $LLVM_CLANG_BUILD_DIR
 
 echo "[~] Checking out 'llvm 3.0'"
 
-svn export http://llvm.org/svn/llvm-project/llvm/tags/RELEASE_30/final/  llvm-3.0 1> /dev/null
+svn export http://llvm.org/svn/llvm-project/llvm/tags/RELEASE_31/final/  llvm-3.1 1> /dev/null
 
 exit_if_error $? "llvm checkout error"
 
@@ -33,15 +33,15 @@ echo
 
 ##### Checkout clang 3.0 ###############################
 
-cd ./llvm-3.0/tools
+cd ./llvm-3.1/tools
 
-echo "[~] Checking out 'clang 3.0'"
+echo "[~] Checking out 'clang 3.1'"
 
-svn export http://llvm.org/svn/llvm-project/cfe/tags/RELEASE_30/final/ clang 1> /dev/null
+svn export http://llvm.org/svn/llvm-project/cfe/tags/RELEASE_31/final/ clang 1> /dev/null
 
 exit_if_error $? "clang checkout error"
 
-echo "[+] Checked out 'clang 3.0'"
+echo "[+] Checked out 'clang 3.1'"
 echo
 #######################################################
 

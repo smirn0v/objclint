@@ -5,4 +5,4 @@ if [ ! -d "build" ]; then
 fi
 
 cd build
-cmake ../ && make && make install
+cmake ../ && make VERBOSE=1 && make install
