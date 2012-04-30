@@ -1,0 +1,41 @@
+#!/usr/bin/python2.7
+
+#######################
+#
+# clang wrapper to run with objclint plugin
+# and perform code style check only 
+#
+# Author: Alexander Smirnov
+# Email: alexander@smirn0v.ru
+#######################
+
+import sys
+import os
+import string
+
+def main():
+    original = sys.argv
+    try:
+        input_file = original[original.index("-c")+1]
+    except:
+        sys.exit(0) # linker call should just succeed
+    new_argvs = ["/opt/llvm-3.0/bin/clang"]
+    supported_opts_without_params=["-I","-F","-D","-std"]
+    supported_opts_with_params=["-isysroot","-x","-iquote","-MT","-include"]
+
+    for index,value in enumerate(original):
+        for opt in supported_opts_with_params:
+            if opt == value:
+                new_argvs.append(value);
+                new_argvs.append(original[index+1])
+        for opt in supported_opts_without_params:
+            if value.find(opt)==0:
+                new_argvs.append(value)
+
+    new_argvs += ["-fblocks","-fsyntax-only", input_file]
+    # plugin settings must be first
+    new_argvs[1:1] = ["-cc1","-load","/opt/llvm-3.0/lib/libobjclint.dylib","-plugin","objclint"]
+    os.execv(new_argvs[0],new_argvs)
+
+if __name__ == "__main__":
+    main()
