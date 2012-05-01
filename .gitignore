@@ -13,7 +13,7 @@
 
 # Required third-parties
 
-llvm-3.0/
+llvm-3.1/
 build/
 llvm-clang-build/
 lib/

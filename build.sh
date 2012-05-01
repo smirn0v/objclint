@@ -1,8 +1,7 @@
 #!/bin/bash
 
-if [ ! -d "build" ]; then
-    mkdir build
-fi
+OBJCLINT_DIR=llvm-3.1/tools/clang/examples/objclint
 
-cd build
-cmake ../ && make VERBOSE=1 && make install
+cp -R src/* "$OBJCLINT_DIR" 
+cd "$OBJCLINT_DIR"
+make && make install

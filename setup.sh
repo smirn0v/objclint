@@ -33,7 +33,7 @@ echo "[+] Checked out"
 echo
 ########################################################
 
-##### Checkout clang 3.0 ###############################
+##### Checkout clang ###############################
 
 cd ./${LLVM_CHECKOUT_DIR}/tools
 
@@ -49,16 +49,21 @@ echo
 
 ##### Creating new 'example' #########################
 ## this is a simpliest way to build plugin currently
-## at least for now
+## at least for now, at least for me
+
+echo "[~] Adding new plugin to build"
 
 cd clang/examples
 
-# adding new folder to build
-sed -i -e 's/\(PARALLEL_DIRS.*$\)/\1 objclint/' Makefile
+# build only objclint example 
+sed -i -e 's/\(PARALLEL_DIRS.*$\)/PARALLEL_DIRS := objclint/' Makefile
 
 mkdir objclint
 
-cp "$PROJECT_DIR"/src/* objclint/
+cp -R "$PROJECT_DIR"/src/* objclint/
+
+echo "[+] Added"
+echo
 
 ######################################################
 
