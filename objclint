@@ -50,7 +50,7 @@ def main():
         os.execv("/usr/bin/clang",original)
     else:
         print "modified args {}".format(new_argvs)
-        os.execv(new_argvs[0],new_argvs)
+        os.execv(new_argvs[0],original)
 
 if __name__ == "__main__":
     main()
