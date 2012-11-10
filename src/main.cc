@@ -17,7 +17,7 @@ enum CXChildVisitResult visitor(CXCursor cursor, CXCursor parent, CXClientData c
 	
 	enum CXLinkageKind linkageKind = clang_getCursorLinkage(cursor);
 	
-	printf("%s[%d,linkage = %d]: %s\n",fileNameC,line,linkageKind,spelling);
+	printf("%s[%d,linkage = %d]: %s\n",fileNameC,line,linkageKind,spellingC);
 	clang_disposeString(fileName);
 	clang_disposeString(spelling);
 	return CXChildVisit_Recurse;
