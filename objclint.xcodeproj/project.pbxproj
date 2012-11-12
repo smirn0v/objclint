@@ -42,6 +42,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B24DED601651868000D12E0B /* thirdparty */ = {
+			isa = PBXGroup;
+			children = (
+				B26111F4164ED5140053F67B /* libclang.a */,
+			);
+			name = thirdparty;
+			sourceTree = "<group>";
+		};
 		B26111EF164ED0F20053F67B /* src */ = {
 			isa = PBXGroup;
 			children = (
@@ -54,7 +62,7 @@
 		B281CC84164ECEBB0003A327 = {
 			isa = PBXGroup;
 			children = (
-				B26111F4164ED5140053F67B /* libclang.a */,
+				B24DED601651868000D12E0B /* thirdparty */,
 				B26111EF164ED0F20053F67B /* src */,
 				B281CC90164ECEBB0003A327 /* Products */,
 			);
