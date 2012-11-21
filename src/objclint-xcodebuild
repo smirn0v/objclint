@@ -1,0 +1,8 @@
+#!/bin/bash
+
+OBJCLINT_LOCATION=/opt/local/bin/objclint
+
+export CC="$OBJCLINT_LOCATION"
+export CXX="$OBJCLINT_LOCATION"
+
+xcodebuild GCC_PRECOMPILE_PREFIX_HEADER=NO -PBXBuildsContinueAfterErrors=YES "$@"

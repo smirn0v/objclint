@@ -1,0 +1,56 @@
+#!/usr/bin/python2.7
+
+#######################
+#
+# clang wrapper to run with objclint plugin
+# and perform code style check only 
+#
+# Author: Alexander Smirnov
+# Email: alexander@smirn0v.ru
+#######################
+
+import sys
+import os
+import string
+
+def main():
+    original = sys.argv
+    try:
+        input_file = original[original.index("-c")+1]
+    except:
+        sys.exit(0) # linker call should just succeed
+    new_argvs = ["/opt/local/bin/objclint-clang"]
+    
+    supported_opts = {
+        "-I": 0,
+        "-F": 0,
+        "-D": 0,
+        "-U": 0,
+        "-std": 0,
+        "-isysroot": 1,
+        "-x": 1,
+        "-iquote": 1,
+        "-MT": 1,
+        "-include": 1,
+    }
+
+    for index,value in enumerate(original):
+        for opt in supported_opts.keys():
+            if value.startswith(opt):
+                new_argvs.append(value)
+                for arg_index in range(supported_opts[opt]):
+                    new_argvs.append(original[index+arg_index+1])
+                continue
+
+    new_argvs += ["-D__arm__","-U__i386__","-U__x86_64__","-fblocks","-fsyntax-only", input_file]
+    # plugin settings must be first
+    new_argvs[1:1] = ["-cc1","-load","/opt/local/lib/libobjclint.dylib","-plugin","objclint"]
+    
+    if input_file == "/dev/null":
+        os.execv("/usr/bin/clang",original)
+    else:
+        print "modified args {}".format(new_argvs)
+        os.execv(new_argvs[0],original)
+
+if __name__ == "__main__":
+    main()

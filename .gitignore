@@ -13,5 +13,22 @@
 
 # Required third-parties
 
-llvm-3.0/
+llvm-3.1/
 build/
+llvm-clang-build/
+lib/
+
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+*.xcworkspace
+!default.xcworkspace
+xcuserdata
+profile
+*.moved-aside
+DerivedData

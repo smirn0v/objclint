@@ -1,5 +1,8 @@
 #!/bin/bash
 
+LLVM_CLANG_BUILD_DIR="`pwd`/thirdparty/llvm-3.1/llvm-clang-build"
+LLVM_CHECKOUT_DIR="`pwd`/thirdparty/llvm-3.1"
+
 function exit_if_error {
     if [ $1 -gt 0 ]; then
         echo "[-] $2"
@@ -9,47 +12,47 @@ function exit_if_error {
 
 ##### Check if not ran before ##########################
 
-if [ -d "llvm-3.0" ] || [ -d "build" ]; then
-    exit_if_error 1 "Try to delete 'llvm-3.0' and 'build' directories and then run 'setup.sh' again"
+if [ -d $LLVM_CHECKOUT_DIR ] || [ -d $LLVM_CLANG_BUILD_DIR  ]; then
+    exit_if_error 1 "Try to delete '${LLVM_CHECKOUT_DIR}' and '${LLVM_CLANG_BUILD_DIR}' directories and then run 'setup.sh' again"
 fi
 
-mkdir build
+mkdir -p $LLVM_CLANG_BUILD_DIR 
 
 ########################################################
 
-##### Checkout llvm 3.0 ################################
+##### Checkout llvm ################################
 
-echo "[~] Checking out 'llvm 3.0'"
+echo "[~] Checking out '${LLVM_CHECKOUT_DIR}'"
 
-svn export http://llvm.org/svn/llvm-project/llvm/tags/RELEASE_30/final/  llvm-3.0 1> /dev/null
+svn --force export http://llvm.org/svn/llvm-project/llvm/tags/RELEASE_31/final/ $LLVM_CHECKOUT_DIR 1> /dev/null
 
 exit_if_error $? "llvm checkout error"
 
-echo "[+] Checked out 'llvm 3.0'"
+echo "[+] Checked out"
 echo
 ########################################################
 
-##### Checkout clang 3.0 ###############################
+##### Checkout clang ###############################
 
-cd ./llvm-3.0/tools
+cd ${LLVM_CHECKOUT_DIR}/tools
 
-echo "[~] Checking out 'clang 3.0'"
+echo "[~] Checking out 'clang 3.1'"
 
-svn export http://llvm.org/svn/llvm-project/cfe/tags/RELEASE_30/final/ clang 1> /dev/null
+svn export http://llvm.org/svn/llvm-project/cfe/tags/RELEASE_31/final/ clang 1> /dev/null
 
 exit_if_error $? "clang checkout error"
 
-echo "[+] Checked out 'clang 3.0'"
+echo "[+] Checked out"
 echo
 #######################################################
 
 ##### Building llvm ##################################
 
-cd ../
+cd ${LLVM_CHECKOUT_DIR}
 
 echo "[~] Configuring llvm && clang"
 
-./configure --prefix `cd ../build/;pwd` --enable-optimized 1> /dev/null
+./configure --prefix=${LLVM_CLANG_BUILD_DIR} --enable-optimized 1> /dev/null
 
 exit_if_error $? "Failed to configure 'llvm'"
 
@@ -58,9 +61,9 @@ echo
 
 echo "[~] Building..."
 
-# building twice(sic!), somehow first build fails.
-make -j4 BUILD_EXAMPLES=1 1> /dev/null 2>&1
-make -j4 BUILD_EXAMPLES=1 1> /dev/null
+# building twice, somehow first build fails.
+make -j4 1> /dev/null 2>&1
+make -j4 1> /dev/null
 
 exit_if_error $? "Failed to build"
 
@@ -73,7 +76,8 @@ make install
 
 exit_if_error $? "Failed to install"
 
-echo "[+] Installed"
+echo "[+] llvm+clang installed into 'thirdparty' directory"
 echo
 
+echo "now you can use cmake to build/install 'objclint'"
 echo "...Have fun..."
