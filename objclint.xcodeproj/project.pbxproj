@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B24727F1165D89240037D69B /* basename-lgpl.c in Sources */ = {isa = PBXBuildFile; fileRef = B24727EF165D84810037D69B /* basename-lgpl.c */; };
+		B24727F2165D89240037D69B /* dirname-lgpl.c in Sources */ = {isa = PBXBuildFile; fileRef = B24727ED165D83060037D69B /* dirname-lgpl.c */; };
+		B24727F3165D89240037D69B /* dirname.c in Sources */ = {isa = PBXBuildFile; fileRef = B24727DE165D81150037D69B /* dirname.c */; };
 		B26111F3164ED0F20053F67B /* main.cc in Sources */ = {isa = PBXBuildFile; fileRef = B26111F0164ED0F20053F67B /* main.cc */; };
 		B26111F5164ED5140053F67B /* libclang.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B26111F4164ED5140053F67B /* libclang.a */; };
 /* End PBXBuildFile section */
@@ -24,6 +27,11 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		B24727DE165D81150037D69B /* dirname.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = dirname.c; sourceTree = "<group>"; };
+		B24727DF165D81150037D69B /* dirname.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dirname.h; sourceTree = "<group>"; };
+		B24727E0165D81150037D69B /* dosname.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dosname.h; sourceTree = "<group>"; };
+		B24727ED165D83060037D69B /* dirname-lgpl.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "dirname-lgpl.c"; sourceTree = "<group>"; };
+		B24727EF165D84810037D69B /* basename-lgpl.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "basename-lgpl.c"; sourceTree = "<group>"; };
 		B26111F0164ED0F20053F67B /* main.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cc; sourceTree = "<group>"; };
 		B26111F2164ED0F20053F67B /* objclint-xcodebuild */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = "objclint-xcodebuild"; sourceTree = "<group>"; };
 		B26111F4164ED5140053F67B /* libclang.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libclang.a; path = "thirdparty/llvm-3.1/llvm-clang-build/lib/libclang.a"; sourceTree = "<group>"; };
@@ -42,9 +50,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B24727DD165D81150037D69B /* gnulib */ = {
+			isa = PBXGroup;
+			children = (
+				B24727EF165D84810037D69B /* basename-lgpl.c */,
+				B24727ED165D83060037D69B /* dirname-lgpl.c */,
+				B24727DE165D81150037D69B /* dirname.c */,
+				B24727DF165D81150037D69B /* dirname.h */,
+				B24727E0165D81150037D69B /* dosname.h */,
+			);
+			name = gnulib;
+			path = thirdparty/gnulib;
+			sourceTree = "<group>";
+		};
 		B24DED601651868000D12E0B /* thirdparty */ = {
 			isa = PBXGroup;
 			children = (
+				B24727DD165D81150037D69B /* gnulib */,
 				B26111F4164ED5140053F67B /* libclang.a */,
 			);
 			name = thirdparty;
@@ -128,6 +150,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				B26111F3164ED0F20053F67B /* main.cc in Sources */,
+				B24727F1165D89240037D69B /* basename-lgpl.c in Sources */,
+				B24727F2165D89240037D69B /* dirname-lgpl.c in Sources */,
+				B24727F3165D89240037D69B /* dirname.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -188,6 +213,8 @@
 		B281CC9A164ECEBB0003A327 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				CLANG_CXX_LIBRARY = "libc++";
 				HEADER_SEARCH_PATHS = "./thirdparty/llvm-3.1/llvm-clang-build/include/clang-c";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -200,6 +227,8 @@
 		B281CC9B164ECEBB0003A327 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				CLANG_CXX_LIBRARY = "libc++";
 				HEADER_SEARCH_PATHS = "./thirdparty/llvm-3.1/llvm-clang-build/include/clang-c";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
