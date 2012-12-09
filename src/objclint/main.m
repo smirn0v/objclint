@@ -1,16 +1,7 @@
-#include <Index.h>
-#include <stdio.h>
+#import <Foundation/Foundation.h>
+#include "Index.h"
 
-
-#include <string>
-#include <sstream>
-#include <unordered_set>
-
-#include "dirname.h"
-
-
-typedef std::unordered_set<std::string> string_set;
-
+#if 0
 std::string location_description(const CXSourceLocation* location) {
     CXFile file;
     unsigned line;
@@ -48,11 +39,10 @@ bool is_project_file(const std::string& file_name) {
     free(directory);
     return true;
 }
+#endif
 
 enum CXChildVisitResult visitor(CXCursor cursor, CXCursor parent, CXClientData client_data)
 {
-    
-    string_set *locations = (string_set*)client_data;
     
 	enum CXCursorKind kind = clang_getCursorKind(cursor);
 	CXString spelling = clang_getCursorKindSpelling(kind);
@@ -75,30 +65,27 @@ enum CXChildVisitResult visitor(CXCursor cursor, CXCursor parent, CXClientData c
 	
 	enum CXLinkageKind linkageKind = clang_getCursorLinkage(cursor);
 
-    if(fileNameC) {
-        std::string fileNameStr(fileNameC);
-
-        is_project_file(fileNameStr);
-    }
-	clang_disposeString(fileName);
+    	clang_disposeString(fileName);
 	clang_disposeString(spelling);
 	return CXChildVisit_Recurse;
 }
 
 int main(int argc, char *argv[]) {
     setvbuf(stdout, NULL, _IONBF, 0);
+    
+    @autoreleasepool {
+        CXIndex Index = clang_createIndex(0, 0);
+        CXTranslationUnit TU = clang_parseTranslationUnit(Index, 0, argv, argc, 0, 0, CXTranslationUnit_None);
+        
+        if(TU) {
+            CXCursor cursor = clang_getTranslationUnitCursor(TU);
 
-    CXIndex Index = clang_createIndex(0, 0);
-    CXTranslationUnit TU = clang_parseTranslationUnit(Index, 0, argv, argc, 0, 0, CXTranslationUnit_None);
-	
-    if(TU) {
-        CXCursor cursor = clang_getTranslationUnitCursor(TU);
-        string_set locations;
-        clang_visitChildren(cursor, &visitor, &locations);
-	
-        clang_disposeTranslationUnit(TU);
+            clang_visitChildren(cursor, &visitor, NULL);
+        
+            clang_disposeTranslationUnit(TU);
+        }
+        clang_disposeIndex(Index);
     }
-    clang_disposeIndex(Index);
     
     return 0;
 }

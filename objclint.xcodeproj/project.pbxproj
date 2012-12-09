@@ -7,14 +7,24 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B24727F1165D89240037D69B /* basename-lgpl.c in Sources */ = {isa = PBXBuildFile; fileRef = B24727EF165D84810037D69B /* basename-lgpl.c */; };
-		B24727F2165D89240037D69B /* dirname-lgpl.c in Sources */ = {isa = PBXBuildFile; fileRef = B24727ED165D83060037D69B /* dirname-lgpl.c */; };
-		B24727F3165D89240037D69B /* dirname.c in Sources */ = {isa = PBXBuildFile; fileRef = B24727DE165D81150037D69B /* dirname.c */; };
-		B26111F3164ED0F20053F67B /* main.cc in Sources */ = {isa = PBXBuildFile; fileRef = B26111F0164ED0F20053F67B /* main.cc */; };
+		B22690DB16751C3A005CF60C /* ObjclintSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B22690DA16751C3A005CF60C /* ObjclintSessionManager.m */; };
 		B26111F5164ED5140053F67B /* libclang.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B26111F4164ED5140053F67B /* libclang.a */; };
+		B26F85311674F9DA00F940F4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B26F85301674F9DA00F940F4 /* Foundation.framework */; };
+		B26F85461675007D00F940F4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B26F85301674F9DA00F940F4 /* Foundation.framework */; };
+		B26F854E1675063F00F940F4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B26F85481675063F00F940F4 /* main.m */; };
+		B26F85511675063F00F940F4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B26F854B1675063F00F940F4 /* main.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		B26F85351675006C00F940F4 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
 		B281CC8D164ECEBB0003A327 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -27,22 +37,35 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		B24727DE165D81150037D69B /* dirname.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = dirname.c; sourceTree = "<group>"; };
-		B24727DF165D81150037D69B /* dirname.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dirname.h; sourceTree = "<group>"; };
-		B24727E0165D81150037D69B /* dosname.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dosname.h; sourceTree = "<group>"; };
-		B24727ED165D83060037D69B /* dirname-lgpl.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "dirname-lgpl.c"; sourceTree = "<group>"; };
-		B24727EF165D84810037D69B /* basename-lgpl.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "basename-lgpl.c"; sourceTree = "<group>"; };
-		B26111F0164ED0F20053F67B /* main.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cc; sourceTree = "<group>"; };
-		B26111F2164ED0F20053F67B /* objclint-xcodebuild */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = "objclint-xcodebuild"; sourceTree = "<group>"; };
+		B22690D916751C3A005CF60C /* ObjclintSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjclintSessionManager.h; sourceTree = "<group>"; };
+		B22690DA16751C3A005CF60C /* ObjclintSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObjclintSessionManager.m; sourceTree = "<group>"; };
 		B26111F4164ED5140053F67B /* libclang.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libclang.a; path = "thirdparty/llvm-3.1/llvm-clang-build/lib/libclang.a"; sourceTree = "<group>"; };
+		B26F85301674F9DA00F940F4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		B26F85371675006C00F940F4 /* objclint-coordinator */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "objclint-coordinator"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B26F85481675063F00F940F4 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		B26F85491675063F00F940F4 /* objclint */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = objclint; sourceTree = "<group>"; };
+		B26F854B1675063F00F940F4 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		B26F854C1675063F00F940F4 /* objclint-coordinator-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "objclint-coordinator-Prefix.pch"; sourceTree = "<group>"; };
+		B26F854D1675063F00F940F4 /* objclint-xcodebuild */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = "objclint-xcodebuild"; sourceTree = "<group>"; };
+		B26F85521675074000F940F4 /* objclint-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "objclint-Prefix.pch"; sourceTree = "<group>"; };
+		B26F8556167519C500F940F4 /* ObjclintSessionManagerProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ObjclintSessionManagerProtocol.h; sourceTree = "<group>"; };
 		B281CC8F164ECEBB0003A327 /* objclint */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = objclint; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		B26F85341675006C00F940F4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B26F85461675007D00F940F4 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		B281CC8C164ECEBB0003A327 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B26F85311674F9DA00F940F4 /* Foundation.framework in Frameworks */,
 				B26111F5164ED5140053F67B /* libclang.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -50,23 +73,9 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		B24727DD165D81150037D69B /* gnulib */ = {
-			isa = PBXGroup;
-			children = (
-				B24727EF165D84810037D69B /* basename-lgpl.c */,
-				B24727ED165D83060037D69B /* dirname-lgpl.c */,
-				B24727DE165D81150037D69B /* dirname.c */,
-				B24727DF165D81150037D69B /* dirname.h */,
-				B24727E0165D81150037D69B /* dosname.h */,
-			);
-			name = gnulib;
-			path = thirdparty/gnulib;
-			sourceTree = "<group>";
-		};
 		B24DED601651868000D12E0B /* thirdparty */ = {
 			isa = PBXGroup;
 			children = (
-				B24727DD165D81150037D69B /* gnulib */,
 				B26111F4164ED5140053F67B /* libclang.a */,
 			);
 			name = thirdparty;
@@ -75,15 +84,47 @@
 		B26111EF164ED0F20053F67B /* src */ = {
 			isa = PBXGroup;
 			children = (
-				B26111F0164ED0F20053F67B /* main.cc */,
-				B26111F2164ED0F20053F67B /* objclint-xcodebuild */,
+				B26F85471675063F00F940F4 /* objclint */,
+				B26F854A1675063F00F940F4 /* objclint-coordinator */,
+				B26F854D1675063F00F940F4 /* objclint-xcodebuild */,
+				B26F8556167519C500F940F4 /* ObjclintSessionManagerProtocol.h */,
 			);
 			path = src;
+			sourceTree = "<group>";
+		};
+		B26F85321674F9E200F940F4 /* frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				B26F85301674F9DA00F940F4 /* Foundation.framework */,
+			);
+			name = frameworks;
+			sourceTree = "<group>";
+		};
+		B26F85471675063F00F940F4 /* objclint */ = {
+			isa = PBXGroup;
+			children = (
+				B26F85481675063F00F940F4 /* main.m */,
+				B26F85491675063F00F940F4 /* objclint */,
+				B26F85521675074000F940F4 /* objclint-Prefix.pch */,
+			);
+			path = objclint;
+			sourceTree = "<group>";
+		};
+		B26F854A1675063F00F940F4 /* objclint-coordinator */ = {
+			isa = PBXGroup;
+			children = (
+				B26F854B1675063F00F940F4 /* main.m */,
+				B26F854C1675063F00F940F4 /* objclint-coordinator-Prefix.pch */,
+				B22690D916751C3A005CF60C /* ObjclintSessionManager.h */,
+				B22690DA16751C3A005CF60C /* ObjclintSessionManager.m */,
+			);
+			path = "objclint-coordinator";
 			sourceTree = "<group>";
 		};
 		B281CC84164ECEBB0003A327 = {
 			isa = PBXGroup;
 			children = (
+				B26F85321674F9E200F940F4 /* frameworks */,
 				B24DED601651868000D12E0B /* thirdparty */,
 				B26111EF164ED0F20053F67B /* src */,
 				B281CC90164ECEBB0003A327 /* Products */,
@@ -94,6 +135,7 @@
 			isa = PBXGroup;
 			children = (
 				B281CC8F164ECEBB0003A327 /* objclint */,
+				B26F85371675006C00F940F4 /* objclint-coordinator */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -101,6 +143,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		B26F85361675006C00F940F4 /* objclint-coordinator */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B26F85431675006D00F940F4 /* Build configuration list for PBXNativeTarget "objclint-coordinator" */;
+			buildPhases = (
+				B26F85331675006C00F940F4 /* Sources */,
+				B26F85341675006C00F940F4 /* Frameworks */,
+				B26F85351675006C00F940F4 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "objclint-coordinator";
+			productName = "objclint-coordinator";
+			productReference = B26F85371675006C00F940F4 /* objclint-coordinator */;
+			productType = "com.apple.product-type.tool";
+		};
 		B281CC8E164ECEBB0003A327 /* objclint */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = B281CC99164ECEBB0003A327 /* Build configuration list for PBXNativeTarget "objclint" */;
@@ -140,25 +199,50 @@
 			projectRoot = "";
 			targets = (
 				B281CC8E164ECEBB0003A327 /* objclint */,
+				B26F85361675006C00F940F4 /* objclint-coordinator */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXSourcesBuildPhase section */
+		B26F85331675006C00F940F4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B26F85511675063F00F940F4 /* main.m in Sources */,
+				B22690DB16751C3A005CF60C /* ObjclintSessionManager.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		B281CC8B164ECEBB0003A327 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B26111F3164ED0F20053F67B /* main.cc in Sources */,
-				B24727F1165D89240037D69B /* basename-lgpl.c in Sources */,
-				B24727F2165D89240037D69B /* dirname-lgpl.c in Sources */,
-				B24727F3165D89240037D69B /* dirname.c in Sources */,
+				B26F854E1675063F00F940F4 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
+		B26F85441675006D00F940F4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "src/objclint-coordinator/objclint-coordinator-Prefix.pch";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		B26F85451675006D00F940F4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "src/objclint-coordinator/objclint-coordinator-Prefix.pch";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		B281CC97164ECEBB0003A327 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -241,6 +325,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		B26F85431675006D00F940F4 /* Build configuration list for PBXNativeTarget "objclint-coordinator" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B26F85441675006D00F940F4 /* Debug */,
+				B26F85451675006D00F940F4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		B281CC89164ECEBB0003A327 /* Build configuration list for PBXProject "objclint" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
