@@ -71,36 +71,31 @@ enum CXChildVisitResult visitor(CXCursor cursor, CXCursor parent, CXClientData c
 	return CXChildVisit_Recurse;
 }
 
+id<ObjclintSessionManagerProtocol> aquireSessionManager() {
+    NSConnection* connection = [[NSConnection connectionWithRegisteredName: @"ru.borsch-lab.objclint.coordinator"
+                                                                      host: nil] autorelease];
+    
+    [connection.rootProxy setProtocolForProxy:@protocol(ObjclintSessionManagerProtocol)];
+    return (id<ObjclintSessionManagerProtocol>) connection.rootProxy;
+}
+
 int main(int argc, char *argv[]) {
+    // immediately flush stdout
     setvbuf(stdout, NULL, _IONBF, 0);
     
     @autoreleasepool {
-#if 0
-        CXIndex Index = clang_createIndex(0, 0);
-        CXTranslationUnit TU = clang_parseTranslationUnit(Index, 0, argv, argc, 0, 0, CXTranslationUnit_None);
-        
-        if(TU) {
-            CXCursor cursor = clang_getTranslationUnitCursor(TU);
 
-            clang_visitChildren(cursor, &visitor, NULL);
+        CXIndex index = clang_createIndex(0, 0);
+        CXTranslationUnit translationUnit = clang_parseTranslationUnit(index, 0,(const char**) argv, argc, 0, 0, CXTranslationUnit_None);
         
-            clang_disposeTranslationUnit(TU);
+        if(translationUnit) {
+            CXCursor cursor = clang_getTranslationUnitCursor(translationUnit);
+
+            clang_visitChildren(cursor, &visitor, aquireSessionManager());
+        
+            clang_disposeTranslationUnit(translationUnit);
         }
-        clang_disposeIndex(Index);
-#endif
-        NSConnection* connection = [NSConnection connectionWithRegisteredName:@"ru.borsch-lab.objclint.coordinator"
-                                                                         host:nil];
-
-        
-        id<ObjclintSessionManagerProtocol> sessionManager = nil;
-        NSLog(@"Connection = %@", connection);
-        
-        [connection.rootProxy setProtocolForProxy:@protocol(ObjclintSessionManagerProtocol)];
-        sessionManager = connection.rootProxy;
-        
-        NSLog(@"sessionManager = %@", sessionManager);
-        
-        [sessionManager markLocation:@"sdfdf" checkedForProjectIdentity:@"sdfsdf"];
+        clang_disposeIndex(index);
         
     }
     
