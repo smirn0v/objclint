@@ -1,5 +1,6 @@
 #import <Foundation/Foundation.h>
-#include "Index.h"
+#import "ObjclintSessionManagerProtocol.h"
+#include <Index.h>
 
 #if 0
 std::string location_description(const CXSourceLocation* location) {
@@ -74,6 +75,7 @@ int main(int argc, char *argv[]) {
     setvbuf(stdout, NULL, _IONBF, 0);
     
     @autoreleasepool {
+#if 0
         CXIndex Index = clang_createIndex(0, 0);
         CXTranslationUnit TU = clang_parseTranslationUnit(Index, 0, argv, argc, 0, 0, CXTranslationUnit_None);
         
@@ -85,6 +87,21 @@ int main(int argc, char *argv[]) {
             clang_disposeTranslationUnit(TU);
         }
         clang_disposeIndex(Index);
+#endif
+        NSConnection* connection = [NSConnection connectionWithRegisteredName:@"ru.borsch-lab.objclint.coordinator"
+                                                                         host:nil];
+
+        
+        id<ObjclintSessionManagerProtocol> sessionManager = nil;
+        NSLog(@"Connection = %@", connection);
+        
+        [connection.rootProxy setProtocolForProxy:@protocol(ObjclintSessionManagerProtocol)];
+        sessionManager = connection.rootProxy;
+        
+        NSLog(@"sessionManager = %@", sessionManager);
+        
+        [sessionManager markLocation:@"sdfdf" checkedForProjectIdentity:@"sdfsdf"];
+        
     }
     
     return 0;
