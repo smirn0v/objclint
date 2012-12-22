@@ -2,8 +2,20 @@
 #import "ObjclintSessionManagerProtocol.h"
 #include <Index.h>
 
-#if 0
-std::string location_description(const CXSourceLocation* location) {
+NSString* filePathForLocation(const CXSourceLocation* location) {
+    CXFile file;
+    clang_getSpellingLocation(*location, &file, NULL, NULL, NULL);
+    CXString fileNameCX = clang_getFileName(file);
+    const char* fileNameC = clang_getCString(fileNameCX);
+    
+    NSString* filePath = [NSString stringWithFormat:@"%s",fileNameC];
+    
+    clang_disposeString(fileNameCX);
+    
+    return filePath;
+}
+
+NSString* locationDescription(const CXSourceLocation* location) {
     CXFile file;
     unsigned line;
     unsigned column;
@@ -14,60 +26,85 @@ std::string location_description(const CXSourceLocation* location) {
     CXString fileNameCX = clang_getFileName(file);
     const char* fileNameC = clang_getCString(fileNameCX);
     
-    std::ostringstream stringStream;
-    
-    stringStream << fileNameC << "-" << line << "-" << column << "-" << offset;
+    NSMutableString* locationDescription = [NSMutableString string];
+    [locationDescription appendFormat:@"%s-", fileNameC];
+    [locationDescription appendFormat:@"%u-%u-%u",line,column,offset];
     
     clang_disposeString(fileNameCX);
     
-    return stringStream.str();
+    return locationDescription;
 }
 
-bool location_already_analyzed(const string_set& locations, const CXSourceLocation* location) {
-    return locations.find(location_description(location)) != locations.end();
-}
-
-void mark_location_as_analyzed(string_set& locations, const CXSourceLocation* location) {
-    locations.insert(location_description(location));
-}
-
-bool is_project_file(const std::string& file_name) {
-
-    char* directory = dir_name(file_name.c_str());
+NSString* projectPath() {
+    static NSString* currentDirPath = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        currentDirPath = [[[NSFileManager defaultManager] currentDirectoryPath] retain];
+    });
     
-    printf("directory: %s\n", directory);
-    
-    free(directory);
-    return true;
+    return currentDirPath;
 }
-#endif
 
-enum CXChildVisitResult visitor(CXCursor cursor, CXCursor parent, CXClientData client_data)
-{
+BOOL isLocationBelongsToProject(const CXSourceLocation* location) {
+    return [filePathForLocation(location) rangeOfString: projectPath()].location == 0;
+}
+
+BOOL isLocationAlreadyChecked(const CXSourceLocation* location, id<ObjclintSessionManagerProtocol> sessionManager) {
+    static NSMutableDictionary* paths = nil;
     
-	enum CXCursorKind kind = clang_getCursorKind(cursor);
-	CXString spelling = clang_getCursorKindSpelling(kind);
-	const char* spellingC = clang_getCString(spelling);
-	
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        paths = @{}.mutableCopy;
+    });
+    
+    if(NO == isLocationBelongsToProject(location))
+        return YES;
+    
+    NSString* filePath = filePathForLocation(location);
+    
+    if(!filePath)
+        return YES;
+    
+    NSNumber* status = paths[filePath];
+    
+    if(!status) {
+        NSLog(@"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        NSNumber* coordinatorStatus = @([sessionManager checkIfLocation:filePath wasCheckedForProjectIdentity:projectPath()]);
+        if(coordinatorStatus.boolValue) {
+            paths[filePath] = @YES; // already checked
+        } else {
+            // we will handle it
+            [sessionManager markLocation:filePath checkedForProjectIdentity:projectPath()];
+            // locally treat it as unchecked
+            paths[filePath] = @NO;
+        }
+    }
+    
+    return status.boolValue;
+}
+
+enum CXChildVisitResult visitor(CXCursor cursor, CXCursor parent, CXClientData client_data) {
+    
+    id<ObjclintSessionManagerProtocol> sessionManager = client_data;
+
 	CXSourceLocation location = clang_getCursorLocation(cursor);
+
+    NSString* locationDescriptionStr = locationDescription(&location);
+    
+    if(isLocationAlreadyChecked(&location, sessionManager)) {
+        return CXChildVisit_Continue;
+    }
+    
+    [sessionManager markLocation:locationDescriptionStr
+       checkedForProjectIdentity:projectPath()];
     
 
-    //if(location_already_analyzed(*locations, &location))
-      //  return CXChildVisit_Continue;
-
-  //  mark_location_as_analyzed(*locations, &location);
+    CXString spelling = clang_getCursorSpelling(cursor);
+    const char* spellingC = clang_getCString(spelling);
+    NSLog(@"%@ - %s",locationDescriptionStr,spellingC);
     
-	CXFile file;
-	unsigned line;
-	
-	clang_getSpellingLocation(location,&file,&line,0,0);
-	CXString fileName = clang_getFileName(file);
-	const char* fileNameC = clang_getCString(fileName);
-	
-	enum CXLinkageKind linkageKind = clang_getCursorLinkage(cursor);
+    clang_disposeString(spelling);
 
-    	clang_disposeString(fileName);
-	clang_disposeString(spelling);
 	return CXChildVisit_Recurse;
 }
 

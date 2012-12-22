@@ -18,7 +18,6 @@
     self = [super init];
     if (self) {
         _sessionsByProject = @{}.mutableCopy;
-        NSLog(@"ObjclintSessionManager init");
     }
 
     return self;
@@ -32,17 +31,15 @@
 #pragma mark - ObjclintSessionManagerProtocol
 
 - (BOOL) checkIfLocation:(NSString*) location wasCheckedForProjectIdentity:(NSString*) projectIdentity {
-    NSLog(@"check");
+
     if(!location)
         return NO;
-
 
     NSMutableSet* projectLocations = _sessionsByProject[projectIdentity];
     return [projectLocations containsObject: location];
 }
 
 - (void) markLocation:(NSString*) location checkedForProjectIdentity:(NSString*) projectIdentity {
-    NSLog(@"mark");
     if(!location)
         return;
 

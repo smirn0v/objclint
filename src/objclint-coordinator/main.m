@@ -13,21 +13,16 @@ int main(int argc, const char* argv[]) {
 
         NSRunLoop* runLoop = [NSRunLoop currentRunLoop];
 
-        id<ObjclintSessionManagerProtocol> root = [ObjclintSessionManager new];
+        id<ObjclintSessionManagerProtocol> root = [[ObjclintSessionManager new] autorelease];
         
-        NSConnection* connection = [[NSConnection alloc] init];
-        
+        NSConnection* connection = [[[NSConnection alloc] init] autorelease];
         
         [connection setRootObject: [NSProtocolChecker protocolCheckerWithTarget:root protocol:@protocol(ObjclintSessionManagerProtocol)]];
-        
-        NSLog(@"connection = %@",connection);
         
         if(NO == [connection registerName:@"ru.borsch-lab.objclint.coordinator"]) {
             NSLog(@"failed to register local service");
             return 1;
         }
-        
-        
         
         [connection addRunLoop:runLoop];
 
