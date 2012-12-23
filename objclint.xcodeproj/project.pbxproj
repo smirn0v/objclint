@@ -12,6 +12,8 @@
 		B26F85461675007D00F940F4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B26F85301674F9DA00F940F4 /* Foundation.framework */; };
 		B26F854E1675063F00F940F4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B26F85481675063F00F940F4 /* main.m */; };
 		B26F85511675063F00F940F4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B26F854B1675063F00F940F4 /* main.m */; };
+		B27348FC168720960031D877 /* ClangUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = B27348FB168720960031D877 /* ClangUtils.m */; };
+		B27348FF168721620031D877 /* ClangSpellingLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = B27348FE168721620031D877 /* ClangSpellingLocation.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -47,6 +49,10 @@
 		B26F854D1675063F00F940F4 /* objclint-xcodebuild */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = "objclint-xcodebuild"; sourceTree = "<group>"; };
 		B26F85521675074000F940F4 /* objclint-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "objclint-Prefix.pch"; sourceTree = "<group>"; };
 		B26F8556167519C500F940F4 /* ObjclintSessionManagerProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ObjclintSessionManagerProtocol.h; sourceTree = "<group>"; };
+		B27348FA168720960031D877 /* ClangUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ClangUtils.h; sourceTree = "<group>"; };
+		B27348FB168720960031D877 /* ClangUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ClangUtils.m; sourceTree = "<group>"; };
+		B27348FD168721620031D877 /* ClangSpellingLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ClangSpellingLocation.h; sourceTree = "<group>"; };
+		B27348FE168721620031D877 /* ClangSpellingLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ClangSpellingLocation.m; sourceTree = "<group>"; };
 		B281CC8F164ECEBB0003A327 /* objclint */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = objclint; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -95,6 +101,10 @@
 				B26F85481675063F00F940F4 /* main.m */,
 				B26F85491675063F00F940F4 /* objclint */,
 				B26F85521675074000F940F4 /* objclint-Prefix.pch */,
+				B27348FA168720960031D877 /* ClangUtils.h */,
+				B27348FB168720960031D877 /* ClangUtils.m */,
+				B27348FD168721620031D877 /* ClangSpellingLocation.h */,
+				B27348FE168721620031D877 /* ClangSpellingLocation.m */,
 			);
 			path = objclint;
 			sourceTree = "<group>";
@@ -207,6 +217,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				B26F854E1675063F00F940F4 /* main.m in Sources */,
+				B27348FC168720960031D877 /* ClangUtils.m in Sources */,
+				B27348FF168721620031D877 /* ClangSpellingLocation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -1,53 +1,8 @@
 #import <Foundation/Foundation.h>
 #import "ObjclintSessionManagerProtocol.h"
+#import "ClangUtils.h"
+#import "ClangSpellingLocation.h"
 #include <Index.h>
-
-NSString* filePathForLocation(const CXSourceLocation* location) {
-    CXFile file;
-    clang_getSpellingLocation(*location, &file, NULL, NULL, NULL);
-    CXString fileNameCX = clang_getFileName(file);
-    const char* fileNameC = clang_getCString(fileNameCX);
-    
-    NSString* filePath = [NSString stringWithFormat:@"%s",fileNameC];
-    
-    clang_disposeString(fileNameCX);
-    
-    return filePath;
-}
-
-NSString* locationDescription(const CXSourceLocation* location) {
-    CXFile file;
-    unsigned line;
-    unsigned column;
-    unsigned offset;
-    
-    clang_getSpellingLocation(*location,&file,&line,&column,&offset);
-    
-    CXString fileNameCX = clang_getFileName(file);
-    const char* fileNameC = clang_getCString(fileNameCX);
-    
-    NSMutableString* locationDescription = [NSMutableString string];
-    [locationDescription appendFormat:@"%s-", fileNameC];
-    [locationDescription appendFormat:@"%u-%u-%u",line,column,offset];
-    
-    clang_disposeString(fileNameCX);
-    
-    return locationDescription;
-}
-
-NSString* projectPath() {
-    static NSString* currentDirPath = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        currentDirPath = [[[NSFileManager defaultManager] currentDirectoryPath] retain];
-    });
-    
-    return currentDirPath;
-}
-
-BOOL isLocationBelongsToProject(const CXSourceLocation* location) {
-    return [filePathForLocation(location) rangeOfString: projectPath()].location == 0;
-}
 
 BOOL isLocationAlreadyChecked(const CXSourceLocation* location, id<ObjclintSessionManagerProtocol> sessionManager) {
     static NSMutableDictionary* paths = nil;
@@ -56,26 +11,29 @@ BOOL isLocationAlreadyChecked(const CXSourceLocation* location, id<ObjclintSessi
     dispatch_once(&onceToken, ^{
         paths = @{}.mutableCopy;
     });
-    
-    if(NO == isLocationBelongsToProject(location))
+
+    if(NO == [ClangUtils locationBelongsToProject: location])
         return YES;
     
-    NSString* filePath = filePathForLocation(location);
+    ClangSpellingLocation* spellingLocation = [ClangUtils spellingLocationForSourceLocation: location];
     
-    if(!filePath)
+    if(!spellingLocation.filePath)
         return YES;
     
-    NSNumber* status = paths[filePath];
+    NSNumber* status = paths[spellingLocation.filePath];
     
     if(!status) {
-        NSNumber* coordinatorStatus = @([sessionManager checkIfLocation:filePath wasCheckedForProjectIdentity:projectPath()]);
+        NSNumber* coordinatorStatus = @([sessionManager checkIfLocation:spellingLocation.filePath
+                                           wasCheckedForProjectIdentity:ClangUtils.projectPath]);
         if(coordinatorStatus.boolValue) {
-            paths[filePath] = @YES; // already checked
+            paths[spellingLocation.filePath] = @YES; // already checked
         } else {
             // we will handle it
-            [sessionManager markLocation:filePath checkedForProjectIdentity:projectPath()];
+            [sessionManager markLocation:spellingLocation.filePath
+               checkedForProjectIdentity:ClangUtils.projectPath];
+            
             // locally treat it as unchecked
-            paths[filePath] = @NO;
+            paths[spellingLocation.filePath] = @NO;
         }
     }
     
@@ -88,19 +46,13 @@ enum CXChildVisitResult visitor(CXCursor cursor, CXCursor parent, CXClientData c
 
 	CXSourceLocation location = clang_getCursorLocation(cursor);
 
-    NSString* locationDescriptionStr = locationDescription(&location);
-    
     if(isLocationAlreadyChecked(&location, sessionManager)) {
         return CXChildVisit_Continue;
     }
-    
-    [sessionManager markLocation:locationDescriptionStr
-       checkedForProjectIdentity:projectPath()];
-    
 
     CXString spelling = clang_getCursorSpelling(cursor);
     const char* spellingC = clang_getCString(spelling);
-    NSLog(@"%@ - %s",locationDescriptionStr,spellingC);
+    NSLog(@"%@ - %s",[ClangUtils spellingLocationForSourceLocation:&location],spellingC);
     
     clang_disposeString(spelling);
 

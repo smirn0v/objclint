@@ -1,8 +1,16 @@
 #!/bin/bash
 
-OBJCLINT_LOCATION=/opt/local/bin/objclint
+OBJCLINT_LOCATION=/opt/local/bin/objclint-dispatcher.py
 
-export CC="$OBJCLINT_LOCATION"
-export CXX="$OBJCLINT_LOCATION"
-
-xcodebuild GCC_PRECOMPILE_PREFIX_HEADER=NO -PBXBuildsContinueAfterErrors=YES "$@"
+xcodebuild \
+    CC="$OBJCLINT_LOCATION"\
+    CXX="$OBJCLINT_LOCATION"\
+    CCFLAGS="-objclint-fake-cc"\
+    CXXFLAGS="-objclint-fake-cxx"\
+    LD="true"\
+    LDPLUSPLUS="true"\
+    GCC_GENERATE_DEBUGGING_SYMBOLS=NO\
+    GCC_PRECOMPILE_PREFIX_HEADER=NO\
+    -PBXBuildsContinueAfterErrors=YES\
+    -jobs 1\
+    "$@"
