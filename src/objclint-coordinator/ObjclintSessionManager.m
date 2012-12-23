@@ -24,14 +24,25 @@
 }
 
 - (void)dealloc {
+    [_lastActionDate release];
     [_sessionsByProject release];
     [super dealloc];
 }
 
 #pragma mark - ObjclintSessionManagerProtocol
 
-- (BOOL) checkIfLocation:(NSString*) location wasCheckedForProjectIdentity:(NSString*) projectIdentity {
+- (void) clearSessionForProjectIdentity:(NSString*) projectIdentity {
+    [self updateLastActionDate];
+    
+    if(!projectIdentity)
+        return;
 
+    [_sessionsByProject removeObjectForKey: projectIdentity];
+}
+
+- (BOOL) checkIfLocation:(NSString*) location wasCheckedForProjectIdentity:(NSString*) projectIdentity {
+    [self updateLastActionDate];
+    
     if(!location)
         return NO;
 
@@ -40,6 +51,8 @@
 }
 
 - (void) markLocation:(NSString*) location checkedForProjectIdentity:(NSString*) projectIdentity {
+    [self updateLastActionDate];
+    
     if(!location)
         return;
 
@@ -51,6 +64,13 @@
     }
 
     [projectLocations addObject: location];
+}
+
+#pragma mark - Private
+
+- (void) updateLastActionDate {
+    [_lastActionDate autorelease];
+    _lastActionDate = [[NSDate date] retain];
 }
 
 @end

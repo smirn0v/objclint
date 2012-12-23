@@ -11,4 +11,6 @@
 
 @interface ObjclintSessionManager : NSObject<ObjclintSessionManagerProtocol>
 
+@property(nonatomic,readonly) NSDate* lastActionDate;
+
 @end

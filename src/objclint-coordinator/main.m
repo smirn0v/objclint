@@ -10,10 +10,24 @@
 
 int main(int argc, const char* argv[]) {
     @autoreleasepool {
+        
+        if(argc == 3 && strcmp(argv[1],"--drop-session") == 0) {
+            NSString* projectPath = [NSString stringWithUTF8String:argv[2]];
+            
+            NSConnection* connection = [[NSConnection connectionWithRegisteredName: @"ru.borsch-lab.objclint.coordinator"
+                                                                              host: nil] autorelease];
+            
+            [connection.rootProxy setProtocolForProxy:@protocol(ObjclintSessionManagerProtocol)];
+            id<ObjclintSessionManagerProtocol> sessionManager = (id<ObjclintSessionManagerProtocol>) connection.rootProxy;
+            
+            [sessionManager clearSessionForProjectIdentity: projectPath];
+            
+            return 0;
+        }
 
         NSRunLoop* runLoop = [NSRunLoop currentRunLoop];
 
-        id<ObjclintSessionManagerProtocol> root = [[ObjclintSessionManager new] autorelease];
+        ObjclintSessionManager* root = [[ObjclintSessionManager new] autorelease];
         
         NSConnection* connection = [[[NSConnection alloc] init] autorelease];
         
@@ -27,7 +41,13 @@ int main(int argc, const char* argv[]) {
         [connection addRunLoop:runLoop];
 
         while (1) {
-            [runLoop runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
+            @autoreleasepool {
+                NSDate* boundaryDate = [NSDate dateWithTimeInterval:1*60 sinceDate:[NSDate date]];
+                [runLoop runMode:NSDefaultRunLoopMode beforeDate: boundaryDate];
+                
+                if([[NSDate date] timeIntervalSinceDate: root.lastActionDate] > 5*60)
+                    break;
+            }
         }
     }
     return 0;

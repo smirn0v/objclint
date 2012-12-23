@@ -10,6 +10,7 @@
 
 @protocol ObjclintSessionManagerProtocol <NSObject>
 
+- (void) clearSessionForProjectIdentity:(NSString*) projectIdentity;
 - (BOOL) checkIfLocation:(NSString*) location wasCheckedForProjectIdentity:(NSString*) projectIdentity;
 - (void) markLocation:(NSString*) location checkedForProjectIdentity:(NSString*) projectIdentity;
 

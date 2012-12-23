@@ -21,7 +21,8 @@ cat > /tmp/ObjclintResourcePlist.plist << EOL
 </plist>
 EOL
 
-    #ONLY_ACTIVE_ARCH=YES\
+/opt/local/bin/objclint-coordinator --drop-session "`pwd`"
+
 xcodebuild \
     CC="$OBJCLINT_LOCATION"\
     CXX="$OBJCLINT_LOCATION"\
