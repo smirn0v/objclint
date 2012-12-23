@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		B22690DB16751C3A005CF60C /* ObjclintSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B22690DA16751C3A005CF60C /* ObjclintSessionManager.m */; };
-		B26111F5164ED5140053F67B /* libclang.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B26111F4164ED5140053F67B /* libclang.a */; };
 		B26F85311674F9DA00F940F4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B26F85301674F9DA00F940F4 /* Foundation.framework */; };
 		B26F85461675007D00F940F4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B26F85301674F9DA00F940F4 /* Foundation.framework */; };
 		B26F854E1675063F00F940F4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B26F85481675063F00F940F4 /* main.m */; };
@@ -39,7 +38,6 @@
 /* Begin PBXFileReference section */
 		B22690D916751C3A005CF60C /* ObjclintSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjclintSessionManager.h; sourceTree = "<group>"; };
 		B22690DA16751C3A005CF60C /* ObjclintSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObjclintSessionManager.m; sourceTree = "<group>"; };
-		B26111F4164ED5140053F67B /* libclang.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libclang.a; path = "thirdparty/llvm-3.1/llvm-clang-build/lib/libclang.a"; sourceTree = "<group>"; };
 		B26F85301674F9DA00F940F4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		B26F85371675006C00F940F4 /* objclint-coordinator */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "objclint-coordinator"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B26F85481675063F00F940F4 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -66,21 +64,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				B26F85311674F9DA00F940F4 /* Foundation.framework in Frameworks */,
-				B26111F5164ED5140053F67B /* libclang.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		B24DED601651868000D12E0B /* thirdparty */ = {
-			isa = PBXGroup;
-			children = (
-				B26111F4164ED5140053F67B /* libclang.a */,
-			);
-			name = thirdparty;
-			sourceTree = "<group>";
-		};
 		B26111EF164ED0F20053F67B /* src */ = {
 			isa = PBXGroup;
 			children = (
@@ -125,7 +114,6 @@
 			isa = PBXGroup;
 			children = (
 				B26F85321674F9E200F940F4 /* frameworks */,
-				B24DED601651868000D12E0B /* thirdparty */,
 				B26111EF164ED0F20053F67B /* src */,
 				B281CC90164ECEBB0003A327 /* Products */,
 			);
@@ -297,12 +285,35 @@
 		B281CC9A164ECEBB0003A327 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
-				HEADER_SEARCH_PATHS = "./thirdparty/llvm-3.1/llvm-clang-build/include/clang-c";
+				HEADER_SEARCH_PATHS = (
+					"./thirdparty/llvm-3.1/llvm-clang-build/include/clang-c",
+					"./thirdparty/js-1.8.5/build/include",
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/thirdparty/llvm-3.1/llvm-clang-build/lib\"",
+					"\"$(SRCROOT)/thirdparty/js-1.8.5/build/lib\"",
+				);
+				OTHER_LDFLAGS = (
+					"-lstdc++",
+					"\"$(SRCROOT)/thirdparty/llvm-3.1/llvm-clang-build/lib/libclang.a\"",
+					"\"$(SRCROOT)/thirdparty/js-1.8.5/build/lib/libmozjs185-1.0.a\"",
+					"\"$(SRCROOT)/thirdparty/llvm-3.1/llvm-clang-build/lib/libclangAST.a\"",
+					"\"$(SRCROOT)/thirdparty/llvm-3.1/llvm-clang-build/lib/libclangLex.a\"",
+					"\"$(SRCROOT)/thirdparty/llvm-3.1/llvm-clang-build/lib/libLLVMCore.a\"",
+					"\"$(SRCROOT)/thirdparty/llvm-3.1/llvm-clang-build/lib/libclangEdit.a\"",
+					"\"$(SRCROOT)/thirdparty/llvm-3.1/llvm-clang-build/lib/libclangParse.a\"",
+					"\"$(SRCROOT)/thirdparty/llvm-3.1/llvm-clang-build/lib/libclangFrontend.a\"",
+					"\"$(SRCROOT)/thirdparty/llvm-3.1/llvm-clang-build/lib/libclangSema.a\"",
+					"\"$(SRCROOT)/thirdparty/llvm-3.1/llvm-clang-build/lib/libclangBasic.a\"",
+					"\"$(SRCROOT)/thirdparty/llvm-3.1/llvm-clang-build/lib/libclangFrontendTool.a\"",
+					"\"$(SRCROOT)/thirdparty/llvm-3.1/llvm-clang-build/lib/libclangAnalysis.a\"",
+					"\"$(SRCROOT)/thirdparty/llvm-3.1/llvm-clang-build/lib/libclangSerialization.a\"",
+					"\"$(SRCROOT)/thirdparty/llvm-3.1/llvm-clang-build/lib/libLLVMSupport.a\"",
+					"\"$(SRCROOT)/thirdparty/llvm-3.1/llvm-clang-build/lib/libclangDriver.a\"",
+					"\"$(SRCROOT)/thirdparty/llvm-3.1/llvm-clang-build/lib/libLLVMMC.a\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -311,12 +322,35 @@
 		B281CC9B164ECEBB0003A327 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
-				HEADER_SEARCH_PATHS = "./thirdparty/llvm-3.1/llvm-clang-build/include/clang-c";
+				HEADER_SEARCH_PATHS = (
+					"./thirdparty/llvm-3.1/llvm-clang-build/include/clang-c",
+					"./thirdparty/js-1.8.5/build/include",
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/thirdparty/llvm-3.1/llvm-clang-build/lib\"",
+					"\"$(SRCROOT)/thirdparty/js-1.8.5/build/lib\"",
+				);
+				OTHER_LDFLAGS = (
+					"-lstdc++",
+					"\"$(SRCROOT)/thirdparty/llvm-3.1/llvm-clang-build/lib/libclang.a\"",
+					"\"$(SRCROOT)/thirdparty/js-1.8.5/build/lib/libmozjs185-1.0.a\"",
+					"\"$(SRCROOT)/thirdparty/llvm-3.1/llvm-clang-build/lib/libclangAST.a\"",
+					"\"$(SRCROOT)/thirdparty/llvm-3.1/llvm-clang-build/lib/libclangLex.a\"",
+					"\"$(SRCROOT)/thirdparty/llvm-3.1/llvm-clang-build/lib/libLLVMCore.a\"",
+					"\"$(SRCROOT)/thirdparty/llvm-3.1/llvm-clang-build/lib/libclangEdit.a\"",
+					"\"$(SRCROOT)/thirdparty/llvm-3.1/llvm-clang-build/lib/libclangParse.a\"",
+					"\"$(SRCROOT)/thirdparty/llvm-3.1/llvm-clang-build/lib/libclangFrontend.a\"",
+					"\"$(SRCROOT)/thirdparty/llvm-3.1/llvm-clang-build/lib/libclangSema.a\"",
+					"\"$(SRCROOT)/thirdparty/llvm-3.1/llvm-clang-build/lib/libclangBasic.a\"",
+					"\"$(SRCROOT)/thirdparty/llvm-3.1/llvm-clang-build/lib/libclangFrontendTool.a\"",
+					"\"$(SRCROOT)/thirdparty/llvm-3.1/llvm-clang-build/lib/libclangAnalysis.a\"",
+					"\"$(SRCROOT)/thirdparty/llvm-3.1/llvm-clang-build/lib/libclangSerialization.a\"",
+					"\"$(SRCROOT)/thirdparty/llvm-3.1/llvm-clang-build/lib/libLLVMSupport.a\"",
+					"\"$(SRCROOT)/thirdparty/llvm-3.1/llvm-clang-build/lib/libclangDriver.a\"",
+					"\"$(SRCROOT)/thirdparty/llvm-3.1/llvm-clang-build/lib/libLLVMMC.a\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
