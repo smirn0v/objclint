@@ -2,6 +2,25 @@
 
 OBJCLINT_LOCATION=/opt/local/bin/objclint-dispatcher.py
 
+cat > /tmp/ObjclintResourcePlist.plist << EOL
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+    <dict>
+        <key>rules</key>
+        <dict>
+            <key>.*</key>
+            <dict>
+                <key>omit</key>
+                <true/>
+                <key>weight</key>
+                <real>10</real>
+            </dict>
+        </dict>
+    </dict>
+</plist>
+EOL
+
     #ONLY_ACTIVE_ARCH=YES\
 xcodebuild \
     CC="$OBJCLINT_LOCATION"\
@@ -12,6 +31,8 @@ xcodebuild \
     LDPLUSPLUS="true"\
     GCC_GENERATE_DEBUGGING_SYMBOLS=NO\
     GCC_PRECOMPILE_PREFIX_HEADER=NO\
+    ONLY_ACTIVE_ARCH=YES\
+    --resource-rules=/tmp/ObjclintReosurceRules.plist\
     -PBXBuildsContinueAfterErrors=YES\
     -jobs 1\
     "$@"
