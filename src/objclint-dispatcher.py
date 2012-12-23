@@ -20,6 +20,11 @@ def main():
     try:
         input_file = sys.argv[sys.argv.index("-c")+1]
     except:
+        if "--print-diagnostic-categories" in sys.argv:
+            try:
+                sys.argv[0]="clang"
+                call(sys.argv,stdout=sys.stdout,stderr=sys.stderr)
+            except: pass
         sys.exit(0) # linker call should just succeed
     
     dependencies_file = None
@@ -27,19 +32,18 @@ def main():
         dependencies_file = sys.argv[sys.argv.index("-MF")+1]
     except: pass
 
-    new_argvs = sys.argv
-    new_argvs[0] = "/opt/local/bin/objclint-fake-compiler"
+    sys.argv[0] = "/opt/local/bin/objclint-fake-compiler"
 
-    if input_file == "/dev/null":
-        new_argvs[0] = "clang"
-        if objclint_fake_cxx in new_argvs:
-            new_argvs[0] = "clang++"
+    if input_file == "/dev/null": 
+        sys.argv[0] = "clang"
+        if objclint_fake_cxx in sys.argv:
+            sys.argv[0] = "clang++"
         try:
-            new_argvs.remove(objclint_fake_cc)
-            new_argvs.remove(objclint_fake_cxx)
+            sys.argv.remove(objclint_fake_cc)
+            sys.argv.remove(objclint_fake_cxx)
         except: pass
 
-    ret_value = call(new_argvs,stdout=sys.stdout,stderr=sys.stderr)
+    ret_value = call(sys.argv,stdout=sys.stdout,stderr=sys.stderr)
 
     if dependencies_file is not None:
         command = 'DEP="%s";DEP_DIR=`dirname "${DEP}"`;mkdir -p "${DEP_DIR}";echo ":" > "${DEP}"'%(dependencies_file)

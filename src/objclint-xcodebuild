@@ -2,6 +2,7 @@
 
 OBJCLINT_LOCATION=/opt/local/bin/objclint-dispatcher.py
 
+    #ONLY_ACTIVE_ARCH=YES\
 xcodebuild \
     CC="$OBJCLINT_LOCATION"\
     CXX="$OBJCLINT_LOCATION"\
