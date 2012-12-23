@@ -40,8 +40,7 @@
     ClangSpellingLocation* spellingLocation = [[ClangSpellingLocation new] autorelease];
     
     if(fileNameC)
-        spellingLocation.filePath = [NSString stringWithCharacters:(const unsigned short*)fileNameC
-                                                            length:strlen(fileNameC)];
+        spellingLocation.filePath = [NSString stringWithUTF8String:fileNameC];
     spellingLocation.line = line;
     spellingLocation.column = column;
     spellingLocation.offset = offset;
