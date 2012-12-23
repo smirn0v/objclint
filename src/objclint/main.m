@@ -68,7 +68,6 @@ BOOL isLocationAlreadyChecked(const CXSourceLocation* location, id<ObjclintSessi
     NSNumber* status = paths[filePath];
     
     if(!status) {
-        NSLog(@"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         NSNumber* coordinatorStatus = @([sessionManager checkIfLocation:filePath wasCheckedForProjectIdentity:projectPath()]);
         if(coordinatorStatus.boolValue) {
             paths[filePath] = @YES; // already checked
