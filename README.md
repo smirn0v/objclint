@@ -3,6 +3,10 @@ objclint
 
 objclint is a clang based tool for performing code style guidelines check.
 
+## TODO
+
+* Dynamic linking to clang
+
 
 LICENSE
 =======
