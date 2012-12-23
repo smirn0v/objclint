@@ -41,22 +41,24 @@ BOOL isLocationAlreadyChecked(const CXSourceLocation* location, id<ObjclintSessi
 }
 
 enum CXChildVisitResult visitor(CXCursor cursor, CXCursor parent, CXClientData client_data) {
+    @autoreleasepool {
     
-    id<ObjclintSessionManagerProtocol> sessionManager = client_data;
+        id<ObjclintSessionManagerProtocol> sessionManager = client_data;
 
-	CXSourceLocation location = clang_getCursorLocation(cursor);
+        CXSourceLocation location = clang_getCursorLocation(cursor);
 
-    if(isLocationAlreadyChecked(&location, sessionManager)) {
-        return CXChildVisit_Continue;
+        if(isLocationAlreadyChecked(&location, sessionManager)) {
+            return CXChildVisit_Continue;
+        }
+
+        CXString spelling = clang_getCursorSpelling(cursor);
+        const char* spellingC = clang_getCString(spelling);
+        NSLog(@"%@ - %s",[ClangUtils spellingLocationForSourceLocation:&location],spellingC);
+        
+        clang_disposeString(spelling);
+
+        return CXChildVisit_Recurse;
     }
-
-    CXString spelling = clang_getCursorSpelling(cursor);
-    const char* spellingC = clang_getCString(spelling);
-    NSLog(@"%@ - %s",[ClangUtils spellingLocationForSourceLocation:&location],spellingC);
-    
-    clang_disposeString(spelling);
-
-	return CXChildVisit_Recurse;
 }
 
 id<ObjclintSessionManagerProtocol> aquireSessionManager() {
