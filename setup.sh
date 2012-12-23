@@ -4,6 +4,7 @@ THIRDPATIES_DIR="`pwd`/thirdparty"
 LLVM_CLANG_BUILD_DIR="`pwd`/thirdparty/llvm-3.1/llvm-clang-build"
 LLVM_CHECKOUT_DIR="`pwd`/thirdparty/llvm-3.1"
 SPIDER_MONKEY_VERSION="js185-1.0.0"
+SPIDER_MONKEY_DIR="${THIRDPATIES_DIR}/js-1.8.5"
 
 function exit_if_error {
     if [ $? -gt 0 ]; then
@@ -51,13 +52,12 @@ echo
 #### Checkout SpiderMonkey #########################
 
 echo "[~] Checking out SpiderMonkey JS Engine"
-echo
 
 cd "${THIRDPATIES_DIR}"
-curl -O "http://ftp.mozilla.org/pub/mozilla.org/js/${SPIDER_MONKEY_VERSION}.tar.gz" 1> /dev/null
+curl -s -O "http://ftp.mozilla.org/pub/mozilla.org/js/${SPIDER_MONKEY_VERSION}.tar.gz" 1> /dev/null
 exit_if_error "failed to download SpiderMonkey JS Engine"
 
-tar -zxvf ${SPIDER_MONKEY_VERSION}.tar.gz 1> /dev/null
+tar -zxf ${SPIDER_MONKEY_VERSION}.tar.gz 1> /dev/null
 exit_if_error "failed to extract"
 
 echo "[+] Checked out"
@@ -68,12 +68,11 @@ echo
 #### Checkout Autocong-2.13 #########################
 
 echo "[~] Checking out Autoconf-2.13 (needed for SpiderMonkey)"
-echo
 
-curl -O "http://ftp.gnu.org/gnu/autoconf/autoconf-2.13.tar.gz" 1> /dev/null
+curl -s -O "http://ftp.gnu.org/gnu/autoconf/autoconf-2.13.tar.gz" 1> /dev/null
 exit_if_error "failed to download autoconf-2.13"
 
-tar -zxvf autoconf-2.13.tar.gz 1> /dev/null
+tar -zxf autoconf-2.13.tar.gz 1> /dev/null
 exit_if_error "failed to extract"
 
 echo "[+] Checked out"
@@ -90,10 +89,10 @@ echo "[~] Setting up autoconf-2.13"
 ./configure --prefix=./build --disable-debug --program-suffix=213 1> /dev/null
 exit_if_error "failed to configure autoconf"
 
-make install
+make install 1> /dev/null
 exit_if_error "failed to install autoconf-2.13"
 
-cp ./build/share/autoconf/* "${THIRDPATIES_DIR}/${SPIDER_MONKEY_VERSION}/js/src/"
+cp -R ./build/share/autoconf/* "${SPIDER_MONKEY_DIR}/js/src/"
 exit_if_error "failed to copy autoconf files into SpiderMonkey"
 
 echo "[+] Finished configuring autoconf-2.13"
@@ -104,28 +103,25 @@ echo
 
 echo "[~] Building SpiderMonkey"
 
-cd "${THIRDPATIES_DIR}/${SPIDER_MONKEY_VERSION}"/js/src
+cd "${SPIDER_MONKEY_DIR}"/js/src
 
 echo "[~] Autoconf"
-"./${THIRDPATIES_DIR}/autoconf-2.13/build/bin/autoconf213"
+"${THIRDPATIES_DIR}/autoconf-2.13/build/bin/autoconf213"
 exit_if_error "failed to autoconf"
 echo "[+] Autoconf finished"
-echo
 
 echo "[~] Configuring"
-./configure --prefix="${THIRDPATIES_DIR}/${SPIDER_MONKEY_VERSION}/build"
+CC=cc CXX=c++ CCFLAGS=-w CXXFLAGS=-w ./configure --prefix="${SPIDER_MONKEY_DIR}/build" 1> /dev/null
 exit_if_error "failed to configure SpiderMonkey"
 echo "[+] Configured"
-echo
 
 echo "[~] Building"
-make
+make 1> /dev/null
 exit_if_error "failed to build SpiderMonkey"
 echo "[+] Build finished"
-echo
 
 echo "[~] Installing"
-make install
+make install 1> /dev/null
 exit_if_error "failed to install SpiderMonkey"
 echo "[+] Installed"
 echo 
