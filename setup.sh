@@ -14,8 +14,8 @@ function exit_if_error {
 
 ##### Check if not ran before ##########################
 
-if [ -d $LLVM_CHECKOUT_DIR ] || [ -d $LLVM_CLANG_BUILD_DIR  ]; then
-    echo "[-] Try to delete '${LLVM_CHECKOUT_DIR}' and '${LLVM_CLANG_BUILD_DIR}' directories and then run 'setup.sh' again"
+if [ "$(ls -A ${THIRDPATIES_DIR})" ]; then
+    echo "[-] Try to cleanup ${THIRDPATIES_DIR} and run $0 again"
     exit 1
 fi
 
