@@ -56,6 +56,7 @@
 		B27348FE168721620031D877 /* ClangSpellingLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ClangSpellingLocation.m; sourceTree = "<group>"; };
 		B273490116879EB30031D877 /* JavaScriptSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JavaScriptSession.h; sourceTree = "<group>"; };
 		B273490216879EB40031D877 /* JavaScriptSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JavaScriptSession.m; sourceTree = "<group>"; };
+		B27349051687A5970031D877 /* lint-check-ivars.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "lint-check-ivars.js"; sourceTree = "<group>"; };
 		B281CC8F164ECEBB0003A327 /* objclint */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = objclint; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -82,6 +83,7 @@
 		B26111EF164ED0F20053F67B /* src */ = {
 			isa = PBXGroup;
 			children = (
+				B27349041687A5970031D877 /* lint-checkers */,
 				B26F85471675063F00F940F4 /* objclint */,
 				B26F854A1675063F00F940F4 /* objclint-coordinator */,
 				B26F854D1675063F00F940F4 /* objclint-xcodebuild */,
@@ -123,6 +125,14 @@
 				B22690DA16751C3A005CF60C /* ObjclintSessionManager.m */,
 			);
 			path = "objclint-coordinator";
+			sourceTree = "<group>";
+		};
+		B27349041687A5970031D877 /* lint-checkers */ = {
+			isa = PBXGroup;
+			children = (
+				B27349051687A5970031D877 /* lint-check-ivars.js */,
+			);
+			path = "lint-checkers";
 			sourceTree = "<group>";
 		};
 		B281CC84164ECEBB0003A327 = {
