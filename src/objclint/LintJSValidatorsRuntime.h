@@ -13,4 +13,6 @@
 - (id) initWithLintsFolderPath:(NSString*) folderPath;
 - (LintJSValidatorsRuntime*) runtimeWithLintsFolderPath:(NSString*) folderPath;
 
+- (void) runValidators;
+
 @end
