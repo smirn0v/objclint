@@ -12,6 +12,7 @@
 
 - (void) clearSessionForProjectIdentity:(NSString*) projectIdentity;
 - (void) setLintJSValidatorsFolderPath:(NSString*)folderPath forProjectIdentity:(NSString*) projectIdentity;
+- (NSString*) lintJSValidatorsFolderPathForProjectIdentity:(NSString*) projectIdentity;
 - (BOOL) checkIfLocation:(NSString*) location wasCheckedForProjectIdentity:(NSString*) projectIdentity;
 - (void) markLocation:(NSString*) location checkedForProjectIdentity:(NSString*) projectIdentity;
 

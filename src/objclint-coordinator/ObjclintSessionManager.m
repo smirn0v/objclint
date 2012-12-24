@@ -53,6 +53,15 @@
         _validatorsFolderPathForProject[projectIdentity] = folderPath;
 }
 
+- (NSString*) lintJSValidatorsFolderPathForProjectIdentity:(NSString*) projectIdentity {
+    [self updateLastActionDate];
+
+    if(!projectIdentity)
+        return nil;
+    
+    return _validatorsFolderPathForProject[projectIdentity];
+}
+
 - (BOOL) checkIfLocation:(NSString*) location wasCheckedForProjectIdentity:(NSString*) projectIdentity {
     [self updateLastActionDate];
     
