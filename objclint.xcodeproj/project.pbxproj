@@ -14,7 +14,7 @@
 		B26F85511675063F00F940F4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B26F854B1675063F00F940F4 /* main.m */; };
 		B27348FC168720960031D877 /* ClangUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = B27348FB168720960031D877 /* ClangUtils.m */; };
 		B27348FF168721620031D877 /* ClangSpellingLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = B27348FE168721620031D877 /* ClangSpellingLocation.m */; };
-		B273490316879EB40031D877 /* JavaScriptSession.m in Sources */ = {isa = PBXBuildFile; fileRef = B273490216879EB40031D877 /* JavaScriptSession.m */; };
+		B273490316879EB40031D877 /* LintJSValidatorsRuntime.m in Sources */ = {isa = PBXBuildFile; fileRef = B273490216879EB40031D877 /* LintJSValidatorsRuntime.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -54,8 +54,8 @@
 		B27348FB168720960031D877 /* ClangUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ClangUtils.m; sourceTree = "<group>"; };
 		B27348FD168721620031D877 /* ClangSpellingLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ClangSpellingLocation.h; sourceTree = "<group>"; };
 		B27348FE168721620031D877 /* ClangSpellingLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ClangSpellingLocation.m; sourceTree = "<group>"; };
-		B273490116879EB30031D877 /* JavaScriptSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JavaScriptSession.h; sourceTree = "<group>"; };
-		B273490216879EB40031D877 /* JavaScriptSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JavaScriptSession.m; sourceTree = "<group>"; };
+		B273490116879EB30031D877 /* LintJSValidatorsRuntime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LintJSValidatorsRuntime.h; sourceTree = "<group>"; };
+		B273490216879EB40031D877 /* LintJSValidatorsRuntime.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LintJSValidatorsRuntime.m; sourceTree = "<group>"; };
 		B27349051687A5970031D877 /* lint-check-ivars.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "lint-check-ivars.js"; sourceTree = "<group>"; };
 		B281CC8F164ECEBB0003A327 /* objclint */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = objclint; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -110,8 +110,8 @@
 				B27348FB168720960031D877 /* ClangUtils.m */,
 				B27348FD168721620031D877 /* ClangSpellingLocation.h */,
 				B27348FE168721620031D877 /* ClangSpellingLocation.m */,
-				B273490116879EB30031D877 /* JavaScriptSession.h */,
-				B273490216879EB40031D877 /* JavaScriptSession.m */,
+				B273490116879EB30031D877 /* LintJSValidatorsRuntime.h */,
+				B273490216879EB40031D877 /* LintJSValidatorsRuntime.m */,
 			);
 			path = objclint;
 			sourceTree = "<group>";
@@ -234,7 +234,7 @@
 				B26F854E1675063F00F940F4 /* main.m in Sources */,
 				B27348FC168720960031D877 /* ClangUtils.m in Sources */,
 				B27348FF168721620031D877 /* ClangSpellingLocation.m in Sources */,
-				B273490316879EB40031D877 /* JavaScriptSession.m in Sources */,
+				B273490316879EB40031D877 /* LintJSValidatorsRuntime.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

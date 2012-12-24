@@ -1,13 +1,13 @@
 //
-//  JavaScriptSession.m
+//  LintJSValidatorsRuntime.h
 //  objclint
 //
 //  Created by Smirnov on 12/24/12.
 //  Copyright (c) 2012 Borsch Lab. All rights reserved.
 //
 
-#import "JavaScriptSession.h"
+#import <Foundation/Foundation.h>
 
-@implementation JavaScriptSession
+@interface LintJSValidatorsRuntime : NSObject
 
 @end
