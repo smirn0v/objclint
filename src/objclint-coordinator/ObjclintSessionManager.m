@@ -10,6 +10,7 @@
 
 @implementation ObjclintSessionManager {
     NSMutableDictionary* _sessionsByProject;
+    NSMutableDictionary* _validatorsFolderPathForProject;
 }
 
 #pragma mark - Init&Dealloc
@@ -18,6 +19,7 @@
     self = [super init];
     if (self) {
         _sessionsByProject = @{}.mutableCopy;
+        _validatorsFolderPathForProject = @{}.mutableCopy;
     }
 
     return self;
@@ -26,6 +28,7 @@
 - (void)dealloc {
     [_lastActionDate release];
     [_sessionsByProject release];
+    [_validatorsFolderPathForProject release];
     [super dealloc];
 }
 
@@ -38,6 +41,16 @@
         return;
 
     [_sessionsByProject removeObjectForKey: projectIdentity];
+}
+
+- (void) setLintJSValidatorsFolderPath:(NSString*) folderPath forProjectIdentity:(NSString*) projectIdentity {
+    [self updateLastActionDate];
+    
+    if(!projectIdentity)
+        return;
+    
+    if(folderPath)
+        _validatorsFolderPathForProject[projectIdentity] = folderPath;
 }
 
 - (BOOL) checkIfLocation:(NSString*) location wasCheckedForProjectIdentity:(NSString*) projectIdentity {

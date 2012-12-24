@@ -10,4 +10,7 @@
 
 @interface LintJSValidatorsRuntime : NSObject
 
+- (id) initWithLintsFolderPath:(NSString*) folderPath;
+- (LintJSValidatorsRuntime*) runtimeWithLintsFolderPath:(NSString*) folderPath;
+
 @end

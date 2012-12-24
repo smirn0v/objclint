@@ -8,35 +8,49 @@
 
 #import "ObjclintSessionManager.h"
 
+static NSString* serviceName = @"ru.borsch-lab.objclint.coordinator";
+
+BOOL setupExistingCoordinator(NSString* projectIdentity, NSString* jsValidatorsFolder) {
+    NSConnection* existingCoordinatorConnection = [[NSConnection connectionWithRegisteredName: serviceName
+                                                                                         host: nil] autorelease];
+    
+    [existingCoordinatorConnection.rootProxy setProtocolForProxy:@protocol(ObjclintSessionManagerProtocol)];
+    id<ObjclintSessionManagerProtocol> sessionManager = (id<ObjclintSessionManagerProtocol>) existingCoordinatorConnection.rootProxy;
+    
+    [sessionManager clearSessionForProjectIdentity: projectIdentity];
+    [sessionManager setLintJSValidatorsFolderPath:jsValidatorsFolder forProjectIdentity:projectIdentity];
+    
+    return existingCoordinatorConnection != nil;
+}
+
 int main(int argc, const char* argv[]) {
     @autoreleasepool {
         
-        if(argc == 3 && strcmp(argv[1],"--drop-session") == 0) {
-            NSString* projectPath = [NSString stringWithUTF8String:argv[2]];
-            
-            NSConnection* connection = [[NSConnection connectionWithRegisteredName: @"ru.borsch-lab.objclint.coordinator"
-                                                                              host: nil] autorelease];
-            
-            [connection.rootProxy setProtocolForProxy:@protocol(ObjclintSessionManagerProtocol)];
-            id<ObjclintSessionManagerProtocol> sessionManager = (id<ObjclintSessionManagerProtocol>) connection.rootProxy;
-            
-            [sessionManager clearSessionForProjectIdentity: projectPath];
-            
+
+        NSString* projectIdentity = [[NSFileManager defaultManager] currentDirectoryPath];
+        NSString* jsValidatorsFolder = @"/opt/local/share/objclint-validators";
+        //TODO: support for '.objclint' configuration for validators folder
+        
+        if(setupExistingCoordinator(projectIdentity, jsValidatorsFolder)) {
+            printf("Connected to existing %s, prepared for new session\n", argv[0]);
             return 0;
         }
 
         NSRunLoop* runLoop = [NSRunLoop currentRunLoop];
 
-        ObjclintSessionManager* root = [[ObjclintSessionManager new] autorelease];
+        ObjclintSessionManager* sessionManager = [[ObjclintSessionManager new] autorelease];
         
         NSConnection* connection = [[[NSConnection alloc] init] autorelease];
         
-        [connection setRootObject: [NSProtocolChecker protocolCheckerWithTarget:root protocol:@protocol(ObjclintSessionManagerProtocol)]];
+        [connection setRootObject: [NSProtocolChecker protocolCheckerWithTarget:sessionManager protocol:@protocol(ObjclintSessionManagerProtocol)]];
         
-        if(NO == [connection registerName:@"ru.borsch-lab.objclint.coordinator"]) {
-            NSLog(@"failed to register local service");
+        if(NO == [connection registerName:serviceName]) {
+            printf("Failed to register local service\n");
             return 1;
         }
+        
+        [sessionManager clearSessionForProjectIdentity: projectIdentity];
+        [sessionManager setLintJSValidatorsFolderPath:jsValidatorsFolder forProjectIdentity:projectIdentity];
         
         [connection addRunLoop:runLoop];
 
@@ -45,7 +59,7 @@ int main(int argc, const char* argv[]) {
                 NSDate* boundaryDate = [NSDate dateWithTimeInterval:1*60 sinceDate:[NSDate date]];
                 [runLoop runMode:NSDefaultRunLoopMode beforeDate: boundaryDate];
                 
-                if([[NSDate date] timeIntervalSinceDate: root.lastActionDate] > 5*60)
+                if([[NSDate date] timeIntervalSinceDate: sessionManager.lastActionDate] > 5*60)
                     break;
             }
         }
