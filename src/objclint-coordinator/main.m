@@ -29,7 +29,7 @@ BOOL setupExistingCoordinator(BOOL check, NSString* projectIdentity, NSString* j
 int main(int argc, const char* argv[]) {
     @autoreleasepool {
         
-        BOOL justCheck = argc==2 && strcmp(argv[1],"--check");
+        BOOL justCheck = argc==2 && strcmp(argv[1],"--check") == 0;
 
         NSString* projectIdentity = [[NSFileManager defaultManager] currentDirectoryPath];
         NSString* jsValidatorsFolder = @"/opt/local/share/objclint-validators";
