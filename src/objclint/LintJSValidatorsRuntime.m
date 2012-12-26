@@ -11,23 +11,28 @@
 #define JS_NO_JSVAL_JSID_STRUCT_TYPES
 #include "js/jsapi.h"
 
-JSBool lintjs_print(JSContext *cx, uintN argc, jsval *vp) {
-    NSLog(@"JavaScript output!!!!");
+JSBool lint_log(JSContext *cx, uintN argc, jsval *vp) {
     
+    JSString* string;
+    if (!JS_ConvertArguments(cx, argc, JS_ARGV(cx, vp), "/S", &string))
+        return JS_FALSE;
+    
+    char* stringC = JS_EncodeString(cx, string);
+    
+    NSLog(@"%s",stringC);
+    
+    JS_free(cx, stringC);
     JS_SET_RVAL(cx, vp, JSVAL_VOID);
     return JS_TRUE;
 }
 
-
-
 /* The class of the global object. */
 static JSClass global_class = { "global", JSCLASS_GLOBAL_FLAGS, JS_PropertyStub, JS_PropertyStub, JS_PropertyStub, JS_StrictPropertyStub, JS_EnumerateStub, JS_ResolveStub, JS_ConvertStub, NULL, JSCLASS_NO_OPTIONAL_MEMBERS };
 
+static JSClass lint_class = { "Lint", JSCLASS_HAS_PRIVATE, JS_PropertyStub, JS_PropertyStub, JS_PropertyStub, JS_StrictPropertyStub, JS_EnumerateStub, JS_ResolveStub, JS_ConvertStub, NULL, JSCLASS_NO_OPTIONAL_MEMBERS };
 
-static JSClass lint_class = { "Lint", JSCLASS_, JS_PropertyStub, JS_PropertyStub, JS_PropertyStub, JS_StrictPropertyStub, JS_EnumerateStub, JS_ResolveStub, JS_ConvertStub, NULL, JSCLASS_NO_OPTIONAL_MEMBERS };
-
-static JSFunctionSpec lint_global_functions[] = {
-    JS_FS("print", lintjs_print, 0, 0),
+static JSFunctionSpec lint_methods[] = {
+    JS_FS("log", lint_log, 1, 0),
     JS_FS_END
 };
 
@@ -116,9 +121,7 @@ void reportError(JSContext *cx, const char *message, JSErrorReport *report) {
     if (!JS_InitStandardClasses(_context, _global))
         return NO;
 
-    if (!JS_DefineFunctions(_context, _global, lintjs_global_functions))
-        return NO;
-
+    [self registerLintObject];
     [self prepareValidators];
     
     return YES;
@@ -159,7 +162,7 @@ void reportError(JSContext *cx, const char *message, JSErrorReport *report) {
                 if(NULL == scriptObj)
                     continue;
 
-                if(!JS_AddNamedObjectRoot(_context, &scriptObj, NULL))
+                if(!JS_AddObjectRoot(_context, &scriptObj))
                     continue;
                     
                 [_validatorsScripts addObject: [NSValue valueWithPointer: scriptObj]];
@@ -177,7 +180,11 @@ void reportError(JSContext *cx, const char *message, JSErrorReport *report) {
     _validatorsScripts = nil;
 }
 
-- (void) registerGlobals {
+- (void) registerLintObject {
+    
+    JSObject* prototype = JS_InitClass(_context, _global, NULL, &lint_class, NULL, NULL, NULL, lint_methods, NULL, NULL);
+    JSObject* lintObject = JS_DefineObject(_context, _global, "lint", &lint_class, prototype, 0);
+    JS_AddNamedObjectRoot(_context, &lintObject, "lint");
     
 }
 
