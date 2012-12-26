@@ -1,13 +1,12 @@
 #import <Foundation/Foundation.h>
 #import "ObjclintSessionManagerProtocol.h"
 #import "ClangUtils.h"
-#import "ClangSpellingLocation.h"
 #import "LintJSValidatorsRuntime.h"
 #include <Index.h>
 
 static LintJSValidatorsRuntime* jsRuntime = nil;
 
-BOOL isLocationAlreadyChecked(const CXSourceLocation* location, id<ObjclintSessionManagerProtocol> sessionManager) {
+BOOL isCursorAlreadyChecked(CXCursor cursor, id<ObjclintSessionManagerProtocol> sessionManager) {
     static NSMutableDictionary* paths = nil;
     
     static dispatch_once_t onceToken;
@@ -15,28 +14,28 @@ BOOL isLocationAlreadyChecked(const CXSourceLocation* location, id<ObjclintSessi
         paths = @{}.mutableCopy;
     });
 
-    if(NO == [ClangUtils locationBelongsToProject: location])
+    if(NO == [ClangUtils cursorBelongsToProject: cursor])
         return YES;
     
-    ClangSpellingLocation* spellingLocation = [ClangUtils spellingLocationForSourceLocation: location];
+    NSString* filePath = [ClangUtils filePathForCursor: cursor];
     
-    if(!spellingLocation.filePath)
+    if(!filePath)
         return YES;
     
-    NSNumber* status = paths[spellingLocation.filePath];
+    NSNumber* status = paths[filePath];
     
     if(!status) {
-        NSNumber* coordinatorStatus = @([sessionManager checkIfLocation:spellingLocation.filePath
+        NSNumber* coordinatorStatus = @([sessionManager checkIfLocation:filePath
                                            wasCheckedForProjectIdentity:ClangUtils.projectPath]);
         if(coordinatorStatus.boolValue) {
-            paths[spellingLocation.filePath] = @YES; // already checked
+            paths[filePath] = @YES; // already checked
         } else {
             // we will handle it
-            [sessionManager markLocation:spellingLocation.filePath
+            [sessionManager markLocation:filePath
                checkedForProjectIdentity:ClangUtils.projectPath];
             
             // locally treat it as unchecked
-            paths[spellingLocation.filePath] = @NO;
+            paths[filePath] = @NO;
         }
     }
     
@@ -52,18 +51,11 @@ enum CXChildVisitResult visitor(CXCursor cursor, CXCursor parent, CXClientData c
             jsRuntime = [[LintJSValidatorsRuntime runtimeWithLintsFolderPath: [sessionManager lintJSValidatorsFolderPathForProjectIdentity: [ClangUtils projectPath]]] retain];
         }
 
-        CXSourceLocation location = clang_getCursorLocation(cursor);
-
-        if(isLocationAlreadyChecked(&location, sessionManager)) {
+        if(isCursorAlreadyChecked(cursor, sessionManager)) {
             return CXChildVisit_Continue;
         }
 
-        CXString spelling = clang_getCursorSpelling(cursor);
-        const char* spellingC = clang_getCString(spelling);
-        NSLog(@"%@ - %s",[ClangUtils spellingLocationForSourceLocation:&location],spellingC);
-        [jsRuntime runValidators];
-        
-        clang_disposeString(spelling);
+        [jsRuntime runValidatorsForCursor: cursor];
 
         return CXChildVisit_Recurse;
     }
@@ -99,11 +91,3 @@ int main(int argc, char *argv[]) {
     
     return 0;
 }
-
-#if 0
-CXDiagnostic Diag = clang_getDiagnostic(TU, I);
-      CXString String = clang_formatDiagnostic(Diag, 
-                                             clang_defaultDiagnosticDisplayOptions());
-          printf("!!!!!!!! %s\n", clang_getCString(String));
-              clang_disposeString(String);
-#endif

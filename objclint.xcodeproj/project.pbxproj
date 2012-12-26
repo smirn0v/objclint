@@ -13,7 +13,6 @@
 		B26F854E1675063F00F940F4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B26F85481675063F00F940F4 /* main.m */; };
 		B26F85511675063F00F940F4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B26F854B1675063F00F940F4 /* main.m */; };
 		B27348FC168720960031D877 /* ClangUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = B27348FB168720960031D877 /* ClangUtils.m */; };
-		B27348FF168721620031D877 /* ClangSpellingLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = B27348FE168721620031D877 /* ClangSpellingLocation.m */; };
 		B273490316879EB40031D877 /* LintJSValidatorsRuntime.m in Sources */ = {isa = PBXBuildFile; fileRef = B273490216879EB40031D877 /* LintJSValidatorsRuntime.m */; };
 /* End PBXBuildFile section */
 
@@ -52,8 +51,6 @@
 		B26F8556167519C500F940F4 /* ObjclintSessionManagerProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ObjclintSessionManagerProtocol.h; sourceTree = "<group>"; };
 		B27348FA168720960031D877 /* ClangUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ClangUtils.h; sourceTree = "<group>"; };
 		B27348FB168720960031D877 /* ClangUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ClangUtils.m; sourceTree = "<group>"; };
-		B27348FD168721620031D877 /* ClangSpellingLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ClangSpellingLocation.h; sourceTree = "<group>"; };
-		B27348FE168721620031D877 /* ClangSpellingLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ClangSpellingLocation.m; sourceTree = "<group>"; };
 		B273490116879EB30031D877 /* LintJSValidatorsRuntime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LintJSValidatorsRuntime.h; sourceTree = "<group>"; };
 		B273490216879EB40031D877 /* LintJSValidatorsRuntime.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LintJSValidatorsRuntime.m; sourceTree = "<group>"; };
 		B27349051687A5970031D877 /* lint-check-ivars.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "lint-check-ivars.js"; sourceTree = "<group>"; };
@@ -108,8 +105,6 @@
 				B26F85521675074000F940F4 /* objclint-Prefix.pch */,
 				B27348FA168720960031D877 /* ClangUtils.h */,
 				B27348FB168720960031D877 /* ClangUtils.m */,
-				B27348FD168721620031D877 /* ClangSpellingLocation.h */,
-				B27348FE168721620031D877 /* ClangSpellingLocation.m */,
 				B273490116879EB30031D877 /* LintJSValidatorsRuntime.h */,
 				B273490216879EB40031D877 /* LintJSValidatorsRuntime.m */,
 			);
@@ -233,7 +228,6 @@
 			files = (
 				B26F854E1675063F00F940F4 /* main.m in Sources */,
 				B27348FC168720960031D877 /* ClangUtils.m in Sources */,
-				B27348FF168721620031D877 /* ClangSpellingLocation.m in Sources */,
 				B273490316879EB40031D877 /* LintJSValidatorsRuntime.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

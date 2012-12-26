@@ -7,6 +7,7 @@
 //
 
 #import "LintJSValidatorsRuntime.h"
+#import "ClangUtils.h"
 
 #define JS_NO_JSVAL_JSID_STRUCT_TYPES
 #include "js/jsapi.h"
@@ -26,6 +27,33 @@ JSBool lint_log(JSContext *cx, uintN argc, jsval *vp) {
     return JS_TRUE;
 }
 
+JSBool lint_reportError(JSContext *cx, uintN argc, jsval *vp) {
+    JSString* errorDescription;
+    if (!JS_ConvertArguments(cx, argc, JS_ARGV(cx, vp), "S", &errorDescription))
+        return JS_FALSE;
+    
+    char* errorDescriptionC = JS_EncodeString(cx, errorDescription);
+    
+    LintJSValidatorsRuntime* runtime = JS_GetContextPrivate(cx);
+
+    //TODO: somehow use CXDiagnostic
+    
+    NSString* filePath = [ClangUtils filePathForCursor: runtime->_cursor];
+    NSString* fileName = filePath.lastPathComponent;
+    const char* fileNameC = [fileName UTF8String];
+    
+    CXSourceLocation location = clang_getCursorLocation(runtime->_cursor);
+    
+    unsigned line;
+    unsigned column;
+    
+    clang_getSpellingLocation(location,NULL,&line,&column,NULL);
+
+    printf("%s:%u:%u: warning: %s\n", fileNameC, line, column, errorDescriptionC);
+    
+    return JS_TRUE;
+}
+
 /* The class of the global object. */
 static JSClass global_class = { "global", JSCLASS_GLOBAL_FLAGS, JS_PropertyStub, JS_PropertyStub, JS_PropertyStub, JS_StrictPropertyStub, JS_EnumerateStub, JS_ResolveStub, JS_ConvertStub, NULL, JSCLASS_NO_OPTIONAL_MEMBERS };
 
@@ -33,6 +61,7 @@ static JSClass lint_class = { "Lint", JSCLASS_HAS_PRIVATE, JS_PropertyStub, JS_P
 
 static JSFunctionSpec lint_methods[] = {
     JS_FS("log", lint_log, 1, 0),
+    JS_FS("reportError", lint_reportError, 1, 0),
     JS_FS_END
 };
 
@@ -49,6 +78,7 @@ void reportError(JSContext *cx, const char *message, JSErrorReport *report) {
     JSRuntime* _runtime;
     JSContext* _context;
     JSObject*  _global;
+    JSObject* _lintObject;
     NSMutableArray* _validatorsScripts;
 }
 
@@ -79,9 +109,13 @@ void reportError(JSContext *cx, const char *message, JSErrorReport *report) {
 
 #pragma mark - Public
 
-- (void) runValidators {
+- (void) runValidatorsForCursor:(CXCursor) cursor {
     if(!_runtime || !_context || !_global)
         return;
+    
+    _cursor = cursor;
+    
+    [self fillLintObjectFromCursor: cursor];
     
     for(NSValue* scriptObjValue in _validatorsScripts) {
         JSObject* scriptObj = (JSObject*)[scriptObjValue pointerValue];
@@ -110,6 +144,7 @@ void reportError(JSContext *cx, const char *message, JSErrorReport *report) {
     JS_SetOptions(_context, JSOPTION_VAROBJFIX | JSOPTION_METHODJIT);
     JS_SetVersion(_context, JSVERSION_LATEST);
     JS_SetErrorReporter(_context, reportError);
+    JS_SetContextPrivate(_context, self);
 
     /* Create the global object in a new compartment. */
     _global = JS_NewCompartmentAndGlobalObject(_context, &global_class, NULL);
@@ -182,14 +217,58 @@ void reportError(JSContext *cx, const char *message, JSErrorReport *report) {
 
 - (void) registerLintObject {
     
-    JSObject* prototype = JS_InitClass(_context, _global, NULL, &lint_class, NULL, NULL, NULL, lint_methods, NULL, NULL);
-    JSObject* lintObject = JS_DefineObject(_context, _global, "lint", &lint_class, prototype, 0);
+    JSObject* prototype = JS_InitClass(_context, _global, NULL, &lint_class, NULL, 0, NULL, lint_methods, NULL, NULL);
+    _lintObject = JS_DefineObject(_context, _global, "lint", &lint_class, prototype, 0);
     
-    jsval line = INT_TO_JSVAL(10);
-    JS_SetProperty(_context, lintObject, "line", &line);
     
-    JS_AddNamedObjectRoot(_context, &lintObject, "lint");
     
+    JS_AddNamedObjectRoot(_context, &_lintObject, "lint");
+}
+
+- (void) fillLintObjectFromCursor:(CXCursor) cursor {
+    CXSourceLocation location = clang_getCursorLocation(cursor);
+    
+    unsigned line;
+    unsigned column;
+    unsigned offset;
+    
+    clang_getSpellingLocation(location,NULL,&line,&column,&offset);
+    
+    jsval lineVal = UINT_TO_JSVAL(line);
+    jsval columnVal = UINT_TO_JSVAL(column);
+    jsval offsetVal = UINT_TO_JSVAL(offset);
+    
+    JS_SetProperty(_context, _lintObject, "line", &lineVal);
+    JS_SetProperty(_context, _lintObject, "column", &columnVal);
+    JS_SetProperty(_context, _lintObject, "offset", &offsetVal);
+    
+    // display name
+    CXString displayName = clang_getCursorDisplayName(cursor);
+    [self setJSPropertyNamed:"displayName" withCXString:displayName];
+    clang_disposeString(displayName);// ??? should I ?
+    
+    
+    CXString usr = clang_getCursorUSR(cursor);
+    [self setJSPropertyNamed:"USR" withCXString:usr];
+    clang_disposeString(usr);
+    
+    CXString spelling = clang_getCursorSpelling(cursor);
+    [self setJSPropertyNamed:"spelling" withCXString:spelling];
+    clang_disposeString(spelling);
+    
+    CXString kind = clang_getCursorKindSpelling(clang_getCursorKind(cursor));
+    [self setJSPropertyNamed:"kind" withCXString:kind];
+    clang_disposeString(kind);
+    
+}
+
+- (void) setJSPropertyNamed:(const char*) name withCXString:(CXString) string {
+    const char* stringC = clang_getCString(string);
+    
+    JSString* js_string = JS_NewStringCopyZ(_context, stringC);
+    jsval usrVal = STRING_TO_JSVAL(js_string);
+    
+    JS_SetProperty(_context, _lintObject, name, &usrVal);
 }
 
 

@@ -14,7 +14,9 @@
 @interface ClangUtils : NSObject
 
 + (NSString*) projectPath;
-+ (BOOL) locationBelongsToProject:(const CXSourceLocation*) location;
-+ (ClangSpellingLocation*) spellingLocationForSourceLocation:(const CXSourceLocation*) location;
++ (NSString*) filePathForCursor:(CXCursor) cursor;
++ (BOOL) cursorBelongsToProject:(CXCursor) cursor;
++ (NSString*) cursorDescription:(CXCursor) cursor;
+
 
 @end

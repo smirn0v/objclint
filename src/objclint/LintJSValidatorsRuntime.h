@@ -7,12 +7,16 @@
 //
 
 #import <Foundation/Foundation.h>
+#include <Index.h>
 
-@interface LintJSValidatorsRuntime : NSObject
+@interface LintJSValidatorsRuntime : NSObject {
+@public
+    CXCursor _cursor;
+}
 
 - (id) initWithLintsFolderPath:(NSString*) folderPath;
 + (LintJSValidatorsRuntime*) runtimeWithLintsFolderPath:(NSString*) folderPath;
 
-- (void) runValidators;
+- (void) runValidatorsForCursor:(CXCursor) cursor;
 
 @end

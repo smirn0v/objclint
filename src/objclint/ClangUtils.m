@@ -7,7 +7,7 @@
 //
 
 #import "ClangUtils.h"
-#import "ClangSpellingLocation.h"
+
 
 @implementation ClangUtils
 
@@ -21,33 +21,51 @@
     return currentDirPath;
 }
 
-+ (BOOL) locationBelongsToProject:(const CXSourceLocation*) location {
-    NSString* filePath = [self spellingLocationForSourceLocation: location].filePath;
-    return [filePath rangeOfString: self.projectPath].location == 0;
++ (NSString*) filePathForCursor:(CXCursor) cursor {
+    CXSourceLocation location = clang_getCursorLocation(cursor);
+    
+    CXFile file;
+    
+    clang_getSpellingLocation(location,&file,NULL,NULL,NULL);
+    
+    CXString fileNameCX = clang_getFileName(file);
+    const char* fileNameC = clang_getCString(fileNameCX);
+    
+    NSString* filePath = nil;
+    if(fileNameC)
+        filePath = [NSString stringWithUTF8String: fileNameC];
+    
+    clang_disposeString(fileNameCX);
+    
+    return filePath;
 }
 
-+ (ClangSpellingLocation*) spellingLocationForSourceLocation:(const CXSourceLocation*) location {
++ (BOOL) cursorBelongsToProject:(CXCursor) cursor {
+    NSString* filePath = [self filePathForCursor: cursor];
+    
+    return filePath!=nil && [filePath rangeOfString: self.projectPath].location == 0;
+}
+
++ (NSString*) cursorDescription:(CXCursor) cursor {
+    CXSourceLocation location = clang_getCursorLocation(cursor);
+    
     CXFile file;
     unsigned line;
     unsigned column;
     unsigned offset;
     
-    clang_getSpellingLocation(*location,&file,&line,&column,&offset);
+    clang_getSpellingLocation(location,&file,&line,&column,&offset);
     
     CXString fileNameCX = clang_getFileName(file);
     const char* fileNameC = clang_getCString(fileNameCX);
     
-    ClangSpellingLocation* spellingLocation = [[ClangSpellingLocation new] autorelease];
-    
+    NSString* filePath = nil;
     if(fileNameC)
-        spellingLocation.filePath = [NSString stringWithUTF8String:fileNameC];
-    spellingLocation.line = line;
-    spellingLocation.column = column;
-    spellingLocation.offset = offset;
+        filePath = [NSString stringWithUTF8String: fileNameC];
     
     clang_disposeString(fileNameCX);
     
-    return spellingLocation;
+    return [NSString stringWithFormat:@"clang-%@-%u-%u-%u", filePath,line,column,offset];
 }
 
 @end
