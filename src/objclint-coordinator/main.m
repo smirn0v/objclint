@@ -36,7 +36,10 @@ int main(int argc, const char* argv[]) {
         //TODO: support for '.objclint' configuration for validators folder
         
         if(setupExistingCoordinator(justCheck, projectIdentity, jsValidatorsFolder)) {
-            printf("Connected to existing %s, prepared for new session\n", argv[0]);
+            if(justCheck)
+                printf("...%s started...\n",argv[0]);
+            else
+                printf("connected to existing %s, prepared for new session\n", argv[0]);
             return 0;
         } else if(justCheck) {
             //TODO: support for daemonization instead of '--check'
@@ -52,7 +55,7 @@ int main(int argc, const char* argv[]) {
         [connection setRootObject: [NSProtocolChecker protocolCheckerWithTarget:sessionManager protocol:@protocol(ObjclintSessionManagerProtocol)]];
         
         if(NO == [connection registerName:serviceName]) {
-            printf("Failed to register local service\n");
+            printf("failed to register local service\n");
             return 1;
         }
         
