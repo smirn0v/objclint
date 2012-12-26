@@ -12,7 +12,10 @@
 @interface LintJSValidatorsRuntime : NSObject {
 @public
     CXCursor _cursor;
+    BOOL     _errorsOccured;
 }
+
+@property(nonatomic, readonly) BOOL errorsOccured;
 
 - (id) initWithLintsFolderPath:(NSString*) folderPath;
 + (LintJSValidatorsRuntime*) runtimeWithLintsFolderPath:(NSString*) folderPath;

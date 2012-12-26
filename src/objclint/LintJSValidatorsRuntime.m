@@ -48,8 +48,9 @@ JSBool lint_reportError(JSContext *cx, uintN argc, jsval *vp) {
     unsigned column;
     
     clang_getSpellingLocation(location,NULL,&line,&column,NULL);
-
-    printf("%s:%u:%u: warning: %s\n", fileNameC, line, column, errorDescriptionC);
+    fprintf(stderr,"%s:%u:%u: warning: %s\n", fileNameC, line, column, errorDescriptionC);
+    
+    runtime->_errorsOccured = YES;
     
     return JS_TRUE;
 }

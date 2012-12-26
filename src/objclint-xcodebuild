@@ -21,7 +21,7 @@ cat > /tmp/ObjclintResourcePlist.plist << EOL
 </plist>
 EOL
 
-/opt/local/bin/objclint-coordinator&
+/opt/local/bin/objclint-coordinator &>/dev/null&
 sleep 1
 /opt/local/bin/objclint-coordinator --check
 
