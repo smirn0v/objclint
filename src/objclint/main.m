@@ -2,7 +2,10 @@
 #import "ObjclintSessionManagerProtocol.h"
 #import "ClangUtils.h"
 #import "ClangSpellingLocation.h"
+#import "LintJSValidatorsRuntime.h"
 #include <Index.h>
+
+static LintJSValidatorsRuntime* jsRuntime = nil;
 
 BOOL isLocationAlreadyChecked(const CXSourceLocation* location, id<ObjclintSessionManagerProtocol> sessionManager) {
     static NSMutableDictionary* paths = nil;
@@ -42,8 +45,12 @@ BOOL isLocationAlreadyChecked(const CXSourceLocation* location, id<ObjclintSessi
 
 enum CXChildVisitResult visitor(CXCursor cursor, CXCursor parent, CXClientData client_data) {
     @autoreleasepool {
-    
+        
         id<ObjclintSessionManagerProtocol> sessionManager = client_data;
+        
+        if(!jsRuntime) {
+            jsRuntime = [[LintJSValidatorsRuntime runtimeWithLintsFolderPath: [sessionManager lintJSValidatorsFolderPathForProjectIdentity: [ClangUtils projectPath]]] retain];
+        }
 
         CXSourceLocation location = clang_getCursorLocation(cursor);
 
@@ -54,6 +61,7 @@ enum CXChildVisitResult visitor(CXCursor cursor, CXCursor parent, CXClientData c
         CXString spelling = clang_getCursorSpelling(cursor);
         const char* spellingC = clang_getCString(spelling);
         NSLog(@"%@ - %s",[ClangUtils spellingLocationForSourceLocation:&location],spellingC);
+        [jsRuntime runValidators];
         
         clang_disposeString(spelling);
 
@@ -80,7 +88,7 @@ int main(int argc, char *argv[]) {
         
         if(translationUnit) {
             CXCursor cursor = clang_getTranslationUnitCursor(translationUnit);
-
+            
             clang_visitChildren(cursor, &visitor, aquireSessionManager());
         
             clang_disposeTranslationUnit(translationUnit);

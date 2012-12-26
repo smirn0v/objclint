@@ -11,6 +11,10 @@
 *.la
 *.a
 
+# Vim swap
+
+*.swp
+
 # Required third-parties
 
 thirdparty/

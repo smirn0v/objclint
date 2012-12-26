@@ -111,7 +111,14 @@ exit_if_error "failed to autoconf"
 echo "[+] Autoconf finished"
 
 echo "[~] Configuring"
-CC=cc CXX=c++ CCFLAGS=-w CXXFLAGS=-w ./configure --prefix="${SPIDER_MONKEY_DIR}/build" 1> /dev/null
+CC=cc \
+CXX=c++ \
+CCFLAGS=-w \
+CXXFLAGS=-w \
+./configure \
+--prefix="${SPIDER_MONKEY_DIR}/build" \
+--disable-shared-js 1> /dev/null
+
 exit_if_error "failed to configure SpiderMonkey"
 echo "[+] Configured"
 

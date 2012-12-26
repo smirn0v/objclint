@@ -7,18 +7,21 @@
 //
 
 #import "ObjclintSessionManager.h"
+#include <stdlib.h>
 
 static NSString* serviceName = @"ru.borsch-lab.objclint.coordinator";
 
-BOOL setupExistingCoordinator(NSString* projectIdentity, NSString* jsValidatorsFolder) {
+BOOL setupExistingCoordinator(BOOL check, NSString* projectIdentity, NSString* jsValidatorsFolder) {
     NSConnection* existingCoordinatorConnection = [[NSConnection connectionWithRegisteredName: serviceName
                                                                                          host: nil] autorelease];
     
     [existingCoordinatorConnection.rootProxy setProtocolForProxy:@protocol(ObjclintSessionManagerProtocol)];
     id<ObjclintSessionManagerProtocol> sessionManager = (id<ObjclintSessionManagerProtocol>) existingCoordinatorConnection.rootProxy;
     
-    [sessionManager clearSessionForProjectIdentity: projectIdentity];
-    [sessionManager setLintJSValidatorsFolderPath:jsValidatorsFolder forProjectIdentity:projectIdentity];
+    if(NO == check) {
+        [sessionManager clearSessionForProjectIdentity: projectIdentity];
+        [sessionManager setLintJSValidatorsFolderPath:jsValidatorsFolder forProjectIdentity:projectIdentity];
+    }
     
     return existingCoordinatorConnection != nil;
 }
@@ -26,14 +29,18 @@ BOOL setupExistingCoordinator(NSString* projectIdentity, NSString* jsValidatorsF
 int main(int argc, const char* argv[]) {
     @autoreleasepool {
         
+        BOOL justCheck = argc==2 && strcmp(argv[1],"--check");
 
         NSString* projectIdentity = [[NSFileManager defaultManager] currentDirectoryPath];
         NSString* jsValidatorsFolder = @"/opt/local/share/objclint-validators";
         //TODO: support for '.objclint' configuration for validators folder
         
-        if(setupExistingCoordinator(projectIdentity, jsValidatorsFolder)) {
+        if(setupExistingCoordinator(justCheck, projectIdentity, jsValidatorsFolder)) {
             printf("Connected to existing %s, prepared for new session\n", argv[0]);
             return 0;
+        } else if(justCheck) {
+            //TODO: support for daemonization instead of '--check'
+            return 1;
         }
 
         NSRunLoop* runLoop = [NSRunLoop currentRunLoop];

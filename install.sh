@@ -51,4 +51,13 @@ exit_if_error "Failed to copy objclint-xcodebuild"
 
 echo "[+] Success"
 echo
+
+echo "[~] Going to copy default lint scripts into /opt/local/share/objclint-validators"
+
+sudo mkdir -p /opt/local/share/objclint-validators
+exit_if_error "Failed to create objclint-validators folder"
+
+sudo cp ./src/lint-checkers/*.js /opt/local/share/objclint-validators/
+exit_if_error "Failed to copy scripts"
+
 echo "[+] Open your project directory and run 'objclint-xcodebuild'"

@@ -1,2 +1,1 @@
-function check(spelling_location) {
-}
+print();
