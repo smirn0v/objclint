@@ -14,7 +14,7 @@
 JSBool lint_log(JSContext *cx, uintN argc, jsval *vp) {
     
     JSString* string;
-    if (!JS_ConvertArguments(cx, argc, JS_ARGV(cx, vp), "/S", &string))
+    if (!JS_ConvertArguments(cx, argc, JS_ARGV(cx, vp), "S", &string))
         return JS_FALSE;
     
     char* stringC = JS_EncodeString(cx, string);
@@ -184,6 +184,10 @@ void reportError(JSContext *cx, const char *message, JSErrorReport *report) {
     
     JSObject* prototype = JS_InitClass(_context, _global, NULL, &lint_class, NULL, NULL, NULL, lint_methods, NULL, NULL);
     JSObject* lintObject = JS_DefineObject(_context, _global, "lint", &lint_class, prototype, 0);
+    
+    jsval line = INT_TO_JSVAL(10);
+    JS_SetProperty(_context, lintObject, "line", &line);
+    
     JS_AddNamedObjectRoot(_context, &lintObject, "lint");
     
 }
