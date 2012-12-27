@@ -23,7 +23,9 @@ var supportedKinds = [
                       "WhileStmt",
                       "DoStmt",
                       "ForStmt",
-                      "ObjCAutoreleasePoolStmt"];
+                      "ObjCAutoreleasePoolStmt",
+                      "ObjCInstanceMethodDecl",
+                      "ObjCClassMethodDecl"];
 
 if(supportedKinds.indexOf(lint.kind)!=-1) {
     open_braces = lint.tokens.filter(function(token) {return token.kind=="Punctuation" && token.spelling=="{";})
