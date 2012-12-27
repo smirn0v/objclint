@@ -54,6 +54,7 @@
 		B273490116879EB30031D877 /* LintJSValidatorsRuntime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LintJSValidatorsRuntime.h; sourceTree = "<group>"; };
 		B273490216879EB40031D877 /* LintJSValidatorsRuntime.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LintJSValidatorsRuntime.m; sourceTree = "<group>"; };
 		B27349051687A5970031D877 /* lint-check-ivars.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "lint-check-ivars.js"; sourceTree = "<group>"; };
+		B2734909168C981C0031D877 /* lint-check-opening-curly-brace.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "lint-check-opening-curly-brace.js"; sourceTree = "<group>"; wrapsLines = 1; };
 		B281CC8F164ECEBB0003A327 /* objclint */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = objclint; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -126,6 +127,7 @@
 			isa = PBXGroup;
 			children = (
 				B27349051687A5970031D877 /* lint-check-ivars.js */,
+				B2734909168C981C0031D877 /* lint-check-opening-curly-brace.js */,
 			);
 			path = "lint-checkers";
 			sourceTree = "<group>";

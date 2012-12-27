@@ -68,4 +68,16 @@
     return [NSString stringWithFormat:@"clang-%@-%u-%u-%u", filePath,line,column,offset];
 }
 
++ (NSString*) tokenKindDescription:(CXTokenKind) tokenKind {
+    NSDictionary* tokenKindDescription =
+    @{
+        @(CXToken_Punctuation) : @"Punctuation",
+        @(CXToken_Keyword)     : @"Keyword",
+        @(CXToken_Identifier)  : @"Identifier",
+        @(CXToken_Literal)     : @"Literal",
+        @(CXToken_Comment)     : @"Comment"
+    };
+    return tokenKindDescription[@(tokenKind)];
+}
+
 @end

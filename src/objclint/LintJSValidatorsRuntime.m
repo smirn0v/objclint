@@ -20,7 +20,7 @@ JSBool lint_log(JSContext *cx, uintN argc, jsval *vp) {
     
     char* stringC = JS_EncodeString(cx, string);
     
-    NSLog(@"%s",stringC);
+    printf("%s\n",stringC);
     
     JS_free(cx, stringC);
     JS_SET_RVAL(cx, vp, JSVAL_VOID);
@@ -60,6 +60,8 @@ static JSClass global_class = { "global", JSCLASS_GLOBAL_FLAGS, JS_PropertyStub,
 
 static JSClass lint_class = { "Lint", JSCLASS_HAS_PRIVATE, JS_PropertyStub, JS_PropertyStub, JS_PropertyStub, JS_StrictPropertyStub, JS_EnumerateStub, JS_ResolveStub, JS_ConvertStub, NULL, JSCLASS_NO_OPTIONAL_MEMBERS };
 
+static JSClass token_class = { "Token", JSCLASS_HAS_PRIVATE, JS_PropertyStub, JS_PropertyStub, JS_PropertyStub, JS_StrictPropertyStub, JS_EnumerateStub, JS_ResolveStub, JS_ConvertStub, NULL, JSCLASS_NO_OPTIONAL_MEMBERS };
+
 static JSFunctionSpec lint_methods[] = {
     JS_FS("log", lint_log, 1, 0),
     JS_FS("reportError", lint_reportError, 1, 0),
@@ -79,11 +81,13 @@ void reportError(JSContext *cx, const char *message, JSErrorReport *report) {
     JSRuntime* _runtime;
     JSContext* _context;
     JSObject*  _global;
+    JSObject* _lintPrototypeObject;
+    JSObject* _tokenPrototypeObject;
     JSObject* _lintObject;
     NSMutableArray* _validatorsScripts;
 }
 
-- (id) initWithLintsFolderPath:(NSString*) folderPath {
+- (id) initWithLintsFolderPath:(NSString*) folderPath{
     self = [super init];
     if(self) {
         _folderPath = [folderPath retain];
@@ -218,12 +222,14 @@ void reportError(JSContext *cx, const char *message, JSErrorReport *report) {
 
 - (void) registerLintObject {
     
-    JSObject* prototype = JS_InitClass(_context, _global, NULL, &lint_class, NULL, 0, NULL, lint_methods, NULL, NULL);
-    _lintObject = JS_DefineObject(_context, _global, "lint", &lint_class, prototype, 0);
+    _lintPrototypeObject = JS_InitClass(_context, _global, NULL, &lint_class, NULL, 0, NULL, lint_methods, NULL, NULL);
+    _tokenPrototypeObject = JS_InitClass(_context, _global, NULL, &token_class, NULL, 0, NULL, NULL, NULL, NULL);
     
-    
+    _lintObject = JS_DefineObject(_context, _global, "lint", &lint_class, _lintPrototypeObject, 0);
     
     JS_AddNamedObjectRoot(_context, &_lintObject, "lint");
+    JS_AddNamedObjectRoot(_context, &_lintPrototypeObject, "lint-prototype");
+    JS_AddNamedObjectRoot(_context, &_tokenPrototypeObject, "token-prototype");
 }
 
 - (void) fillLintObjectFromCursor:(CXCursor) cursor {
@@ -239,14 +245,13 @@ void reportError(JSContext *cx, const char *message, JSErrorReport *report) {
     jsval columnVal = UINT_TO_JSVAL(column);
     jsval offsetVal = UINT_TO_JSVAL(offset);
     
-    JS_SetProperty(_context, _lintObject, "line", &lineVal);
+    JS_SetProperty(_context, _lintObject, "lineNumber", &lineVal);
     JS_SetProperty(_context, _lintObject, "column", &columnVal);
     JS_SetProperty(_context, _lintObject, "offset", &offsetVal);
     
-    // display name
     CXString displayName = clang_getCursorDisplayName(cursor);
     [self setJSPropertyNamed:"displayName" withCXString:displayName];
-    clang_disposeString(displayName);// ??? should I ?
+    clang_disposeString(displayName);
     
     
     CXString usr = clang_getCursorUSR(cursor);
@@ -260,7 +265,8 @@ void reportError(JSContext *cx, const char *message, JSErrorReport *report) {
     CXString kind = clang_getCursorKindSpelling(clang_getCursorKind(cursor));
     [self setJSPropertyNamed:"kind" withCXString:kind];
     clang_disposeString(kind);
-    
+
+    [self fillLintObjectWithTokensForCursor: cursor];
 }
 
 - (void) setJSPropertyNamed:(const char*) name withCXString:(CXString) string {
@@ -270,6 +276,75 @@ void reportError(JSContext *cx, const char *message, JSErrorReport *report) {
     jsval usrVal = STRING_TO_JSVAL(js_string);
     
     JS_SetProperty(_context, _lintObject, name, &usrVal);
+}
+
+- (void) fillLintObjectWithTokensForCursor:(CXCursor) cursor {
+    
+    unsigned line;
+    unsigned column;
+
+    CXTranslationUnit translationUnit = clang_Cursor_getTranslationUnit(cursor);
+    CXToken* tokens;
+    unsigned int numTokens;
+    
+    CXSourceRange cursorExtent = clang_getCursorExtent(cursor);
+    clang_tokenize(translationUnit, cursorExtent, &tokens, &numTokens);
+    
+    if(numTokens == 0) {
+//        clang_disposeTokens(translationUnit, tokens, numTokens);
+        return;
+    }
+    
+    JSObject* tokenObjects[numTokens];
+    jsval arrayValues[numTokens];
+    
+    for(int i = 0; i<numTokens; i++) {
+        CXToken token = tokens[i];
+        CXTokenKind tokenKind = clang_getTokenKind(token);
+        
+        CXString tokenSpelling = clang_getTokenSpelling(translationUnit, token);
+        const char* tokenSpellingC = clang_getCString(tokenSpelling);
+        const char* tokenKindC = [[ClangUtils tokenKindDescription: tokenKind] UTF8String];
+        
+        CXSourceLocation tokenLocation = clang_getTokenLocation(translationUnit, token);
+        clang_getExpansionLocation(tokenLocation, NULL, &line, &column, NULL);
+        
+        tokenObjects[i] = JS_NewObject(_context, &token_class, _tokenPrototypeObject, NULL);
+      //  JS_AddObjectRoot(_context, &tokenObjects[i]);
+      //  printf("token object %p",tokenObjects[i]);
+        JSString* tokenKindString = JS_NewStringCopyZ(_context, tokenKindC);
+        jsval tokenKindVal = STRING_TO_JSVAL(tokenKindString);
+        //JS_AddValueRoot(_context, &tokenKindVal);
+        JS_SetProperty(_context, tokenObjects[i], "kind", &tokenKindVal);
+        
+        JSString* tokenSpellingString = JS_NewStringCopyZ(_context, tokenSpellingC);
+        jsval tokenSpellingVal = STRING_TO_JSVAL(tokenSpellingString);
+        JS_SetProperty(_context, tokenObjects[i], "spelling", &tokenSpellingVal);
+        
+        jsval lineVal = UINT_TO_JSVAL(line);
+        JS_SetProperty(_context, tokenObjects[i], "lineNumber", &lineVal);
+        
+        jsval columnVal = UINT_TO_JSVAL(column);
+        JS_SetProperty(_context, tokenObjects[i], "column", &columnVal);
+        
+        arrayValues[i] = OBJECT_TO_JSVAL(tokenObjects[i]);
+        //JS_AddValueRoot(_context, &arrayValues[i]);
+        
+        clang_disposeString(tokenSpelling);
+    }
+    
+    JSObject* tokensArray = JS_NewArrayObject(_context, numTokens, arrayValues);
+    jsval tokensArrayVal = OBJECT_TO_JSVAL(tokensArray);
+    
+    JS_SetProperty(_context, _lintObject, "tokens", &tokensArrayVal);
+#if 0
+    for(int i = 0; i<numTokens; i++) {
+        JS_RemoveObjectRoot(_context, &tokenObjects[i]);
+        JS_RemoveValueRoot(_context, &arrayValues[i]);
+    }
+#endif
+    
+    clang_disposeTokens(translationUnit, tokens, numTokens);
 }
 
 
