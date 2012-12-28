@@ -240,14 +240,14 @@ static JSFunctionSpec lint_methods[] = {
 
 - (void) fillLintObjectFromCursor:(CXCursor) cursor {
     CXSourceLocation location = clang_getCursorLocation(cursor);
-    
+    CXFile   file;
     unsigned line;
     unsigned column;
     unsigned offset;
     
-    clang_getSpellingLocation(location,NULL,&line,&column,&offset);
+    clang_getSpellingLocation(location,&file,&line,&column,&offset);
     
-    jsval lineVal = UINT_TO_JSVAL(line);
+    jsval lineVal   = UINT_TO_JSVAL(line);
     jsval columnVal = UINT_TO_JSVAL(column);
     jsval offsetVal = UINT_TO_JSVAL(offset);
     
@@ -255,10 +255,14 @@ static JSFunctionSpec lint_methods[] = {
     JS_SetProperty(_context, _lintObject, "column", &columnVal);
     JS_SetProperty(_context, _lintObject, "offset", &offsetVal);
     
+    
+    CXString fileName = clang_getFileName(file);
+    [self setJSPropertyNamed:"fileName" withCXString:fileName];
+    clang_disposeString(fileName);
+    
     CXString displayName = clang_getCursorDisplayName(cursor);
     [self setJSPropertyNamed:"displayName" withCXString:displayName];
     clang_disposeString(displayName);
-    
     
     CXString usr = clang_getCursorUSR(cursor);
     [self setJSPropertyNamed:"USR" withCXString:usr];
