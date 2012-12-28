@@ -13,7 +13,9 @@
 		B26F854E1675063F00F940F4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B26F85481675063F00F940F4 /* main.m */; };
 		B26F85511675063F00F940F4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B26F854B1675063F00F940F4 /* main.m */; };
 		B27348FC168720960031D877 /* ClangUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = B27348FB168720960031D877 /* ClangUtils.m */; };
-		B273490316879EB40031D877 /* LintJSValidatorsRuntime.m in Sources */ = {isa = PBXBuildFile; fileRef = B273490216879EB40031D877 /* LintJSValidatorsRuntime.m */; };
+		B273490316879EB40031D877 /* LintJSValidatorsRuntime.mm in Sources */ = {isa = PBXBuildFile; fileRef = B273490216879EB40031D877 /* LintJSValidatorsRuntime.mm */; };
+		B273490B168DF53C0031D877 /* lint-check-method-size.js in Sources */ = {isa = PBXBuildFile; fileRef = B273490A168DF53C0031D877 /* lint-check-method-size.js */; };
+		B273490D168DF7B20031D877 /* lint-check-wrong-locals-names.js in Sources */ = {isa = PBXBuildFile; fileRef = B273490C168DF7B20031D877 /* lint-check-wrong-locals-names.js */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -52,9 +54,11 @@
 		B27348FA168720960031D877 /* ClangUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ClangUtils.h; sourceTree = "<group>"; };
 		B27348FB168720960031D877 /* ClangUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ClangUtils.m; sourceTree = "<group>"; };
 		B273490116879EB30031D877 /* LintJSValidatorsRuntime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LintJSValidatorsRuntime.h; sourceTree = "<group>"; };
-		B273490216879EB40031D877 /* LintJSValidatorsRuntime.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LintJSValidatorsRuntime.m; sourceTree = "<group>"; };
+		B273490216879EB40031D877 /* LintJSValidatorsRuntime.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LintJSValidatorsRuntime.mm; sourceTree = "<group>"; };
 		B27349051687A5970031D877 /* lint-check-ivars.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "lint-check-ivars.js"; sourceTree = "<group>"; };
 		B2734909168C981C0031D877 /* lint-check-opening-curly-brace.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "lint-check-opening-curly-brace.js"; sourceTree = "<group>"; wrapsLines = 1; };
+		B273490A168DF53C0031D877 /* lint-check-method-size.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "lint-check-method-size.js"; sourceTree = "<group>"; };
+		B273490C168DF7B20031D877 /* lint-check-wrong-locals-names.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "lint-check-wrong-locals-names.js"; sourceTree = "<group>"; };
 		B281CC8F164ECEBB0003A327 /* objclint */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = objclint; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -107,7 +111,7 @@
 				B27348FA168720960031D877 /* ClangUtils.h */,
 				B27348FB168720960031D877 /* ClangUtils.m */,
 				B273490116879EB30031D877 /* LintJSValidatorsRuntime.h */,
-				B273490216879EB40031D877 /* LintJSValidatorsRuntime.m */,
+				B273490216879EB40031D877 /* LintJSValidatorsRuntime.mm */,
 			);
 			path = objclint;
 			sourceTree = "<group>";
@@ -128,6 +132,8 @@
 			children = (
 				B27349051687A5970031D877 /* lint-check-ivars.js */,
 				B2734909168C981C0031D877 /* lint-check-opening-curly-brace.js */,
+				B273490A168DF53C0031D877 /* lint-check-method-size.js */,
+				B273490C168DF7B20031D877 /* lint-check-wrong-locals-names.js */,
 			);
 			path = "lint-checkers";
 			sourceTree = "<group>";
@@ -230,7 +236,9 @@
 			files = (
 				B26F854E1675063F00F940F4 /* main.m in Sources */,
 				B27348FC168720960031D877 /* ClangUtils.m in Sources */,
-				B273490316879EB40031D877 /* LintJSValidatorsRuntime.m in Sources */,
+				B273490316879EB40031D877 /* LintJSValidatorsRuntime.mm in Sources */,
+				B273490B168DF53C0031D877 /* lint-check-method-size.js in Sources */,
+				B273490D168DF7B20031D877 /* lint-check-wrong-locals-names.js in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -311,7 +319,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_CXX_LIBRARY = "libstdc++";
 				HEADER_SEARCH_PATHS = (
 					"./thirdparty/llvm-3.1/llvm-clang-build/include/clang-c",
 					"./thirdparty/js-1.8.5/build/include",
@@ -350,7 +358,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_CXX_LIBRARY = "libstdc++";
 				HEADER_SEARCH_PATHS = (
 					"./thirdparty/llvm-3.1/llvm-clang-build/include/clang-c",
 					"./thirdparty/js-1.8.5/build/include",

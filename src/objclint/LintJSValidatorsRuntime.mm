@@ -12,6 +12,8 @@
 #define JS_NO_JSVAL_JSID_STRUCT_TYPES
 #include "js/jsapi.h"
 
+extern "C" {
+
 JSBool lint_log(JSContext *cx, uintN argc, jsval *vp) {
     
     JSString* string;
@@ -34,7 +36,7 @@ JSBool lint_reportError(JSContext *cx, uintN argc, jsval *vp) {
     
     char* errorDescriptionC = JS_EncodeString(cx, errorDescription);
     
-    LintJSValidatorsRuntime* runtime = JS_GetContextPrivate(cx);
+    LintJSValidatorsRuntime* runtime = (LintJSValidatorsRuntime*)JS_GetContextPrivate(cx);
 
     //TODO: somehow use CXDiagnostic
     
@@ -54,6 +56,16 @@ JSBool lint_reportError(JSContext *cx, uintN argc, jsval *vp) {
     
     return JS_TRUE;
 }
+    
+/* The error reporter callback. */
+void reportError(JSContext *cx, const char *message, JSErrorReport *report) {
+    fprintf(stderr, "%s:%u:%s\n",
+            report->filename ?: "<no filename>",
+            (unsigned int) report->lineno,
+            message);
+}
+    
+}
 
 /* The class of the global object. */
 static JSClass global_class = { "global", JSCLASS_GLOBAL_FLAGS, JS_PropertyStub, JS_PropertyStub, JS_PropertyStub, JS_StrictPropertyStub, JS_EnumerateStub, JS_ResolveStub, JS_ConvertStub, NULL, JSCLASS_NO_OPTIONAL_MEMBERS };
@@ -68,13 +80,7 @@ static JSFunctionSpec lint_methods[] = {
     JS_FS_END
 };
 
-/* The error reporter callback. */
-void reportError(JSContext *cx, const char *message, JSErrorReport *report) {
-    fprintf(stderr, "%s:%u:%s\n",
-            report->filename ?: "<no filename>",
-            (unsigned int) report->lineno,
-            message);
-}
+
 
 @implementation LintJSValidatorsRuntime {
     NSString* _folderPath;
