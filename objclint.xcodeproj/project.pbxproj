@@ -17,6 +17,7 @@
 		B273490B168DF53C0031D877 /* lint-check-method-size.js in Sources */ = {isa = PBXBuildFile; fileRef = B273490A168DF53C0031D877 /* lint-check-method-size.js */; };
 		B273490D168DF7B20031D877 /* lint-check-wrong-locals-names.js in Sources */ = {isa = PBXBuildFile; fileRef = B273490C168DF7B20031D877 /* lint-check-wrong-locals-names.js */; };
 		B273490F168DFE8D0031D877 /* lint-check-one-class-one-file.js in Sources */ = {isa = PBXBuildFile; fileRef = B273490E168DFE8D0031D877 /* lint-check-one-class-one-file.js */; };
+		B28760D6168F480000754F42 /* lint-check-no-synthesize.js in Sources */ = {isa = PBXBuildFile; fileRef = B28760D5168F480000754F42 /* lint-check-no-synthesize.js */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -62,6 +63,7 @@
 		B273490C168DF7B20031D877 /* lint-check-wrong-locals-names.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "lint-check-wrong-locals-names.js"; sourceTree = "<group>"; };
 		B273490E168DFE8D0031D877 /* lint-check-one-class-one-file.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "lint-check-one-class-one-file.js"; sourceTree = "<group>"; };
 		B281CC8F164ECEBB0003A327 /* objclint */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = objclint; sourceTree = BUILT_PRODUCTS_DIR; };
+		B28760D5168F480000754F42 /* lint-check-no-synthesize.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "lint-check-no-synthesize.js"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -137,6 +139,7 @@
 				B273490A168DF53C0031D877 /* lint-check-method-size.js */,
 				B273490C168DF7B20031D877 /* lint-check-wrong-locals-names.js */,
 				B273490E168DFE8D0031D877 /* lint-check-one-class-one-file.js */,
+				B28760D5168F480000754F42 /* lint-check-no-synthesize.js */,
 			);
 			path = "lint-checkers";
 			sourceTree = "<group>";
@@ -243,6 +246,7 @@
 				B273490B168DF53C0031D877 /* lint-check-method-size.js in Sources */,
 				B273490D168DF7B20031D877 /* lint-check-wrong-locals-names.js in Sources */,
 				B273490F168DFE8D0031D877 /* lint-check-one-class-one-file.js in Sources */,
+				B28760D6168F480000754F42 /* lint-check-no-synthesize.js in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
