@@ -19,6 +19,7 @@
 		B273490F168DFE8D0031D877 /* lint-check-one-class-one-file.js in Sources */ = {isa = PBXBuildFile; fileRef = B273490E168DFE8D0031D877 /* lint-check-one-class-one-file.js */; };
 		B28760D6168F480000754F42 /* lint-check-no-synthesize.js in Sources */ = {isa = PBXBuildFile; fileRef = B28760D5168F480000754F42 /* lint-check-no-synthesize.js */; };
 		B28760E0168F4A8B00754F42 /* lint-check-avoid-throw.js in Sources */ = {isa = PBXBuildFile; fileRef = B28760DF168F4A8B00754F42 /* lint-check-avoid-throw.js */; };
+		B28760E2168F506000754F42 /* lint-check-delegate-property.js in Sources */ = {isa = PBXBuildFile; fileRef = B28760E1168F506000754F42 /* lint-check-delegate-property.js */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -66,6 +67,7 @@
 		B281CC8F164ECEBB0003A327 /* objclint */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = objclint; sourceTree = BUILT_PRODUCTS_DIR; };
 		B28760D5168F480000754F42 /* lint-check-no-synthesize.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "lint-check-no-synthesize.js"; sourceTree = "<group>"; };
 		B28760DF168F4A8B00754F42 /* lint-check-avoid-throw.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "lint-check-avoid-throw.js"; sourceTree = "<group>"; };
+		B28760E1168F506000754F42 /* lint-check-delegate-property.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "lint-check-delegate-property.js"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -143,6 +145,7 @@
 				B273490E168DFE8D0031D877 /* lint-check-one-class-one-file.js */,
 				B28760D5168F480000754F42 /* lint-check-no-synthesize.js */,
 				B28760DF168F4A8B00754F42 /* lint-check-avoid-throw.js */,
+				B28760E1168F506000754F42 /* lint-check-delegate-property.js */,
 			);
 			path = "lint-checkers";
 			sourceTree = "<group>";
@@ -251,6 +254,7 @@
 				B273490F168DFE8D0031D877 /* lint-check-one-class-one-file.js in Sources */,
 				B28760D6168F480000754F42 /* lint-check-no-synthesize.js in Sources */,
 				B28760E0168F4A8B00754F42 /* lint-check-avoid-throw.js in Sources */,
+				B28760E2168F506000754F42 /* lint-check-delegate-property.js in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
