@@ -15,6 +15,7 @@
 		B27348FC168720960031D877 /* ClangUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = B27348FB168720960031D877 /* ClangUtils.m */; };
 		B273490316879EB40031D877 /* LintJSValidatorsRuntime.m in Sources */ = {isa = PBXBuildFile; fileRef = B273490216879EB40031D877 /* LintJSValidatorsRuntime.m */; };
 		B28760EC168F772B00754F42 /* cursor-info-helper.cc in Sources */ = {isa = PBXBuildFile; fileRef = B28760EB168F772B00754F42 /* cursor-info-helper.cc */; settings = {COMPILER_FLAGS = "-w"; }; };
+		B28760F1168F91BC00754F42 /* lint-check-disallow-retain-count.js in Sources */ = {isa = PBXBuildFile; fileRef = B28760F0168F91BC00754F42 /* lint-check-disallow-retain-count.js */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -66,6 +67,7 @@
 		B28760E7168F616B00754F42 /* lint-check-avoid-get-set-method-names.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "lint-check-avoid-get-set-method-names.js"; sourceTree = "<group>"; };
 		B28760EA168F772B00754F42 /* cursor-info-helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "cursor-info-helper.h"; sourceTree = "<group>"; };
 		B28760EB168F772B00754F42 /* cursor-info-helper.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "cursor-info-helper.cc"; sourceTree = "<group>"; };
+		B28760F0168F91BC00754F42 /* lint-check-disallow-retain-count.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "lint-check-disallow-retain-count.js"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -147,6 +149,7 @@
 				B28760DF168F4A8B00754F42 /* lint-check-avoid-throw.js */,
 				B28760E1168F506000754F42 /* lint-check-delegate-property.js */,
 				B28760E7168F616B00754F42 /* lint-check-avoid-get-set-method-names.js */,
+				B28760F0168F91BC00754F42 /* lint-check-disallow-retain-count.js */,
 			);
 			path = "lint-checkers";
 			sourceTree = "<group>";
@@ -267,6 +270,7 @@
 				B27348FC168720960031D877 /* ClangUtils.m in Sources */,
 				B273490316879EB40031D877 /* LintJSValidatorsRuntime.m in Sources */,
 				B28760EC168F772B00754F42 /* cursor-info-helper.cc in Sources */,
+				B28760F1168F91BC00754F42 /* lint-check-disallow-retain-count.js in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
