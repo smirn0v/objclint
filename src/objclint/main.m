@@ -2,7 +2,7 @@
 #import "ObjclintSessionManagerProtocol.h"
 #import "ClangUtils.h"
 #import "LintJSValidatorsRuntime.h"
-#include <Index.h>
+#include "clang-c/Index.h"
 
 static LintJSValidatorsRuntime* jsRuntime = nil;
 

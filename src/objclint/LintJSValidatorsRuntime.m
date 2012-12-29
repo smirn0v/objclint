@@ -8,11 +8,12 @@
 
 #import "LintJSValidatorsRuntime.h"
 #import "ClangUtils.h"
+#include "cursor-info-helper.h"
+
 
 #define JS_NO_JSVAL_JSID_STRUCT_TYPES
 #include "js/jsapi.h"
 
-extern "C" {
 
 JSBool lint_log(JSContext *cx, uintN argc, jsval *vp) {
     
@@ -63,8 +64,6 @@ void reportError(JSContext *cx, const char *message, JSErrorReport *report) {
             report->filename ?: "<no filename>",
             (unsigned int) report->lineno,
             message);
-}
-    
 }
 
 /* The class of the global object. */
@@ -255,7 +254,6 @@ static JSFunctionSpec lint_methods[] = {
     JS_SetProperty(_context, _lintObject, "column", &columnVal);
     JS_SetProperty(_context, _lintObject, "offset", &offsetVal);
     
-    
     CXString fileName = clang_getFileName(file);
     [self setJSPropertyNamed:"fileName" withCXString:fileName];
     clang_disposeString(fileName);
@@ -272,10 +270,15 @@ static JSFunctionSpec lint_methods[] = {
     [self setJSPropertyNamed:"spelling" withCXString:spelling];
     clang_disposeString(spelling);
     
-    CXString kind = clang_getCursorKindSpelling(clang_getCursorKind(cursor));
+    enum CXCursorKind cursorKind = clang_getCursorKind(cursor);
+    CXString kind = clang_getCursorKindSpelling(cursorKind);
     [self setJSPropertyNamed:"kind" withCXString:kind];
     clang_disposeString(kind);
-
+    
+    bool synthesized = is_synthesized_method_decl(cursor);
+    jsval synthesizedVal = BOOLEAN_TO_JSVAL(synthesized);
+    JS_SetProperty(_context, _lintObject, "isSynthesized", &synthesizedVal);
+    
     [self fillLintObjectWithTokensForCursor: cursor];
 }
 
@@ -320,11 +323,10 @@ static JSFunctionSpec lint_methods[] = {
         clang_getExpansionLocation(tokenLocation, NULL, &line, &column, NULL);
         
         tokenObjects[i] = JS_NewObject(_context, &token_class, _tokenPrototypeObject, NULL);
-      //  JS_AddObjectRoot(_context, &tokenObjects[i]);
-      //  printf("token object %p",tokenObjects[i]);
+
         JSString* tokenKindString = JS_NewStringCopyZ(_context, tokenKindC);
         jsval tokenKindVal = STRING_TO_JSVAL(tokenKindString);
-        //JS_AddValueRoot(_context, &tokenKindVal);
+
         JS_SetProperty(_context, tokenObjects[i], "kind", &tokenKindVal);
         
         JSString* tokenSpellingString = JS_NewStringCopyZ(_context, tokenSpellingC);
@@ -338,7 +340,6 @@ static JSFunctionSpec lint_methods[] = {
         JS_SetProperty(_context, tokenObjects[i], "column", &columnVal);
         
         arrayValues[i] = OBJECT_TO_JSVAL(tokenObjects[i]);
-        //JS_AddValueRoot(_context, &arrayValues[i]);
         
         clang_disposeString(tokenSpelling);
     }
@@ -347,13 +348,7 @@ static JSFunctionSpec lint_methods[] = {
     jsval tokensArrayVal = OBJECT_TO_JSVAL(tokensArray);
     
     JS_SetProperty(_context, _lintObject, "tokens", &tokensArrayVal);
-#if 0
-    for(int i = 0; i<numTokens; i++) {
-        JS_RemoveObjectRoot(_context, &tokenObjects[i]);
-        JS_RemoveValueRoot(_context, &arrayValues[i]);
-    }
-#endif
-    
+
     clang_disposeTokens(translationUnit, tokens, numTokens);
 }
 

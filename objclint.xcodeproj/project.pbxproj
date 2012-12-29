@@ -13,13 +13,8 @@
 		B26F854E1675063F00F940F4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B26F85481675063F00F940F4 /* main.m */; };
 		B26F85511675063F00F940F4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B26F854B1675063F00F940F4 /* main.m */; };
 		B27348FC168720960031D877 /* ClangUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = B27348FB168720960031D877 /* ClangUtils.m */; };
-		B273490316879EB40031D877 /* LintJSValidatorsRuntime.mm in Sources */ = {isa = PBXBuildFile; fileRef = B273490216879EB40031D877 /* LintJSValidatorsRuntime.mm */; };
-		B273490B168DF53C0031D877 /* lint-check-method-size.js in Sources */ = {isa = PBXBuildFile; fileRef = B273490A168DF53C0031D877 /* lint-check-method-size.js */; };
-		B273490D168DF7B20031D877 /* lint-check-wrong-locals-names.js in Sources */ = {isa = PBXBuildFile; fileRef = B273490C168DF7B20031D877 /* lint-check-wrong-locals-names.js */; };
-		B273490F168DFE8D0031D877 /* lint-check-one-class-one-file.js in Sources */ = {isa = PBXBuildFile; fileRef = B273490E168DFE8D0031D877 /* lint-check-one-class-one-file.js */; };
-		B28760D6168F480000754F42 /* lint-check-no-synthesize.js in Sources */ = {isa = PBXBuildFile; fileRef = B28760D5168F480000754F42 /* lint-check-no-synthesize.js */; };
-		B28760E0168F4A8B00754F42 /* lint-check-avoid-throw.js in Sources */ = {isa = PBXBuildFile; fileRef = B28760DF168F4A8B00754F42 /* lint-check-avoid-throw.js */; };
-		B28760E2168F506000754F42 /* lint-check-delegate-property.js in Sources */ = {isa = PBXBuildFile; fileRef = B28760E1168F506000754F42 /* lint-check-delegate-property.js */; };
+		B273490316879EB40031D877 /* LintJSValidatorsRuntime.m in Sources */ = {isa = PBXBuildFile; fileRef = B273490216879EB40031D877 /* LintJSValidatorsRuntime.m */; };
+		B28760EC168F772B00754F42 /* cursor-info-helper.cc in Sources */ = {isa = PBXBuildFile; fileRef = B28760EB168F772B00754F42 /* cursor-info-helper.cc */; settings = {COMPILER_FLAGS = "-w"; }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -58,7 +53,7 @@
 		B27348FA168720960031D877 /* ClangUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ClangUtils.h; sourceTree = "<group>"; };
 		B27348FB168720960031D877 /* ClangUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ClangUtils.m; sourceTree = "<group>"; };
 		B273490116879EB30031D877 /* LintJSValidatorsRuntime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LintJSValidatorsRuntime.h; sourceTree = "<group>"; };
-		B273490216879EB40031D877 /* LintJSValidatorsRuntime.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LintJSValidatorsRuntime.mm; sourceTree = "<group>"; };
+		B273490216879EB40031D877 /* LintJSValidatorsRuntime.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LintJSValidatorsRuntime.m; sourceTree = "<group>"; };
 		B27349051687A5970031D877 /* lint-check-ivars.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "lint-check-ivars.js"; sourceTree = "<group>"; };
 		B2734909168C981C0031D877 /* lint-check-opening-curly-brace.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "lint-check-opening-curly-brace.js"; sourceTree = "<group>"; wrapsLines = 1; };
 		B273490A168DF53C0031D877 /* lint-check-method-size.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "lint-check-method-size.js"; sourceTree = "<group>"; };
@@ -68,6 +63,9 @@
 		B28760D5168F480000754F42 /* lint-check-no-synthesize.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "lint-check-no-synthesize.js"; sourceTree = "<group>"; };
 		B28760DF168F4A8B00754F42 /* lint-check-avoid-throw.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "lint-check-avoid-throw.js"; sourceTree = "<group>"; };
 		B28760E1168F506000754F42 /* lint-check-delegate-property.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "lint-check-delegate-property.js"; sourceTree = "<group>"; };
+		B28760E7168F616B00754F42 /* lint-check-avoid-get-set-method-names.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "lint-check-avoid-get-set-method-names.js"; sourceTree = "<group>"; };
+		B28760EA168F772B00754F42 /* cursor-info-helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "cursor-info-helper.h"; sourceTree = "<group>"; };
+		B28760EB168F772B00754F42 /* cursor-info-helper.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "cursor-info-helper.cc"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,13 +111,15 @@
 		B26F85471675063F00F940F4 /* objclint */ = {
 			isa = PBXGroup;
 			children = (
+				B28760ED168F776900754F42 /* spider-monkey-api-helpers */,
+				B28760E9168F76EC00754F42 /* clang-api-helpers */,
 				B26F85481675063F00F940F4 /* main.m */,
 				B26F85491675063F00F940F4 /* objclint */,
 				B26F85521675074000F940F4 /* objclint-Prefix.pch */,
 				B27348FA168720960031D877 /* ClangUtils.h */,
 				B27348FB168720960031D877 /* ClangUtils.m */,
 				B273490116879EB30031D877 /* LintJSValidatorsRuntime.h */,
-				B273490216879EB40031D877 /* LintJSValidatorsRuntime.mm */,
+				B273490216879EB40031D877 /* LintJSValidatorsRuntime.m */,
 			);
 			path = objclint;
 			sourceTree = "<group>";
@@ -146,6 +146,7 @@
 				B28760D5168F480000754F42 /* lint-check-no-synthesize.js */,
 				B28760DF168F4A8B00754F42 /* lint-check-avoid-throw.js */,
 				B28760E1168F506000754F42 /* lint-check-delegate-property.js */,
+				B28760E7168F616B00754F42 /* lint-check-avoid-get-set-method-names.js */,
 			);
 			path = "lint-checkers";
 			sourceTree = "<group>";
@@ -166,6 +167,22 @@
 				B26F85371675006C00F940F4 /* objclint-coordinator */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		B28760E9168F76EC00754F42 /* clang-api-helpers */ = {
+			isa = PBXGroup;
+			children = (
+				B28760EA168F772B00754F42 /* cursor-info-helper.h */,
+				B28760EB168F772B00754F42 /* cursor-info-helper.cc */,
+			);
+			path = "clang-api-helpers";
+			sourceTree = "<group>";
+		};
+		B28760ED168F776900754F42 /* spider-monkey-api-helpers */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "spider-monkey-api-helpers";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -248,13 +265,8 @@
 			files = (
 				B26F854E1675063F00F940F4 /* main.m in Sources */,
 				B27348FC168720960031D877 /* ClangUtils.m in Sources */,
-				B273490316879EB40031D877 /* LintJSValidatorsRuntime.mm in Sources */,
-				B273490B168DF53C0031D877 /* lint-check-method-size.js in Sources */,
-				B273490D168DF7B20031D877 /* lint-check-wrong-locals-names.js in Sources */,
-				B273490F168DFE8D0031D877 /* lint-check-one-class-one-file.js in Sources */,
-				B28760D6168F480000754F42 /* lint-check-no-synthesize.js in Sources */,
-				B28760E0168F4A8B00754F42 /* lint-check-avoid-throw.js in Sources */,
-				B28760E2168F506000754F42 /* lint-check-delegate-property.js in Sources */,
+				B273490316879EB40031D877 /* LintJSValidatorsRuntime.m in Sources */,
+				B28760EC168F772B00754F42 /* cursor-info-helper.cc in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -337,7 +349,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libstdc++";
 				HEADER_SEARCH_PATHS = (
-					"./thirdparty/llvm-3.1/llvm-clang-build/include/clang-c",
+					"./thirdparty/llvm-3.1/llvm-clang-build/include",
 					"./thirdparty/js-1.8.5/build/include",
 				);
 				LIBRARY_SEARCH_PATHS = (
@@ -376,7 +388,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libstdc++";
 				HEADER_SEARCH_PATHS = (
-					"./thirdparty/llvm-3.1/llvm-clang-build/include/clang-c",
+					"./thirdparty/llvm-3.1/llvm-clang-build/include",
 					"./thirdparty/js-1.8.5/build/include",
 				);
 				LIBRARY_SEARCH_PATHS = (

@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#include <Index.h>
+#include "clang-c/Index.h"
 
 @interface LintJSValidatorsRuntime : NSObject {
 @public
