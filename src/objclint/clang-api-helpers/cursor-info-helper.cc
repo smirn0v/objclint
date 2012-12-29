@@ -29,6 +29,14 @@ bool is_synthesized_method_decl(CXCursor cursor) {
     }
 }
     
+bool has_body(CXCursor cursor) {
+    if(!clang_isDeclaration(clang_getCursorKind(cursor)))
+       return false;
+    clang::Decl* decl = (clang::Decl*)cursor.data[0];
+    
+    return decl->hasBody();
+}
+    
 }
 
 

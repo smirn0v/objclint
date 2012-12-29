@@ -277,7 +277,11 @@ static JSFunctionSpec lint_methods[] = {
     
     bool synthesized = is_synthesized_method_decl(cursor);
     jsval synthesizedVal = BOOLEAN_TO_JSVAL(synthesized);
-    JS_SetProperty(_context, _lintObject, "isSynthesized", &synthesizedVal);
+    JS_SetProperty(_context, _lintObject, "isSynthesizedMethod", &synthesizedVal);
+    
+    bool hasBody = has_body(cursor);
+    jsval hasBodyVal = BOOLEAN_TO_JSVAL(hasBody);
+    JS_SetProperty(_context, _lintObject, "declarationHasBody", &hasBodyVal);
     
     [self fillLintObjectWithTokensForCursor: cursor];
 }

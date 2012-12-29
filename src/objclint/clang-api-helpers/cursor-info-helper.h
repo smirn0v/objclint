@@ -13,6 +13,7 @@ extern "C" {
 #endif
 
 bool is_synthesized_method_decl(CXCursor cursor);
+bool has_body(CXCursor cursor);
 
 #ifdef __cplusplus
 }

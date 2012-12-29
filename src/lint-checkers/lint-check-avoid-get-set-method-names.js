@@ -1,6 +1,6 @@
 var targetKinds = ["ObjCInstanceMethodDecl","ObjCClassMethodDecl"];
 
-if(targetKinds.indexOf(lint.kind)!=-1 && !lint.isSynthesized) {
+if(targetKinds.indexOf(lint.kind)!=-1 && !lint.isSynthesizedMethod && !lint.declarationHasBody) {
     var wrong = lint.spelling.toLowerCase().indexOf("set")==0 ||
                 lint.spelling.toLowerCase().indexOf("get")==0;
     
