@@ -37,6 +37,7 @@ xcodebuild \
     CXXFLAGS="-objclint-fake-cxx"\
     LD="true"\
     LDPLUSPLUS="true"\
+    LIBTOOL="true"\
     GCC_GENERATE_DEBUGGING_SYMBOLS=NO\
     GCC_PRECOMPILE_PREFIX_HEADER=NO\
     ONLY_ACTIVE_ARCH=YES\
