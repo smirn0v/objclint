@@ -13,13 +13,13 @@ function validateName(varName) {
     }
 }
 
-if(lint.kind=="ObjCIvarDecl") {
-    if(lint.displayName.indexOf("_") == 0)
-        validateName(lint.displayName.substring(1));
+if(cursor.kind=="ObjCIvarDecl") {
+    if(cursor.displayName.indexOf("_") == 0)
+        validateName(cursor.displayName.substring(1));
     else
-        validateName(lint.displayName);
+        validateName(cursor.displayName);
 }
 
-if(["VarDecl","ParmDecl"].indexOf(lint.kind) != -1) {
-    validateName(lint.displayName);
+if(["VarDecl","ParmDecl"].indexOf(cursor.kind) != -1) {
+    validateName(cursor.displayName);
 }

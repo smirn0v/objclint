@@ -15,7 +15,6 @@
 		B27348FC168720960031D877 /* ClangUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = B27348FB168720960031D877 /* ClangUtils.m */; };
 		B273490316879EB40031D877 /* LintJSValidatorsRuntime.m in Sources */ = {isa = PBXBuildFile; fileRef = B273490216879EB40031D877 /* LintJSValidatorsRuntime.m */; };
 		B28760EC168F772B00754F42 /* cursor-info-helper.cc in Sources */ = {isa = PBXBuildFile; fileRef = B28760EB168F772B00754F42 /* cursor-info-helper.cc */; settings = {COMPILER_FLAGS = "-w"; }; };
-		B28760F1168F91BC00754F42 /* lint-check-disallow-retain-count.js in Sources */ = {isa = PBXBuildFile; fileRef = B28760F0168F91BC00754F42 /* lint-check-disallow-retain-count.js */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -270,7 +269,6 @@
 				B27348FC168720960031D877 /* ClangUtils.m in Sources */,
 				B273490316879EB40031D877 /* LintJSValidatorsRuntime.m in Sources */,
 				B28760EC168F772B00754F42 /* cursor-info-helper.cc in Sources */,
-				B28760F1168F91BC00754F42 /* lint-check-disallow-retain-count.js in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

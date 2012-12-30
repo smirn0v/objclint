@@ -15,10 +15,15 @@ var supportedKinds = [
                       "ObjCAtFinallyStmt",
                       "ObjCAtSynchronizedStmt"];
 
-if(supportedKinds.indexOf(lint.kind)!=-1) {
-    open_braces = lint.tokens.filter(function(token) {return token.kind=="Punctuation" && token.spelling=="{";})
+if(supportedKinds.indexOf(cursor.kind)!=-1) {
+    var tokens = cursor.getTokens();
+    open_braces = tokens.filter(function(token) {return token.kind=="Punctuation" && token.spelling=="{";})
     if(open_braces.length > 0) {
-        if(lint.tokens[0].lineNumber != open_braces[0].lineNumber)
-            lint.reportError("'{' should be on the same line with previous expression/statement");
+        if(tokens[0].lineNumber != open_braces[0].lineNumber) {
+            var semanticParent = open_braces[0].cursor.getSemanticParent();
+            if((semanticParent != null && semanticParent.equal(cursor)) || open_braces[0].cursor.equal(cursor)) {
+                lint.reportError("'{' should be on the same line with previous expression/statement");
+            }
+        }
     }
 }

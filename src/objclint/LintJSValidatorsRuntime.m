@@ -14,6 +14,15 @@
 #define JS_NO_JSVAL_JSID_STRUCT_TYPES
 #include "js/jsapi.h"
 
+/* The class of the global object. */
+static JSClass global_class = { "global", JSCLASS_GLOBAL_FLAGS, JS_PropertyStub, JS_PropertyStub, JS_PropertyStub, JS_StrictPropertyStub, JS_EnumerateStub, JS_ResolveStub, JS_ConvertStub, NULL, JSCLASS_NO_OPTIONAL_MEMBERS };
+
+static JSClass lint_class = { "Lint", JSCLASS_HAS_PRIVATE, JS_PropertyStub, JS_PropertyStub, JS_PropertyStub, JS_StrictPropertyStub, JS_EnumerateStub, JS_ResolveStub, JS_ConvertStub, NULL, JSCLASS_NO_OPTIONAL_MEMBERS };
+
+static JSClass token_class = { "Token", JSCLASS_HAS_PRIVATE, JS_PropertyStub, JS_PropertyStub, JS_PropertyStub, JS_StrictPropertyStub, JS_EnumerateStub, JS_ResolveStub, JS_ConvertStub, NULL, JSCLASS_NO_OPTIONAL_MEMBERS };
+
+static JSClass cursor_class = { "Cursor", JSCLASS_HAS_PRIVATE, JS_PropertyStub, JS_PropertyStub, JS_PropertyStub, JS_StrictPropertyStub, JS_EnumerateStub, JS_ResolveStub, JS_ConvertStub, NULL, JSCLASS_NO_OPTIONAL_MEMBERS };
+
 
 JSBool lint_log(JSContext *cx, uintN argc, jsval *vp) {
     
@@ -57,7 +66,106 @@ JSBool lint_reportError(JSContext *cx, uintN argc, jsval *vp) {
     
     return JS_TRUE;
 }
+
+JSBool cursor_get_lexical_parent(JSContext *cx, uintN argc, jsval *vp) {
+
+    JSObject* cursorObject = JS_THIS_OBJECT(cx, vp);
+    CXCursor cursor = cursor_from_jsobject(cx, cursorObject);
+
+    CXCursor lexicalParentCursor = clang_getCursorLexicalParent(cursor);
+    if(clang_Cursor_isNull(lexicalParentCursor)) {
+        JS_SET_RVAL(cx, vp, JSVAL_NULL);
+        return JS_TRUE;
+    }
+
+    JSObject* lexicalParentCursorObj = JS_NewObject(cx, &cursor_class, JS_GetPrototype(cx, cursorObject), NULL);
+
+    LintJSValidatorsRuntime* runtime = JS_GetPrivate(cx, cursorObject);
+
+    [runtime fillJSObject:lexicalParentCursorObj fromCursor:lexicalParentCursor];
+
+    jsval result = OBJECT_TO_JSVAL(lexicalParentCursorObj);
+    JS_SET_RVAL(cx, vp, result);
     
+    return JS_TRUE;
+}
+
+JSBool cursor_get_semantic_parent(JSContext *cx, uintN argc, jsval *vp) {
+    
+    JSObject* cursorObject = JS_THIS_OBJECT(cx, vp);
+    CXCursor cursor = cursor_from_jsobject(cx, cursorObject);
+    
+    CXCursor semanticParentCursor = clang_getCursorSemanticParent(cursor);
+    
+    if(clang_Cursor_isNull(semanticParentCursor)) {
+        JS_SET_RVAL(cx, vp, JSVAL_NULL);
+        return JS_TRUE;
+    }
+    
+    JSObject* semanticParentCursorObj = JS_NewObject(cx, &cursor_class, JS_GetPrototype(cx, cursorObject), NULL);
+    
+    LintJSValidatorsRuntime* runtime = JS_GetPrivate(cx, cursorObject);
+    
+    [runtime fillJSObject:semanticParentCursorObj fromCursor:semanticParentCursor];
+    
+    jsval result = OBJECT_TO_JSVAL(semanticParentCursorObj);
+    JS_SET_RVAL(cx, vp, result);
+    
+    return JS_TRUE;
+}
+
+JSBool cursor_visit_children(JSContext* cx, uintN argc, jsval *vp) {
+
+    JSFunction* ignoreFunction;
+    if (!JS_ConvertArguments(cx, argc, JS_ARGV(cx, vp), "f", &ignoreFunction))
+        return JS_FALSE;
+    
+    JSObject* cursorObject = JS_THIS_OBJECT(cx, vp);
+    CXCursor cursor = cursor_from_jsobject(cx, cursorObject);
+
+    LintJSValidatorsRuntime* runtime = JS_GetPrivate(cx, cursorObject);
+
+    clang_visitChildrenWithBlock(cursor, ^enum CXChildVisitResult(CXCursor childCursor, CXCursor parent) {
+        
+        JSObject* childObj = JS_NewObject(cx, &cursor_class, JS_GetPrototype(cx, cursorObject), NULL);
+
+        [runtime fillJSObject:childObj fromCursor:childCursor];
+        
+        jsval retVal;
+        jsval childVal = OBJECT_TO_JSVAL(childObj);
+
+        JSBool result = JS_CallFunctionValue(cx, JS_GetGlobalObject(cx), *(JS_ARGV(cx, vp)), 1, &childVal, &retVal);
+
+        return CXChildVisit_Recurse;
+    });
+    
+    return JS_TRUE;
+}
+
+JSBool cursor_get_tokens(JSContext* cx, uintN argc, jsval *vp) {
+    JSObject* cursorObject = JS_THIS_OBJECT(cx, vp);
+    CXCursor cursor = cursor_from_jsobject(cx, cursorObject);
+    LintJSValidatorsRuntime* runtime = JS_GetPrivate(cx, cursorObject);
+    JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL([runtime tokensForCursor:cursor]));
+    return JS_TRUE;
+}
+
+JSBool cursor_equal(JSContext* cx, uintN argc, jsval *vp) {
+    JSObject* cursorObject = JS_THIS_OBJECT(cx, vp);
+    CXCursor cursor = cursor_from_jsobject(cx, cursorObject);
+    
+    JSObject* anotherCursorObject;
+    if (!JS_ConvertArguments(cx, argc, JS_ARGV(cx, vp), "o", &anotherCursorObject))
+        return JS_FALSE;
+    
+    CXCursor anotherCursor = cursor_from_jsobject(cx, anotherCursorObject);
+    
+    bool equals = clang_equalCursors(cursor, anotherCursor);
+    JS_SET_RVAL(cx, vp, equals);
+    
+    return JS_TRUE;
+}
+
 /* The error reporter callback. */
 void reportError(JSContext *cx, const char *message, JSErrorReport *report) {
     fprintf(stderr, "%s:%u:%s\n",
@@ -66,20 +174,20 @@ void reportError(JSContext *cx, const char *message, JSErrorReport *report) {
             message);
 }
 
-/* The class of the global object. */
-static JSClass global_class = { "global", JSCLASS_GLOBAL_FLAGS, JS_PropertyStub, JS_PropertyStub, JS_PropertyStub, JS_StrictPropertyStub, JS_EnumerateStub, JS_ResolveStub, JS_ConvertStub, NULL, JSCLASS_NO_OPTIONAL_MEMBERS };
-
-static JSClass lint_class = { "Lint", JSCLASS_HAS_PRIVATE, JS_PropertyStub, JS_PropertyStub, JS_PropertyStub, JS_StrictPropertyStub, JS_EnumerateStub, JS_ResolveStub, JS_ConvertStub, NULL, JSCLASS_NO_OPTIONAL_MEMBERS };
-
-static JSClass token_class = { "Token", JSCLASS_HAS_PRIVATE, JS_PropertyStub, JS_PropertyStub, JS_PropertyStub, JS_StrictPropertyStub, JS_EnumerateStub, JS_ResolveStub, JS_ConvertStub, NULL, JSCLASS_NO_OPTIONAL_MEMBERS };
-
 static JSFunctionSpec lint_methods[] = {
     JS_FS("log", lint_log, 1, 0),
     JS_FS("reportError", lint_reportError, 1, 0),
     JS_FS_END
 };
 
-
+static JSFunctionSpec cursor_methods[] = {
+    JS_FS("getLexicalParent",cursor_get_lexical_parent,0,0),
+    JS_FS("getSemanticParent",cursor_get_semantic_parent,0,0),
+    JS_FS("visitChildren",cursor_visit_children,1,0),
+    JS_FS("getTokens",cursor_get_tokens,0,0),
+    JS_FS("equal",cursor_equal,1,0),
+    JS_FS_END
+};
 
 @implementation LintJSValidatorsRuntime {
     NSString* _folderPath;
@@ -88,7 +196,9 @@ static JSFunctionSpec lint_methods[] = {
     JSObject*  _global;
     JSObject* _lintPrototypeObject;
     JSObject* _tokenPrototypeObject;
+    JSObject* _cursorPrototypeObject;
     JSObject* _lintObject;
+    JSObject* _cursorObject;
     NSMutableArray* _validatorsScripts;
 }
 
@@ -125,7 +235,7 @@ static JSFunctionSpec lint_methods[] = {
     
     _cursor = cursor;
     
-    [self fillLintObjectFromCursor: cursor];
+    [self fillJSObject:_cursorObject fromCursor:cursor];
     
     for(NSValue* scriptObjValue in _validatorsScripts) {
         JSObject* scriptObj = (JSObject*)[scriptObjValue pointerValue];
@@ -229,20 +339,25 @@ static JSFunctionSpec lint_methods[] = {
     
     _lintPrototypeObject = JS_InitClass(_context, _global, NULL, &lint_class, NULL, 0, NULL, lint_methods, NULL, NULL);
     _tokenPrototypeObject = JS_InitClass(_context, _global, NULL, &token_class, NULL, 0, NULL, NULL, NULL, NULL);
+    _cursorPrototypeObject = JS_InitClass(_context, _global, NULL, &token_class, NULL, 0, NULL, cursor_methods, NULL, NULL);
     
     _lintObject = JS_DefineObject(_context, _global, "lint", &lint_class, _lintPrototypeObject, 0);
+    _cursorObject = JS_DefineObject(_context, _global, "cursor", &cursor_class, _cursorPrototypeObject, 0);
     
     JS_AddNamedObjectRoot(_context, &_lintObject, "lint");
     JS_AddNamedObjectRoot(_context, &_lintPrototypeObject, "lint-prototype");
     JS_AddNamedObjectRoot(_context, &_tokenPrototypeObject, "token-prototype");
+    JS_AddNamedObjectRoot(_context, &_cursorPrototypeObject, "cursor-prototype");
 }
 
-- (void) fillLintObjectFromCursor:(CXCursor) cursor {
+- (void) fillJSObject:(JSObject*)object fromCursor:(CXCursor) cursor {
     CXSourceLocation location = clang_getCursorLocation(cursor);
     CXFile   file;
     unsigned line;
     unsigned column;
     unsigned offset;
+    
+    store_cursor_into_jsobject(cursor, _context, object);
     
     clang_getSpellingLocation(location,&file,&line,&column,&offset);
     
@@ -250,66 +365,71 @@ static JSFunctionSpec lint_methods[] = {
     jsval columnVal = UINT_TO_JSVAL(column);
     jsval offsetVal = UINT_TO_JSVAL(offset);
     
-    JS_SetProperty(_context, _lintObject, "lineNumber", &lineVal);
-    JS_SetProperty(_context, _lintObject, "column", &columnVal);
-    JS_SetProperty(_context, _lintObject, "offset", &offsetVal);
+    JS_SetProperty(_context, object, "lineNumber", &lineVal);
+    JS_SetProperty(_context, object, "column", &columnVal);
+    JS_SetProperty(_context, object, "offset", &offsetVal);
     
     CXString fileName = clang_getFileName(file);
-    [self setJSPropertyNamed:"fileName" withCXString:fileName];
+    [self setJSPropertyNamed:"fileName" withCXString:fileName forJSObject:object];
     clang_disposeString(fileName);
     
     CXString displayName = clang_getCursorDisplayName(cursor);
-    [self setJSPropertyNamed:"displayName" withCXString:displayName];
+    [self setJSPropertyNamed:"displayName" withCXString:displayName forJSObject:object];
     clang_disposeString(displayName);
     
     CXString usr = clang_getCursorUSR(cursor);
-    [self setJSPropertyNamed:"USR" withCXString:usr];
+    [self setJSPropertyNamed:"USR" withCXString:usr forJSObject:object];
     clang_disposeString(usr);
     
     CXString spelling = clang_getCursorSpelling(cursor);
-    [self setJSPropertyNamed:"spelling" withCXString:spelling];
+    [self setJSPropertyNamed:"spelling" withCXString:spelling forJSObject:object];
     clang_disposeString(spelling);
     
     enum CXCursorKind cursorKind = clang_getCursorKind(cursor);
     CXString kind = clang_getCursorKindSpelling(cursorKind);
-    [self setJSPropertyNamed:"kind" withCXString:kind];
+    [self setJSPropertyNamed:"kind" withCXString:kind forJSObject:object];
     clang_disposeString(kind);
     
-    bool synthesized = is_synthesized_method_decl(cursor);
+    bool synthesized = method_is_synthesized(cursor);
     jsval synthesizedVal = BOOLEAN_TO_JSVAL(synthesized);
-    JS_SetProperty(_context, _lintObject, "isSynthesizedMethod", &synthesizedVal);
+    JS_SetProperty(_context, object, "isSynthesizedMethod", &synthesizedVal);
     
-    bool hasBody = has_body(cursor);
+    bool hasBody = decl_has_body(cursor);
     jsval hasBodyVal = BOOLEAN_TO_JSVAL(hasBody);
-    JS_SetProperty(_context, _lintObject, "declarationHasBody", &hasBodyVal);
+    JS_SetProperty(_context, object, "declarationHasBody", &hasBodyVal);
     
-    [self fillLintObjectWithTokensForCursor: cursor];
+    JS_SetPrivate(_context, object, self);
 }
 
-- (void) setJSPropertyNamed:(const char*) name withCXString:(CXString) string {
+- (void) setJSPropertyNamed:(const char*) name withCXString:(CXString) string forJSObject:(JSObject*) object{
     const char* stringC = clang_getCString(string);
     
     JSString* js_string = JS_NewStringCopyZ(_context, stringC);
     jsval usrVal = STRING_TO_JSVAL(js_string);
     
-    JS_SetProperty(_context, _lintObject, name, &usrVal);
+    JS_SetProperty(_context, object, name, &usrVal);
 }
 
-- (void) fillLintObjectWithTokensForCursor:(CXCursor) cursor {
+- (JSObject*) tokensForCursor:(CXCursor) cursor {
     
     unsigned line;
     unsigned column;
 
     CXTranslationUnit translationUnit = clang_Cursor_getTranslationUnit(cursor);
     CXToken* tokens;
+    
     unsigned int numTokens;
     
     CXSourceRange cursorExtent = clang_getCursorExtent(cursor);
     clang_tokenize(translationUnit, cursorExtent, &tokens, &numTokens);
     
+    CXCursor cursors[numTokens];
+    
     if(numTokens == 0) {
-//        clang_disposeTokens(translationUnit, tokens, numTokens);
-        return;
+//        clang_disposeTokens(translationUnit, tokens, numTokens);]
+        return JS_NewArrayObject(_context, 0, NULL);
+    } else {
+        clang_annotateTokens(translationUnit, tokens, numTokens, cursors);
     }
     
     JSObject* tokenObjects[numTokens];
@@ -343,17 +463,19 @@ static JSFunctionSpec lint_methods[] = {
         jsval columnVal = UINT_TO_JSVAL(column);
         JS_SetProperty(_context, tokenObjects[i], "column", &columnVal);
         
+        JSObject* cursorObj = JS_DefineObject(_context, tokenObjects[i], "cursor", &cursor_class, _cursorPrototypeObject, 0);
+        [self fillJSObject:cursorObj fromCursor:cursors[i]];
+        
+        
         arrayValues[i] = OBJECT_TO_JSVAL(tokenObjects[i]);
         
         clang_disposeString(tokenSpelling);
     }
     
     JSObject* tokensArray = JS_NewArrayObject(_context, numTokens, arrayValues);
-    jsval tokensArrayVal = OBJECT_TO_JSVAL(tokensArray);
-    
-    JS_SetProperty(_context, _lintObject, "tokens", &tokensArrayVal);
-
     clang_disposeTokens(translationUnit, tokens, numTokens);
+    
+    return tokensArray;
 }
 
 
