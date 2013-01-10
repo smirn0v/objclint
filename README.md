@@ -5,11 +5,12 @@ objclint is a clang based tool for performing code style guidelines check.
 
 ## TODO
 
-* Dynamic linking to clang
-* Support for Unicode in JS
-* Daemonization of objclint-coordinator ?
-* Use CXDiagnostic somehow
+* dynamic linking to clang
+* support for Unicode in JS
+* use CXDiagnostic somehow
 * pragma objclint ignore
+* check for direct '==' comparison of float values
+* report generation with objclint-coordinator
 * ...
 
 
