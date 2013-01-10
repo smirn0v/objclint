@@ -9,6 +9,7 @@ objclint is a clang based tool for performing code style guidelines check.
 * Support for Unicode in JS
 * Daemonization of objclint-coordinator ?
 * Use CXDiagnostic somehow
+* pragma objclint ignore
 * ...
 
 
