@@ -11,6 +11,9 @@ function exit_if_error {
 
 ##### Check if not ran before ##########################
 
+mkdir -p "${THIRDPARTY_DIR}"
+exit_if_error "failed to create ${THIRDPARTY_DIR}"
+
 if [ "$(ls -A ${THIRDPARTY_DIR})" ]; then
     echo "[-] Try to cleanup ${THIRDPARTY_DIR} and run $0 again"
     exit 1
