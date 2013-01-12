@@ -2,6 +2,13 @@
 
 export THIRDPARTY_DIR="`pwd`/thirdparty"
 export STATUS_SH="`pwd`/scripts/status.sh"
+export ERROR_LOG="objclint-setup-error.log"
+
+function print_error {
+    echo "$(tput bold)$(tput setaf 1)[-]$(tput init)$(tput bold) $1$(tput init)"
+    echo
+    exit 1
+}
 
 echo 
 echo "Objclint 0.1 Alpha"
@@ -13,15 +20,19 @@ echo
 mkdir -p "${THIRDPARTY_DIR}"
 
 if [ "$(ls -A ${THIRDPARTY_DIR})" ]; then
-    echo "$(tput bold)$(tput setaf 1)[-] $(tput init)Try to cleanup ${THIRDPARTY_DIR} and run $0 again"
-    echo
-    exit 1
+    print_error "Try to cleanup ${THIRDPARTY_DIR} and run $0 again"
 fi
 
 ########################################################
 
-./scripts/setup_spidermonkey.sh
+exec 2>"${ERROR_LOG}"
+
+set +e
+
+./scripts/setup_spidermonkey.sh && \
 ./scripts/setup_llvm.sh
+
+if [ $? -gt 0 ]; then print_error "Failed to setup. See ${ERROR_LOG} for details"; fi
 
 echo
 echo "#################################################"
