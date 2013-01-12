@@ -29,15 +29,21 @@ exec 2>"${ERROR_LOG}"
 
 set +e
 
+START_TIME=$(date +%s)
+
 ./scripts/setup_spidermonkey.sh && \
 ./scripts/setup_llvm.sh
 
 if [ $? -gt 0 ]; then print_error "Failed to setup. See ${ERROR_LOG} for details"; fi
 
+END_TIME=$(date +%s)
+DIFF_TIME=$(echo "scale=1;($END_TIME - $START_TIME)/60" | bc)
+
 echo
 echo "#################################################"
 echo
-echo "Whew...That was a long trip..."
+echo "Whew, that was a long trip! Took ${DIFF_TIME} minutes."
 echo "Now run ./install.sh to build/install 'objclint'"
 echo
 echo "...Have fun..."
+echo
