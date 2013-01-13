@@ -41,7 +41,7 @@ xcodebuild \
     GCC_GENERATE_DEBUGGING_SYMBOLS=NO\
     GCC_PRECOMPILE_PREFIX_HEADER=NO\
     ONLY_ACTIVE_ARCH=YES\
-    --resource-rules=/tmp/ObjclintReosurceRules.plist\
+    --resource-rules=/tmp/ObjclintResourceRules.plist\
     -PBXBuildsContinueAfterErrors=YES\
     -jobs 1\
     "$@"
