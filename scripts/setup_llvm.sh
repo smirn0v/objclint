@@ -8,7 +8,7 @@ function indented_status {
 }
 
 if [ -d "${LLVM_CLANG_BUILD_DIR}" ]; then
-    indented_status 0 "Seems like LLVM and clang already installed, skipping"
+    indented_status 0 "Seems like LLVM and clang were already installed, skipping"
     exit 0
 fi
 

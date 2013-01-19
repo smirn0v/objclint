@@ -6,7 +6,7 @@
 //  Copyright (c) 2012 Borsch Lab. All rights reserved.
 //
 
-#import "LintJSValidatorsRuntime.h"
+#import "JSValidatorsRunner.h"
 #import "ClangUtils.h"
 #include "cursor-info-helper.h"
 
@@ -46,7 +46,7 @@ JSBool lint_reportError(JSContext *cx, uintN argc, jsval *vp) {
     
     char* errorDescriptionC = JS_EncodeString(cx, errorDescription);
     
-    LintJSValidatorsRuntime* runtime = (LintJSValidatorsRuntime*)JS_GetContextPrivate(cx);
+    JSValidatorsRunner* runtime = (JSValidatorsRunner*)JS_GetContextPrivate(cx);
 
     //TODO: somehow use CXDiagnostic
     
@@ -80,7 +80,7 @@ JSBool cursor_get_lexical_parent(JSContext *cx, uintN argc, jsval *vp) {
 
     JSObject* lexicalParentCursorObj = JS_NewObject(cx, &cursor_class, JS_GetPrototype(cx, cursorObject), NULL);
 
-    LintJSValidatorsRuntime* runtime = JS_GetPrivate(cx, cursorObject);
+    JSValidatorsRunner* runtime = JS_GetPrivate(cx, cursorObject);
 
     [runtime fillJSObject:lexicalParentCursorObj fromCursor:lexicalParentCursor];
 
@@ -104,7 +104,7 @@ JSBool cursor_get_semantic_parent(JSContext *cx, uintN argc, jsval *vp) {
     
     JSObject* semanticParentCursorObj = JS_NewObject(cx, &cursor_class, JS_GetPrototype(cx, cursorObject), NULL);
     
-    LintJSValidatorsRuntime* runtime = JS_GetPrivate(cx, cursorObject);
+    JSValidatorsRunner* runtime = JS_GetPrivate(cx, cursorObject);
     
     [runtime fillJSObject:semanticParentCursorObj fromCursor:semanticParentCursor];
     
@@ -123,7 +123,7 @@ JSBool cursor_visit_children(JSContext* cx, uintN argc, jsval *vp) {
     JSObject* cursorObject = JS_THIS_OBJECT(cx, vp);
     CXCursor cursor = cursor_from_jsobject(cx, cursorObject);
 
-    LintJSValidatorsRuntime* runtime = JS_GetPrivate(cx, cursorObject);
+    JSValidatorsRunner* runtime = JS_GetPrivate(cx, cursorObject);
 
     clang_visitChildrenWithBlock(cursor, ^enum CXChildVisitResult(CXCursor childCursor, CXCursor parent) {
         
@@ -145,7 +145,7 @@ JSBool cursor_visit_children(JSContext* cx, uintN argc, jsval *vp) {
 JSBool cursor_get_tokens(JSContext* cx, uintN argc, jsval *vp) {
     JSObject* cursorObject = JS_THIS_OBJECT(cx, vp);
     CXCursor cursor = cursor_from_jsobject(cx, cursorObject);
-    LintJSValidatorsRuntime* runtime = JS_GetPrivate(cx, cursorObject);
+    JSValidatorsRunner* runtime = JS_GetPrivate(cx, cursorObject);
     JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL([runtime tokensForCursor:cursor]));
     return JS_TRUE;
 }
@@ -189,7 +189,7 @@ static JSFunctionSpec cursor_methods[] = {
     JS_FS_END
 };
 
-@implementation LintJSValidatorsRuntime {
+@implementation JSValidatorsRunner {
     NSString* _folderPath;
     JSRuntime* _runtime;
     JSContext* _context;
@@ -214,10 +214,6 @@ static JSFunctionSpec cursor_methods[] = {
             
     }
     return self;
-}
-
-+ (LintJSValidatorsRuntime*) runtimeWithLintsFolderPath:(NSString*) folderPath {
-    return [[[[self class] alloc] initWithLintsFolderPath: folderPath] autorelease];
 }
 
 - (void)dealloc

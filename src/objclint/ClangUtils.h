@@ -13,10 +13,8 @@
 
 @interface ClangUtils : NSObject
 
-+ (NSString*) projectPath;
+
 + (NSString*) filePathForCursor:(CXCursor) cursor;
-+ (BOOL) cursorBelongsToProject:(CXCursor) cursor;
-+ (NSString*) cursorDescription:(CXCursor) cursor;
 + (NSString*) tokenKindDescription:(CXTokenKind) tokenKind;
 
 

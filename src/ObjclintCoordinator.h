@@ -1,5 +1,5 @@
 //
-//  ObjclintSessionManagerProtocol.h
+//  ObjclintCoordinator.h
 //  objclint
 //
 //  Created by Smirnov on 12/9/12.
@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@protocol ObjclintSessionManagerProtocol <NSObject>
+@protocol ObjclintCoordinator <NSObject>
 
 - (void) clearSessionForProjectIdentity:(NSString*) projectIdentity;
 - (void) setLintJSValidatorsFolderPath:(NSString*)folderPath forProjectIdentity:(NSString*) projectIdentity;

@@ -6,7 +6,7 @@
 //  Copyright (c) 2012 Borsch Lab. All rights reserved.
 //
 
-#import "ObjclintSessionManager.h"
+#import "ObjclintCoordinatorImpl.h"
 #include <stdlib.h>
 
 static NSString* serviceName = @"ru.borsch-lab.objclint.coordinator";
@@ -15,12 +15,12 @@ BOOL setupExistingCoordinator(BOOL check, NSString* projectIdentity, NSString* j
     NSConnection* existingCoordinatorConnection = [[NSConnection connectionWithRegisteredName: serviceName
                                                                                          host: nil] autorelease];
     
-    [existingCoordinatorConnection.rootProxy setProtocolForProxy:@protocol(ObjclintSessionManagerProtocol)];
-    id<ObjclintSessionManagerProtocol> sessionManager = (id<ObjclintSessionManagerProtocol>) existingCoordinatorConnection.rootProxy;
+    [existingCoordinatorConnection.rootProxy setProtocolForProxy:@protocol(ObjclintCoordinator)];
+    id<ObjclintCoordinator> coordinator = (id<ObjclintCoordinator>) existingCoordinatorConnection.rootProxy;
     
     if(NO == check) {
-        [sessionManager clearSessionForProjectIdentity: projectIdentity];
-        [sessionManager setLintJSValidatorsFolderPath:jsValidatorsFolder forProjectIdentity:projectIdentity];
+        [coordinator clearSessionForProjectIdentity: projectIdentity];
+        [coordinator setLintJSValidatorsFolderPath: jsValidatorsFolder forProjectIdentity:projectIdentity];
     }
     
     return existingCoordinatorConnection != nil;
@@ -48,19 +48,19 @@ int main(int argc, const char* argv[]) {
 
         NSRunLoop* runLoop = [NSRunLoop currentRunLoop];
 
-        ObjclintSessionManager* sessionManager = [[ObjclintSessionManager new] autorelease];
+        ObjclintCoordinatorImpl* coordinator = [[ObjclintCoordinatorImpl new] autorelease];
         
         NSConnection* connection = [[[NSConnection alloc] init] autorelease];
         
-        [connection setRootObject: [NSProtocolChecker protocolCheckerWithTarget:sessionManager protocol:@protocol(ObjclintSessionManagerProtocol)]];
+        [connection setRootObject: [NSProtocolChecker protocolCheckerWithTarget:coordinator protocol:@protocol(ObjclintCoordinator)]];
         
         if(NO == [connection registerName:serviceName]) {
             printf("failed to register local service\n");
             return 1;
         }
         
-        [sessionManager clearSessionForProjectIdentity: projectIdentity];
-        [sessionManager setLintJSValidatorsFolderPath:jsValidatorsFolder forProjectIdentity:projectIdentity];
+        [coordinator clearSessionForProjectIdentity: projectIdentity];
+        [coordinator setLintJSValidatorsFolderPath:jsValidatorsFolder forProjectIdentity:projectIdentity];
         
         [connection addRunLoop:runLoop];
 
@@ -69,7 +69,7 @@ int main(int argc, const char* argv[]) {
                 NSDate* boundaryDate = [NSDate dateWithTimeInterval:1*60 sinceDate:[NSDate date]];
                 [runLoop runMode:NSDefaultRunLoopMode beforeDate: boundaryDate];
                 
-                if([[NSDate date] timeIntervalSinceDate: sessionManager.lastActionDate] > 5*60)
+                if([[NSDate date] timeIntervalSinceDate: coordinator.lastActionDate] > 5*60)
                     break;
             }
         }

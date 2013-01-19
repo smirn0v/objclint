@@ -11,15 +11,6 @@
 
 @implementation ClangUtils
 
-+ (NSString*) projectPath {
-    static NSString* currentDirPath = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        currentDirPath = [[[NSFileManager defaultManager] currentDirectoryPath] retain];
-    });
-    
-    return currentDirPath;
-}
 
 + (NSString*) filePathForCursor:(CXCursor) cursor {
     CXSourceLocation location = clang_getCursorLocation(cursor);
@@ -38,34 +29,6 @@
     clang_disposeString(fileNameCX);
     
     return filePath;
-}
-
-+ (BOOL) cursorBelongsToProject:(CXCursor) cursor {
-    NSString* filePath = [self filePathForCursor: cursor];
-    
-    return filePath!=nil && [filePath rangeOfString: self.projectPath].location == 0;
-}
-
-+ (NSString*) cursorDescription:(CXCursor) cursor {
-    CXSourceLocation location = clang_getCursorLocation(cursor);
-    
-    CXFile file;
-    unsigned line;
-    unsigned column;
-    unsigned offset;
-    
-    clang_getSpellingLocation(location,&file,&line,&column,&offset);
-    
-    CXString fileNameCX = clang_getFileName(file);
-    const char* fileNameC = clang_getCString(fileNameCX);
-    
-    NSString* filePath = nil;
-    if(fileNameC)
-        filePath = [NSString stringWithUTF8String: fileNameC];
-    
-    clang_disposeString(fileNameCX);
-    
-    return [NSString stringWithFormat:@"clang-%@-%u-%u-%u", filePath,line,column,offset];
 }
 
 + (NSString*) tokenKindDescription:(CXTokenKind) tokenKind {

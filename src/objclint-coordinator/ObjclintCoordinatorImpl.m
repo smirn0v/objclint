@@ -1,14 +1,14 @@
 //
-//  ObjclintSessionManager.m
+//  ObjclintCoordinatorImpl.m
 //  objclint
 //
 //  Created by Smirnov on 12/9/12.
 //  Copyright (c) 2012 Borsch Lab. All rights reserved.
 //
 
-#import "ObjclintSessionManager.h"
+#import "ObjclintCoordinatorImpl.h"
 
-@implementation ObjclintSessionManager {
+@implementation ObjclintCoordinatorImpl {
     NSMutableDictionary* _sessionsByProject;
     NSMutableDictionary* _validatorsFolderPathForProject;
 }

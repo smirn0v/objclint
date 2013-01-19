@@ -1,5 +1,5 @@
 //
-//  ObjclintSessionManager.h
+//  ObjclintCoordinatorImpl.h
 //  objclint
 //
 //  Created by Smirnov on 12/9/12.
@@ -7,9 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "ObjclintSessionManagerProtocol.h"
+#import "ObjclintCoordinator.h"
 
-@interface ObjclintSessionManager : NSObject<ObjclintSessionManagerProtocol>
+@interface ObjclintCoordinatorImpl : NSObject<ObjclintCoordinator>
 
 @property(nonatomic,readonly) NSDate* lastActionDate;
 

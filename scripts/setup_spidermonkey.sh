@@ -8,7 +8,7 @@ function indented_status {
 }
 
 if [ -d "${SPIDER_MONKEY_DIR}" ]; then
-    indented_status 0 "Seems like SpiderMonkey already installed, skipping"
+    indented_status 0 "Seems like SpiderMonkey was already installed, skipping"
     exit 0
 fi
 
