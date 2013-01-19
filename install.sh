@@ -15,15 +15,7 @@ echo "Objclint 0.1 Alpha"
 echo "=================="
 echo
 
-##### Check if not ran before ##########################
-
 mkdir -p "${THIRDPARTY_DIR}"
-
-if [ "$(ls -A ${THIRDPARTY_DIR})" ]; then
-    exit_error "Try to cleanup ${THIRDPARTY_DIR} and run $0 again"
-fi
-
-########################################################
 
 exec 2>"${ERROR_LOG}"
 

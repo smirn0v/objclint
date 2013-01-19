@@ -7,6 +7,11 @@ function indented_status {
     "${STATUS_SH}" -i $1 "$2"
 }
 
+if [ -d "${SPIDER_MONKEY_DIR}" ]; then
+    indented_status 0 "Seems like SpiderMonkey already installed, skipping"
+    exit 0
+fi
+
 pushd . > /dev/null
 
 cd "${THIRDPARTY_DIR}"

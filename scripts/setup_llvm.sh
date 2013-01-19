@@ -7,6 +7,11 @@ function indented_status {
     "${STATUS_SH}" -i $1 "$2"
 }
 
+if [ -d "${LLVM_CLANG_BUILD_DIR}" ]; then
+    indented_status 0 "Seems like LLVM and clang already installed, skipping"
+    exit 0
+fi
+
 mkdir -p "$LLVM_CLANG_BUILD_DIR"
 
 pushd . > /dev/null
