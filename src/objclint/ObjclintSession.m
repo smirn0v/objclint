@@ -45,13 +45,17 @@
     CXCursor cursor = clang_getTranslationUnitCursor(translationUnit);
     
     clang_visitChildrenWithBlock(cursor, ^enum CXChildVisitResult(CXCursor cursor, CXCursor parent) {
-        BOOL visitChilds = NO;
-        [self validateCursor: cursor visitChilds: &visitChilds];
-        
-        if(visitChilds)
-            return CXChildVisit_Recurse;
-        
-        return CXChildVisit_Continue;
+        @autoreleasepool {
+            
+            BOOL visitChilds = NO;
+            [self validateCursor: cursor visitChilds: &visitChilds];
+            
+            if(visitChilds)
+                return CXChildVisit_Recurse;
+            
+            return CXChildVisit_Continue;
+            
+        }
     });
     
     return !_jsValidatorsRunner.errorsOccured;
