@@ -1,0 +1,17 @@
+Objclint is automatic code style checker for Objective-C.
+Copyright (c) 2013 Alexander Smirnov (alexander [at] smirn0v.ru)
+
+Licensed under the GNU General Public License version 3.0 (GPLv3)
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the gnu general public license as published by
+the free software foundation, either version 3 of the license, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but without any warranty; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
