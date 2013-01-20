@@ -30,7 +30,6 @@ fi
 set -e
 
 $COMMAND_PREFIX mkdir -p "${INSTALL_DIR}/bin"
-$COMMAND_PREFIX mkdir -p "${INSTALL_DIR}/share"
 $COMMAND_PREFIX mkdir -p "${INSTALL_DIR}/share/objclint-validators"
 $COMMAND_PREFIX cp ./build/objclint "${INSTALL_DIR}/bin/objclint-fake-compiler"
 $COMMAND_PREFIX cp ./build/objclint-coordinator "${INSTALL_DIR}/bin/objclint-coordinator"
