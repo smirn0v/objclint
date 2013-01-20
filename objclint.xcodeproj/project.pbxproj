@@ -9,13 +9,19 @@
 /* Begin PBXBuildFile section */
 		B22690DB16751C3A005CF60C /* ObjclintCoordinatorImpl.m in Sources */ = {isa = PBXBuildFile; fileRef = B22690DA16751C3A005CF60C /* ObjclintCoordinatorImpl.m */; };
 		B26867B416AB1F5E00742C6D /* ObjclintSession.m in Sources */ = {isa = PBXBuildFile; fileRef = B26867B316AB1F5E00742C6D /* ObjclintSession.m */; };
+		B26867B816AC009800742C6D /* CursorBinding.m in Sources */ = {isa = PBXBuildFile; fileRef = B26867B716AC009800742C6D /* CursorBinding.m */; };
+		B26867BB16AC038E00742C6D /* ClangBindingsCollection.m in Sources */ = {isa = PBXBuildFile; fileRef = B26867BA16AC038E00742C6D /* ClangBindingsCollection.m */; };
+		B26867C116AC059600742C6D /* TokenBinding.m in Sources */ = {isa = PBXBuildFile; fileRef = B26867C016AC059600742C6D /* TokenBinding.m */; };
+		B26867C316AC48AA00742C6D /* clang-js-utils.c in Sources */ = {isa = PBXBuildFile; fileRef = B26867C216AC48AA00742C6D /* clang-js-utils.c */; };
+		B26867C716AC714700742C6D /* DeclarationBinding.mm in Sources */ = {isa = PBXBuildFile; fileRef = B26867C616AC714700742C6D /* DeclarationBinding.mm */; };
+		B26867CA16AC7CA600742C6D /* ObjCMethodDeclarationBinding.mm in Sources */ = {isa = PBXBuildFile; fileRef = B26867C916AC7CA600742C6D /* ObjCMethodDeclarationBinding.mm */; };
+		B26867CD16AC87FE00742C6D /* DeclarationBinding+Protected.m in Sources */ = {isa = PBXBuildFile; fileRef = B26867CC16AC87FE00742C6D /* DeclarationBinding+Protected.m */; };
 		B26F85311674F9DA00F940F4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B26F85301674F9DA00F940F4 /* Foundation.framework */; };
 		B26F85461675007D00F940F4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B26F85301674F9DA00F940F4 /* Foundation.framework */; };
 		B26F854E1675063F00F940F4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B26F85481675063F00F940F4 /* main.m */; };
 		B26F85511675063F00F940F4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B26F854B1675063F00F940F4 /* main.m */; };
 		B27348FC168720960031D877 /* ClangUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = B27348FB168720960031D877 /* ClangUtils.m */; };
 		B273490316879EB40031D877 /* JSValidatorsRunner.m in Sources */ = {isa = PBXBuildFile; fileRef = B273490216879EB40031D877 /* JSValidatorsRunner.m */; };
-		B28760EC168F772B00754F42 /* cursor-info-helper.cc in Sources */ = {isa = PBXBuildFile; fileRef = B28760EB168F772B00754F42 /* cursor-info-helper.cc */; settings = {COMPILER_FLAGS = "-w"; }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -44,6 +50,21 @@
 		B22690DA16751C3A005CF60C /* ObjclintCoordinatorImpl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObjclintCoordinatorImpl.m; sourceTree = "<group>"; };
 		B26867B216AB1F5D00742C6D /* ObjclintSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjclintSession.h; sourceTree = "<group>"; };
 		B26867B316AB1F5E00742C6D /* ObjclintSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObjclintSession.m; sourceTree = "<group>"; };
+		B26867B616AC009800742C6D /* CursorBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CursorBinding.h; sourceTree = "<group>"; };
+		B26867B716AC009800742C6D /* CursorBinding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CursorBinding.m; sourceTree = "<group>"; };
+		B26867B916AC038E00742C6D /* ClangBindingsCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ClangBindingsCollection.h; sourceTree = "<group>"; };
+		B26867BA16AC038E00742C6D /* ClangBindingsCollection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ClangBindingsCollection.m; sourceTree = "<group>"; };
+		B26867BC16AC03C600742C6D /* ClangBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ClangBinding.h; sourceTree = "<group>"; };
+		B26867BF16AC059600742C6D /* TokenBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TokenBinding.h; sourceTree = "<group>"; };
+		B26867C016AC059600742C6D /* TokenBinding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TokenBinding.m; sourceTree = "<group>"; };
+		B26867C216AC48AA00742C6D /* clang-js-utils.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "clang-js-utils.c"; sourceTree = "<group>"; };
+		B26867C416AC48C100742C6D /* clang-js-utils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "clang-js-utils.h"; sourceTree = "<group>"; };
+		B26867C516AC714700742C6D /* DeclarationBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeclarationBinding.h; sourceTree = "<group>"; };
+		B26867C616AC714700742C6D /* DeclarationBinding.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DeclarationBinding.mm; sourceTree = "<group>"; };
+		B26867C816AC7CA500742C6D /* ObjCMethodDeclarationBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjCMethodDeclarationBinding.h; sourceTree = "<group>"; };
+		B26867C916AC7CA600742C6D /* ObjCMethodDeclarationBinding.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ObjCMethodDeclarationBinding.mm; sourceTree = "<group>"; };
+		B26867CB16AC87FE00742C6D /* DeclarationBinding+Protected.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DeclarationBinding+Protected.h"; sourceTree = "<group>"; };
+		B26867CC16AC87FE00742C6D /* DeclarationBinding+Protected.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "DeclarationBinding+Protected.m"; sourceTree = "<group>"; };
 		B26F85301674F9DA00F940F4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		B26F85371675006C00F940F4 /* objclint-coordinator */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "objclint-coordinator"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B26F85481675063F00F940F4 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -67,8 +88,6 @@
 		B28760DF168F4A8B00754F42 /* lint-check-avoid-throw.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "lint-check-avoid-throw.js"; sourceTree = "<group>"; };
 		B28760E1168F506000754F42 /* lint-check-delegate-property.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "lint-check-delegate-property.js"; sourceTree = "<group>"; };
 		B28760E7168F616B00754F42 /* lint-check-avoid-get-set-method-names.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "lint-check-avoid-get-set-method-names.js"; sourceTree = "<group>"; };
-		B28760EA168F772B00754F42 /* cursor-info-helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "cursor-info-helper.h"; sourceTree = "<group>"; };
-		B28760EB168F772B00754F42 /* cursor-info-helper.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "cursor-info-helper.cc"; sourceTree = "<group>"; };
 		B28760F0168F91BC00754F42 /* lint-check-disallow-retain-count.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "lint-check-disallow-retain-count.js"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -104,6 +123,28 @@
 			path = src;
 			sourceTree = "<group>";
 		};
+		B26867B516AC007500742C6D /* clang-js-bindings */ = {
+			isa = PBXGroup;
+			children = (
+				B26867B616AC009800742C6D /* CursorBinding.h */,
+				B26867B716AC009800742C6D /* CursorBinding.m */,
+				B26867B916AC038E00742C6D /* ClangBindingsCollection.h */,
+				B26867BA16AC038E00742C6D /* ClangBindingsCollection.m */,
+				B26867BC16AC03C600742C6D /* ClangBinding.h */,
+				B26867BF16AC059600742C6D /* TokenBinding.h */,
+				B26867C016AC059600742C6D /* TokenBinding.m */,
+				B26867C416AC48C100742C6D /* clang-js-utils.h */,
+				B26867C216AC48AA00742C6D /* clang-js-utils.c */,
+				B26867C516AC714700742C6D /* DeclarationBinding.h */,
+				B26867C616AC714700742C6D /* DeclarationBinding.mm */,
+				B26867C816AC7CA500742C6D /* ObjCMethodDeclarationBinding.h */,
+				B26867C916AC7CA600742C6D /* ObjCMethodDeclarationBinding.mm */,
+				B26867CB16AC87FE00742C6D /* DeclarationBinding+Protected.h */,
+				B26867CC16AC87FE00742C6D /* DeclarationBinding+Protected.m */,
+			);
+			path = "clang-js-bindings";
+			sourceTree = "<group>";
+		};
 		B26F85321674F9E200F940F4 /* frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -115,8 +156,7 @@
 		B26F85471675063F00F940F4 /* objclint */ = {
 			isa = PBXGroup;
 			children = (
-				B28760ED168F776900754F42 /* spider-monkey-api-helpers */,
-				B28760E9168F76EC00754F42 /* clang-api-helpers */,
+				B26867B516AC007500742C6D /* clang-js-bindings */,
 				B26F85481675063F00F940F4 /* main.m */,
 				B26F85491675063F00F940F4 /* objclint */,
 				B26F85521675074000F940F4 /* objclint-Prefix.pch */,
@@ -174,22 +214,6 @@
 				B26F85371675006C00F940F4 /* objclint-coordinator */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		B28760E9168F76EC00754F42 /* clang-api-helpers */ = {
-			isa = PBXGroup;
-			children = (
-				B28760EA168F772B00754F42 /* cursor-info-helper.h */,
-				B28760EB168F772B00754F42 /* cursor-info-helper.cc */,
-			);
-			path = "clang-api-helpers";
-			sourceTree = "<group>";
-		};
-		B28760ED168F776900754F42 /* spider-monkey-api-helpers */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = "spider-monkey-api-helpers";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -273,8 +297,14 @@
 				B26F854E1675063F00F940F4 /* main.m in Sources */,
 				B27348FC168720960031D877 /* ClangUtils.m in Sources */,
 				B273490316879EB40031D877 /* JSValidatorsRunner.m in Sources */,
-				B28760EC168F772B00754F42 /* cursor-info-helper.cc in Sources */,
 				B26867B416AB1F5E00742C6D /* ObjclintSession.m in Sources */,
+				B26867B816AC009800742C6D /* CursorBinding.m in Sources */,
+				B26867BB16AC038E00742C6D /* ClangBindingsCollection.m in Sources */,
+				B26867C116AC059600742C6D /* TokenBinding.m in Sources */,
+				B26867C316AC48AA00742C6D /* clang-js-utils.c in Sources */,
+				B26867C716AC714700742C6D /* DeclarationBinding.mm in Sources */,
+				B26867CA16AC7CA600742C6D /* ObjCMethodDeclarationBinding.mm in Sources */,
+				B26867CD16AC87FE00742C6D /* DeclarationBinding+Protected.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
