@@ -9,10 +9,17 @@
 #import "ObjCMethodDeclarationBinding.h"
 #import "DeclarationBinding+Protected.h"
 
+#undef IBOutlet
+#undef IBCollection
 #define __STDC_LIMIT_MACROS
 #define __STDC_CONSTANT_MACROS
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wshorten-64-to-32"
+
 #include <clang/AST/DeclObjC.h>
+
+#pragma clang diagnostic pop
 
 static JSClass objc_method_declaration_class = {
     .name        = "ObjCMethodDeclaration",
@@ -31,8 +38,9 @@ static JSClass objc_method_declaration_class = {
 JSBool objc_method_declaration_is_synthesized(JSContext* context, uintN argc, jsval* parameters) {
     
     JSObject* declarationObject = JS_THIS_OBJECT(context, parameters);
-    ObjCMethodDeclarationBinding* declarationBinding = JS_GetPrivate(context, declarationObject);
-    clang::ObjCMethodDecl* declaration = [declarationBinding extractDeclarationFromJSObject: declarationObject];
+    ObjCMethodDeclarationBinding* declarationBinding =
+        (ObjCMethodDeclarationBinding*)JS_GetPrivate(context, declarationObject);
+    clang::ObjCMethodDecl* declaration = (clang::ObjCMethodDecl*)[declarationBinding extractDeclarationFromJSObject: declarationObject];
     
     bool isSynthesized = declaration->isSynthesized();
     JS_SET_RVAL(context, parameters, BOOLEAN_TO_JSVAL(isSynthesized));
@@ -62,7 +70,7 @@ static JSFunctionSpec objc_method_declaration_methods[] = {
         _jsClass  = &objc_method_declaration_class;
         _jsFunctionSpec = objc_method_declaration_methods;
         
-        NSAssert(_bindings.declarationBinding.jsPrototype, "Declaration binding must be initialized before ObjCMethodDeclarationBinding");
+        NSAssert(_bindings.declarationBinding.jsPrototype, @"Declaration binding must be initialized before ObjCMethodDeclarationBinding");
         
         _jsPrototype = JS_InitClass(/* context       */ _bindings.context,
                                     /* global obj    */ JS_GetGlobalObject(_bindings.context),
@@ -107,6 +115,6 @@ static JSFunctionSpec objc_method_declaration_methods[] = {
     return methodDeclJSObject;
 }
 
-#prama mark - Private
+#pragma mark - Private
 
 @end

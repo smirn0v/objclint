@@ -11,7 +11,15 @@
 
 #include <clang-c/Index.h>
 
-const char* getTokenKindSpelling(CXTokenKind tokenKind);
-char* copyCursorFilePath(CXCursor cursor);
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+    const char* getTokenKindSpelling(CXTokenKind tokenKind);
+    char* copyCursorFilePath(CXCursor cursor);
+    
+#ifdef __cplusplus
+}
+#endif
 
 #endif

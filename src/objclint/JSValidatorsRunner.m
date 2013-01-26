@@ -10,8 +10,8 @@
 
 #import "ClangBindings.h"
 
-#import "clang-js-utils.h"
-#import "clang-utils.h"
+#include "clang-js-utils.h"
+#include "clang-utils.h"
 
 #define JS_NO_JSVAL_JSID_STRUCT_TYPES
 #include "js/jsapi.h"

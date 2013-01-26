@@ -10,10 +10,17 @@
 
 #include <clang-c/Index.h>
 
+#undef IBAction
+#undef IBOutlet
 #define __STDC_LIMIT_MACROS
 #define __STDC_CONSTANT_MACROS
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wshorten-64-to-32"
+
 #include <clang/AST/Decl.h>
+
+#pragma clang diagnostic pop
 
 @interface DeclarationBinding (Protected)
 

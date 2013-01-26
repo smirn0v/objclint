@@ -28,7 +28,7 @@ void setJSProperty_CString(JSContext* context, JSObject* object, const char* pro
 
 void setJSProperty_JSObject(JSContext* context, JSObject* object, const char* propertyName, JSObject* propertyObject) {
     jsval value = OBJECT_TO_JSVAL(propertyObject);
-    JS_SetProperty(context, object, propertyName, value);
+    JS_SetProperty(context, object, propertyName, &value);
 }
 
 #define $set_primitive(func_name)\

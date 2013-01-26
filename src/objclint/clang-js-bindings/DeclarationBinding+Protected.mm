@@ -8,6 +8,8 @@
 
 #import "DeclarationBinding+Protected.h"
 
+#include "clang-js-utils.h"
+
 #define JS_NO_JSVAL_JSID_STRUCT_TYPES
 #include "js/jsapi.h"
 
@@ -15,15 +17,15 @@
 
 - (clang::Decl*) extractDeclarationFromJSObject:(JSObject*) object {
     jsval value;
-    JS_GetProperty(_bindings.context, object, "_declaration", &value);
+    JS_GetProperty(self.bindings.context, object, "_declaration", &value);
     
     void* declaration = JSVAL_TO_PRIVATE(value);
     
-    return declaration;
+    return (clang::Decl*)declaration;
 }
 
 - (void) storeDeclaration:(clang::Decl*) declaration intoJSObject:(JSObject*) object {
-    setJSProperty_Ptr(_bindings.context, object, "_declaration", (void*)declaration);
+    setJSProperty_Ptr(self.bindings.context, object, "_declaration", (void*)declaration);
 }
 
 @end

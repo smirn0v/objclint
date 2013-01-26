@@ -16,7 +16,7 @@
 		B26867C316AC48AA00742C6D /* clang-js-utils.c in Sources */ = {isa = PBXBuildFile; fileRef = B26867C216AC48AA00742C6D /* clang-js-utils.c */; };
 		B26867C716AC714700742C6D /* DeclarationBinding.mm in Sources */ = {isa = PBXBuildFile; fileRef = B26867C616AC714700742C6D /* DeclarationBinding.mm */; };
 		B26867CA16AC7CA600742C6D /* ObjCMethodDeclarationBinding.mm in Sources */ = {isa = PBXBuildFile; fileRef = B26867C916AC7CA600742C6D /* ObjCMethodDeclarationBinding.mm */; };
-		B26867CD16AC87FE00742C6D /* DeclarationBinding+Protected.m in Sources */ = {isa = PBXBuildFile; fileRef = B26867CC16AC87FE00742C6D /* DeclarationBinding+Protected.m */; };
+		B26867CD16AC87FE00742C6D /* DeclarationBinding+Protected.mm in Sources */ = {isa = PBXBuildFile; fileRef = B26867CC16AC87FE00742C6D /* DeclarationBinding+Protected.mm */; };
 		B26F85311674F9DA00F940F4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B26F85301674F9DA00F940F4 /* Foundation.framework */; };
 		B26F85461675007D00F940F4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B26F85301674F9DA00F940F4 /* Foundation.framework */; };
 		B26F854E1675063F00F940F4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B26F85481675063F00F940F4 /* main.m */; };
@@ -67,7 +67,7 @@
 		B26867C816AC7CA500742C6D /* ObjCMethodDeclarationBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjCMethodDeclarationBinding.h; sourceTree = "<group>"; };
 		B26867C916AC7CA600742C6D /* ObjCMethodDeclarationBinding.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ObjCMethodDeclarationBinding.mm; sourceTree = "<group>"; };
 		B26867CB16AC87FE00742C6D /* DeclarationBinding+Protected.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DeclarationBinding+Protected.h"; sourceTree = "<group>"; };
-		B26867CC16AC87FE00742C6D /* DeclarationBinding+Protected.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "DeclarationBinding+Protected.m"; sourceTree = "<group>"; };
+		B26867CC16AC87FE00742C6D /* DeclarationBinding+Protected.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "DeclarationBinding+Protected.mm"; sourceTree = "<group>"; };
 		B26F85301674F9DA00F940F4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		B26F85371675006C00F940F4 /* objclint-coordinator */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "objclint-coordinator"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B26F85481675063F00F940F4 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -141,7 +141,7 @@
 				B26867C816AC7CA500742C6D /* ObjCMethodDeclarationBinding.h */,
 				B26867C916AC7CA600742C6D /* ObjCMethodDeclarationBinding.mm */,
 				B26867CB16AC87FE00742C6D /* DeclarationBinding+Protected.h */,
-				B26867CC16AC87FE00742C6D /* DeclarationBinding+Protected.m */,
+				B26867CC16AC87FE00742C6D /* DeclarationBinding+Protected.mm */,
 				B267FB4C16B4271500E9FC66 /* ClangBindings.h */,
 				B267FB5016B42C0A00E9FC66 /* clang-utils.h */,
 				B267FB4E16B42BFE00E9FC66 /* clang-utils.c */,
@@ -305,7 +305,7 @@
 				B26867C316AC48AA00742C6D /* clang-js-utils.c in Sources */,
 				B26867C716AC714700742C6D /* DeclarationBinding.mm in Sources */,
 				B26867CA16AC7CA600742C6D /* ObjCMethodDeclarationBinding.mm in Sources */,
-				B26867CD16AC87FE00742C6D /* DeclarationBinding+Protected.m in Sources */,
+				B26867CD16AC87FE00742C6D /* DeclarationBinding+Protected.mm in Sources */,
 				B267FB4F16B42BFE00E9FC66 /* clang-utils.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

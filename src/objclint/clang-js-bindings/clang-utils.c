@@ -35,7 +35,6 @@ char* copyCursorFilePath(CXCursor cursor) {
     if(fileNameC){
         unsigned long length = strlen(fileNameC);
         result = (char*)malloc(length+1);
-        assert(result,"malloc failed");
         memset(result, 0, length+1);
         strncpy(result, fileNameC, length);
     }

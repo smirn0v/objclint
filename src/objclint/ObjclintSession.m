@@ -8,7 +8,7 @@
 #import "ObjclintSession.h"
 #import "JSValidatorsRunner.h"
 
-#import "clang-utils.h"
+#include "clang-utils.h"
 
 @implementation ObjclintSession {
     id<ObjclintCoordinator> _coordinator;

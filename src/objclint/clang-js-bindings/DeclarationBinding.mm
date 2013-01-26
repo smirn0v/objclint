@@ -11,11 +11,6 @@
 
 #include "clang-js-utils.h"
 
-#define __STDC_LIMIT_MACROS
-#define __STDC_CONSTANT_MACROS
-
-#include <clang/AST/Decl.h>
-
 static JSClass declaration_class = {
     .name        = "Declaration",
     .flags       = JSCLASS_HAS_PRIVATE,
@@ -33,7 +28,7 @@ static JSClass declaration_class = {
 JSBool declaration_has_body(JSContext* context, uintN argc, jsval* parameters) {
 
     JSObject* declarationObject = JS_THIS_OBJECT(context, parameters);
-    DeclarationBinding* declarationBinding = JS_GetPrivate(context, declarationObject);
+    DeclarationBinding* declarationBinding = (DeclarationBinding*)JS_GetPrivate(context, declarationObject);
     clang::Decl* declaration = [declarationBinding extractDeclarationFromJSObject: declarationObject];
     
     bool hasBody = declaration->hasBody();
