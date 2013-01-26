@@ -1,39 +1,20 @@
-# Compiled Object files
-*.slo
-*.lo
-*.o
-
-# Compiled Dynamic libraries
-*.so
-
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-
 # Vim swap
-
 *.swp
 
 # Required third-parties
 
 thirdparty/
-llvm-3.1/
 build/
-llvm-clang-build/
-lib/
 
+# XCode
 *.pbxuser
-!default.pbxuser
 *.mode1v3
-!default.mode1v3
 *.mode2v3
-!default.mode2v3
 *.perspectivev3
-!default.perspectivev3
 xcuserdata
-profile
-*.moved-aside
-DerivedData
+
+# AppCode
 .idea
+
+# Etc
 objclint-setup-error.log
