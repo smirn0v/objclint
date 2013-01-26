@@ -8,7 +8,10 @@
 
 #import "JSValidatorsRunner.h"
 
-#include "clang-utils.h"
+#import "ClangBindings.h"
+
+#import "clang-js-utils.h"
+#import "clang-utils.h"
 
 #define JS_NO_JSVAL_JSID_STRUCT_TYPES
 #include "js/jsapi.h"
@@ -79,10 +82,13 @@ static JSFunctionSpec lint_methods[] = {
 };
 
 @implementation JSValidatorsRunner {
+    ClangBindingsCollection* _bindings;
     NSString* _folderPath;
     JSRuntime* _runtime;
     JSContext* _context;
     JSObject*  _global;
+    JSObject*  _lintPrototypeObject;
+    JSObject*  _lintObject;
     NSMutableArray* _validatorsScripts;
 }
 
@@ -114,7 +120,8 @@ static JSFunctionSpec lint_methods[] = {
     
     _cursor = cursor;
     
-    [self fillJSObject:_cursorObject fromCursor:cursor];
+    JSObject* cursorObject = [_bindings.cursorBinding JSObjectFromCursor: cursor];
+    setJSProperty_JSObject(_context, _global, "cursor", cursorObject);
     
     for(NSValue* scriptObjValue in _validatorsScripts) {
         JSObject* scriptObj = (JSObject*)[scriptObjValue pointerValue];
@@ -130,12 +137,10 @@ static JSFunctionSpec lint_methods[] = {
 
     [self teardownSpiderMonkey];
 
-    /* Create a JS runtime. */
     _runtime = JS_NewRuntime(8L * 1024L * 1024L);
     if (_runtime == NULL)
         return NO;
 
-    /* Create a context. */
     _context = JS_NewContext(_runtime, 8192);
     if (_context == NULL)
         return NO;
@@ -155,13 +160,16 @@ static JSFunctionSpec lint_methods[] = {
     if (!JS_InitStandardClasses(_context, _global))
         return NO;
 
-    [self registerLintObject];
-    [self prepareValidators];
+    _bindings = [[ClangBindingsCollection alloc] initWithContext:_context runtime:_runtime];
+    [self setupLintObject];
+    [self setupValidators];
     
     return YES;
 }
 
 - (void) teardownSpiderMonkey {
+    [_bindings release];
+    [self releaseLintObject];
     [self releaseValidators];
     
     if(_context)
@@ -174,7 +182,25 @@ static JSFunctionSpec lint_methods[] = {
     _global  = NULL;
 }
 
-- (void) prepareValidators {
+- (void) setupLintObject {
+    _lintPrototypeObject = JS_InitClass(_context, _global, NULL, &lint_class, NULL, 0, NULL, lint_methods, NULL, NULL);
+    _lintObject = JS_DefineObject(_context, _global, "lint", &lint_class, _lintPrototypeObject, 0);
+    
+    JS_AddNamedObjectRoot(_context, &_lintObject, "lint");
+    JS_AddNamedObjectRoot(_context, &_lintPrototypeObject, "lint-prototype");
+}
+
+- (void) releaseLintObject {
+    if(_lintObject)
+        JS_RemoveObjectRoot(_context, &_lintObject);
+    if(_lintPrototypeObject)
+        JS_RemoveObjectRoot(_context, &_lintObject);
+    
+    _lintObject          = NULL;
+    _lintPrototypeObject = NULL;
+}
+
+- (void) setupValidators {
     @autoreleasepool {
         [_validatorsScripts release];
         _validatorsScripts = [[NSMutableArray array] retain];

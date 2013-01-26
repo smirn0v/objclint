@@ -7,7 +7,8 @@
 
 #import "ObjclintSession.h"
 #import "JSValidatorsRunner.h"
-#import "ClangUtils.h"
+
+#import "clang-utils.h"
 
 @implementation ObjclintSession {
     id<ObjclintCoordinator> _coordinator;
@@ -68,7 +69,7 @@
     if(!visitChilds)
         visitChilds = &safetyTempVar;
     
-    NSString* filePath = [ClangUtils filePathForCursor: cursor];
+    NSString* filePath = [self filePathForCursor: cursor];
     
     if(![self cursorBelongsToProject: cursor] || !filePath) {
         *visitChilds = NO;
@@ -101,9 +102,19 @@
 }
 
 - (BOOL) cursorBelongsToProject:(CXCursor) cursor {
-    NSString* filePath = [ClangUtils filePathForCursor: cursor];
+    NSString* filePath = [self filePathForCursor: cursor];
     
     return filePath!=nil && [filePath rangeOfString: _projectPath].location == 0;
+}
+
+- (NSString*) filePathForCursor:(CXCursor) cursor {
+    char* filePathC = copyCursorFilePath(cursor);
+    if(filePathC)
+        return [[[NSString alloc] initWithBytesNoCopy: filePathC
+                                               length: strlen(filePathC)
+                                             encoding: NSUTF8StringEncoding
+                                         freeWhenDone: YES] autorelease];
+    return nil;
 }
 
 @end
