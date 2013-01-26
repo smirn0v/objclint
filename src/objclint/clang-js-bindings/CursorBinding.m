@@ -2,11 +2,14 @@
 //  CursorBinding.m
 //  objclint
 //
-//  Created by Smirnov on 1/20/13.
-//  Copyright (c) 2013 Borsch Lab. All rights reserved.
+//  Created by Alexander Smirnov on 1/20/13.
+//  Copyright (c) 2013 Alexander Smirnov. All rights reserved.
 //
 
 #import "CursorBinding.h"
+
+#import "TokenBinding.h"
+#import "ObjCMethodDeclarationBinding.h"
 
 #include "clang-js-utils.h"
 
@@ -66,6 +69,7 @@ JSBool cursor_get_semantic_parent(JSContext* context, uintN argc, jsval* paramet
 JSBool cursor_visit_children(JSContext* context, uintN argc, jsval* parameters) {
     
     // Using JS_ConvertArguments only to test input parameter.
+    // Thanks to Jeff Hubbard who answered my question on stackoverflow
     // http://stackoverflow.com/questions/14092952/calling-callback-function-in-spidermonkey-js-enginge
     JSFunction* ignoreFunction;
     if (!JS_ConvertArguments(context, argc, JS_ARGV(cx, parameters), "f", &ignoreFunction))
@@ -95,7 +99,8 @@ JSBool cursor_get_tokens(JSContext* context, uintN argc, jsval* parameters) {
     CursorBinding* cursorBinding = JS_GetPrivate(context, cursorObject);
     CXCursor cursor = [cursorBinding cursorFromJSObject: cursorObject];
     
-    JS_SET_RVAL(context, parameters, OBJECT_TO_JSVAL([runtime tokensForCursor:cursor]));
+    JSObject* tokens = [cursorBinding.bindings.tokenBinding tokensJSArrayFromCursor: cursor];
+    JS_SET_RVAL(context, parameters, OBJECT_TO_JSVAL(tokens));
     return JS_TRUE;
 }
 
@@ -106,6 +111,20 @@ JSBool cursor_is_declaration(JSContext* context, uintN argc, jsval* parameters) 
     
     bool isDeclaration = clang_isDeclaration(clang_getCursorKind(cursor));
     JS_SET_RVAL(context, parameters, BOOLEAN_TO_JSVAL(isDeclaration));
+    return JS_TRUE;
+}
+
+JSBool cursor_get_objc_method_declaration(JSContext* context, uintN argc, jsval* parameters) {
+    JSObject* cursorObject = JS_THIS_OBJECT(context, parameters);
+    CursorBinding* cursorBinding = JS_GetPrivate(context, cursorObject);
+    CXCursor cursor = [cursorBinding cursorFromJSObject: cursorObject];
+    
+    ObjCMethodDeclarationBinding* binding = cursorBinding.bindings.objCMethodDeclarationBinding;
+    JSObject* declarationObj = [binding declarationJSObjectFromCursor: cursor];
+    
+    jsval returnValue = OBJECT_TO_JSVAL(declarationObj);
+    JS_SET_RVAL(context, parameters, returnValue);
+    
     return JS_TRUE;
 }
 
@@ -132,15 +151,15 @@ static JSFunctionSpec cursor_methods[] = {
     JS_FS("visitChildren",    cursor_visit_children,1,0),
     JS_FS("getTokens",        cursor_get_tokens,0,0),
     JS_FS("isDeclaration",    cursor_is_declaration,0,0),
+    JS_FS("getObjCMethodDeclaration", cursor_get_objc_method_declaration,0,0),
     JS_FS("equal",            cursor_equal,1,0),
     JS_FS_END
 };
 
-@implementation CursorBinding {
-    ClangBindingsCollection* _bindings;
-}
+@implementation CursorBinding
 
-@synthesize jsClass        = _jsClass,
+@synthesize bindings       = _bindings,
+            jsClass        = _jsClass,
             jsFunctionSpec = _jsFunctionSpec,
             jsPrototype    = _jsPrototype;
 
@@ -239,15 +258,9 @@ static JSFunctionSpec cursor_methods[] = {
     setJSProperty_CXString(_bindings.context, cursorJSObject, "kind", kind);
     clang_disposeString(kind);
     
-#if 0
-    bool synthesized = method_is_synthesized(cursor);
-    setJSProperty_Bool(_bindings.context, cursorJSObject, "isSynthesizedMethod", synthesized);
-    
-    bool hasBody = decl_has_body(cursor);
-    setJSProperty_Bool(_bindings.context, cursorJSObject, "declarationHasBody", hasBody);
-#endif
-    
     JS_SetPrivate(_bindings.context, cursorJSObject, self);
+    
+    return cursorJSObject;
 }
 
 #pragma mark - Private

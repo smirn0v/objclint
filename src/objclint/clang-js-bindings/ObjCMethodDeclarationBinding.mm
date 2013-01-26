@@ -2,8 +2,8 @@
 //  ObjCMethodDeclarationBinding.m
 //  objclint
 //
-//  Created by Smirnov on 1/20/13.
-//  Copyright (c) 2013 Borsch Lab. All rights reserved.
+//  Created by Alexander Smirnov on 1/20/13.
+//  Copyright (c) 2013 Alexander Smirnov. All rights reserved.
 //
 
 #import "ObjCMethodDeclarationBinding.h"
@@ -45,11 +45,10 @@ static JSFunctionSpec objc_method_declaration_methods[] = {
     JS_FS_END
 };
 
-@implementation ObjCMethodDeclarationBinding {
-    ClangBindingsCollection* _bindings;
-}
+@implementation ObjCMethodDeclarationBinding
 
-@synthesize jsClass        = _jsClass,
+@synthesize bindings       = _bindings,
+            jsClass        = _jsClass,
             jsFunctionSpec = _jsFunctionSpec,
             jsPrototype    = _jsPrototype;
 

@@ -2,8 +2,8 @@
 //  ObjclintSession.h
 //  objclint
 //
-//  Created by Smirnov on 1/19/13.
-//  Copyright (c) 2013 Borsch Lab. All rights reserved.
+//  Created by Alexander Smirnov on 1/19/13.
+//  Copyright (c) 2013 Alexander Smirnov. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>

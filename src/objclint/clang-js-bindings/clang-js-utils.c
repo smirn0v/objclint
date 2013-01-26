@@ -2,13 +2,14 @@
 //  clang-js-utils.c
 //  objclint
 //
-//  Created by Smirnov on 1/20/13.
-//  Copyright (c) 2013 Borsch Lab. All rights reserved.
+//  Created by Alexander Smirnov on 1/20/13.
+//  Copyright (c) 2013 Alexander Smirnov. All rights reserved.
 //
 
 #include "clang-js-utils.h"
 
 void setJSProperty_CXString(JSContext* context, JSObject* object, const char* propertyName, CXString string) {
+    //REDO: leak ?
     const char* stringC = clang_getCString(string);
     
     JSString* jsString = JS_NewStringCopyZ(context, stringC);
@@ -18,10 +19,16 @@ void setJSProperty_CXString(JSContext* context, JSObject* object, const char* pr
 }
 
 void setJSProperty_CString(JSContext* context, JSObject* object, const char* propertyName, const char* stringC) {
+    //REDO: leak ?
     JSString* jsString = JS_NewStringCopyZ(context, stringC);
     jsval value = STRING_TO_JSVAL(jsString);
     
     JS_SetProperty(context, object, propertyName, &value);
+}
+
+void setJSProperty_JSObject(JSContext* context, JSObject* object, const char* propertyName, JSObject* propertyObject) {
+    jsval value = OBJECT_TO_JSVAL(propertyObject);
+    JS_SetProperty(context, object, propertyName, value);
 }
 
 #define $set_primitive(func_name)\

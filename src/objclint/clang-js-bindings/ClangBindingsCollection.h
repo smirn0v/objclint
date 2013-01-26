@@ -2,8 +2,8 @@
 //  ClangBindingsCollection.h
 //  objclint
 //
-//  Created by Smirnov on 1/20/13.
-//  Copyright (c) 2013 Borsch Lab. All rights reserved.
+//  Created by Alexander Smirnov on 1/20/13.
+//  Copyright (c) 2013 Alexander Smirnov. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -21,7 +21,7 @@
 @property(nonatomic,readonly) JSContext* context;
 @property(nonatomic,readonly) JSRuntime* runtime;
 
-@property(nonatomic,readonly) CursorBinding* curcorBinding;
+@property(nonatomic,readonly) CursorBinding* cursorBinding;
 @property(nonatomic,readonly) TokenBinding* tokenBinding;
 @property(nonatomic,readonly) DeclarationBinding* declarationBinding;
 @property(nonatomic,readonly) ObjCMethodDeclarationBinding* objCMethodDeclarationBinding;

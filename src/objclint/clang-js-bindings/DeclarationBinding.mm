@@ -2,8 +2,8 @@
 //  DeclarationBinding.m
 //  objclint
 //
-//  Created by Smirnov on 1/20/13.
-//  Copyright (c) 2013 Borsch Lab. All rights reserved.
+//  Created by Alexander Smirnov on 1/20/13.
+//  Copyright (c) 2013 Alexander Smirnov. All rights reserved.
 //
 
 #import "DeclarationBinding.h"
@@ -47,11 +47,10 @@ static JSFunctionSpec declaration_methods[] = {
     JS_FS_END
 };
 
-@implementation DeclarationBinding {
-    ClangBindingsCollection* _bindings;
-}
+@implementation DeclarationBinding
 
-@synthesize jsClass        = _jsClass,
+@synthesize bindings       = _bindings,
+            jsClass        = _jsClass,
             jsFunctionSpec = _jsFunctionSpec,
             jsPrototype    = _jsPrototype;
 

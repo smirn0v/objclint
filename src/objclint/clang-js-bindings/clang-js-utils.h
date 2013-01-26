@@ -2,8 +2,8 @@
 //  clang-js-utils.h
 //  objclint
 //
-//  Created by Smirnov on 1/20/13.
-//  Copyright (c) 2013 Borsch Lab. All rights reserved.
+//  Created by Alexander Smirnov on 1/20/13.
+//  Copyright (c) 2013 Alexander Smirnov. All rights reserved.
 //
 
 #ifndef objclint_clang_js_utils_h
@@ -17,6 +17,7 @@
 
 void setJSProperty_CXString(JSContext* context, JSObject* object, const char* propertyName, CXString string);
 void setJSProperty_CString(JSContext* context, JSObject* object, const char* propertyName, const char* stringC);
+void setJSProperty_JSObject(JSContext* context, JSObject* object, const char* propertyName, JSObject* propertyObject);
 void setJSProperty_UInt(JSContext* context, JSObject* object, const char* propertyName, unsigned int value);
 void setJSProperty_Int(JSContext* context, JSObject* object, const char* propertyName, int value);
 void setJSProperty_Bool(JSContext* context, JSObject* object, const char* propertyName, bool value);
