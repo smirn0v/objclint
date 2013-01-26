@@ -97,6 +97,11 @@ static JSFunctionSpec token_methods[] = {
     
     for(int i = 0; i<numTokens; i++) {
         
+        // note: looks like some glitch in 'libclang'
+        // some of cursors have no translation unit
+        // setting it manually
+        cursors[i].data[2] = translationUnit;
+        
         tokenObjects[i] = [self JSObjectFromToken:tokens[i] cursor:cursors[i]];
 
         arrayValues[i] = OBJECT_TO_JSVAL(tokenObjects[i]);
