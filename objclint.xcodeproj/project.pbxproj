@@ -51,6 +51,7 @@
 		B267FB4C16B4271500E9FC66 /* ClangBindings.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ClangBindings.h; sourceTree = "<group>"; };
 		B267FB4E16B42BFE00E9FC66 /* clang-utils.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "clang-utils.c"; sourceTree = "<group>"; };
 		B267FB5016B42C0A00E9FC66 /* clang-utils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "clang-utils.h"; sourceTree = "<group>"; };
+		B267FB5716B479BF00E9FC66 /* clang-cpp-api.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "clang-cpp-api.h"; sourceTree = "<group>"; };
 		B26867B216AB1F5D00742C6D /* ObjclintSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjclintSession.h; sourceTree = "<group>"; };
 		B26867B316AB1F5E00742C6D /* ObjclintSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObjclintSession.m; sourceTree = "<group>"; };
 		B26867B616AC009800742C6D /* CursorBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CursorBinding.h; sourceTree = "<group>"; };
@@ -145,6 +146,7 @@
 				B267FB4C16B4271500E9FC66 /* ClangBindings.h */,
 				B267FB5016B42C0A00E9FC66 /* clang-utils.h */,
 				B267FB4E16B42BFE00E9FC66 /* clang-utils.c */,
+				B267FB5716B479BF00E9FC66 /* clang-cpp-api.h */,
 			);
 			path = "clang-js-bindings";
 			sourceTree = "<group>";

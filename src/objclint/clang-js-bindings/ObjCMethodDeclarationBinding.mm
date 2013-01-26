@@ -9,17 +9,7 @@
 #import "ObjCMethodDeclarationBinding.h"
 #import "DeclarationBinding+Protected.h"
 
-#undef IBOutlet
-#undef IBCollection
-#define __STDC_LIMIT_MACROS
-#define __STDC_CONSTANT_MACROS
-
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wshorten-64-to-32"
-
-#include <clang/AST/DeclObjC.h>
-
-#pragma clang diagnostic pop
+#include "clang-cpp-api.h"
 
 static JSClass objc_method_declaration_class = {
     .name        = "ObjCMethodDeclaration",
