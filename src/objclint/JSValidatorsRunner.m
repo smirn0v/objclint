@@ -194,7 +194,7 @@ static JSFunctionSpec lint_methods[] = {
     if(_lintObject)
         JS_RemoveObjectRoot(_context, &_lintObject);
     if(_lintPrototypeObject)
-        JS_RemoveObjectRoot(_context, &_lintObject);
+        JS_RemoveObjectRoot(_context, &_lintPrototypeObject);
     
     _lintObject          = NULL;
     _lintPrototypeObject = NULL;
