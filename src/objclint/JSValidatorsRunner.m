@@ -222,15 +222,12 @@ static JSFunctionSpec lint_methods[] = {
                 // JS_AddObjectRoot stores pointer to scriptObject, so it MUST be on heap
                 JSObject** scriptObj = (JSObject**)malloc(sizeof(JSObject*));
                 *scriptObj = JS_CompileFile(_context, _global, filePathC);
-                
-                if(NULL == *scriptObj) {
+
+                if(NULL == *scriptObj || !JS_AddObjectRoot(_context, scriptObj)) {
                     free(scriptObj);
                     continue;
                 }
-
-                if(!JS_AddObjectRoot(_context, scriptObj))
-                    continue;
-                    
+                
                 [_validatorsScripts addObject: [NSValue valueWithPointer: scriptObj]];
             }
         }
