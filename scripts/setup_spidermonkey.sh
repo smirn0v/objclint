@@ -59,6 +59,8 @@ indented_status 3 "Running autoconf"
 "${THIRDPARTY_DIR}/autoconf-2.13/build/bin/autoconf213"
 
 indented_status 3 "Configuring"
+#--enable-debug \
+#--enable-debug-symbols \
 CC=cc \
 CXX=c++ \
 CCFLAGS="-w" \
