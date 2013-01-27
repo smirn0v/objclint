@@ -124,9 +124,9 @@ static JSFunctionSpec lint_methods[] = {
     setJSProperty_JSObject(_context, _global, "cursor", cursorObject);
     
     for(NSValue* scriptObjValue in _validatorsScripts) {
-        JSObject* scriptObj = (JSObject*)[scriptObjValue pointerValue];
+        JSObject** scriptObj = (JSObject**)[scriptObjValue pointerValue];
         jsval result;
-        JS_ExecuteScript(_context, _global, scriptObj, &result);
+        JS_ExecuteScript(_context, _global, *scriptObj, &result);
         JS_MaybeGC(_context);
     }
 }
@@ -217,12 +217,18 @@ static JSFunctionSpec lint_methods[] = {
             if([fileName hasPrefix:@"lint-check"] && [fileName hasSuffix:@".js"]) {
                 
                 const char* filePathC = [filePath cStringUsingEncoding:NSUTF8StringEncoding];
-                JSObject* scriptObj = JS_CompileFile(_context, _global, filePathC);
-                
-                if(NULL == scriptObj)
-                    continue;
 
-                if(!JS_AddObjectRoot(_context, &scriptObj))
+                // Thanks to Philip from #jsapi irc.mozilla.org
+                // JS_AddObjectRoot stores pointer to scriptObject, so it MUST be on heap
+                JSObject** scriptObj = (JSObject**)malloc(sizeof(JSObject*));
+                *scriptObj = JS_CompileFile(_context, _global, filePathC);
+                
+                if(NULL == *scriptObj) {
+                    free(scriptObj);
+                    continue;
+                }
+
+                if(!JS_AddObjectRoot(_context, scriptObj))
                     continue;
                     
                 [_validatorsScripts addObject: [NSValue valueWithPointer: scriptObj]];
@@ -233,8 +239,9 @@ static JSFunctionSpec lint_methods[] = {
 
 - (void) releaseValidators {
     for(NSValue* scriptObjValue in _validatorsScripts) {
-        JSObject* scriptObj = (JSObject*)[scriptObjValue pointerValue];
-        JS_RemoveObjectRoot(_context, &scriptObj);
+        JSObject** scriptObj = (JSObject**)[scriptObjValue pointerValue];
+        JS_RemoveObjectRoot(_context, scriptObj);
+        free(scriptObj);
     }
     [_validatorsScripts release];
     _validatorsScripts = nil;
