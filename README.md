@@ -14,4 +14,5 @@ objclint is a clang based tool for performing code style guidelines check.
 * support for '#import' in js validators
 * support for configuration
 * support for additional folder with js validators
+* checking number of conditions for 'if' statements
 * ...
