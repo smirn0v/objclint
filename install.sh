@@ -17,10 +17,10 @@ echo
 
 mkdir -p "${THIRDPARTY_DIR}"
 
+set +e
+
 rm "${ERROR_LOG}" 2> /dev/null
 exec 2>"${ERROR_LOG}"
-
-set +e
 
 START_TIME=$(date +%s)
 
