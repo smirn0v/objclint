@@ -10,7 +10,7 @@
 
 @implementation ObjclintCoordinatorImpl {
     NSMutableDictionary* _sessionsByProject;
-    NSMutableDictionary* _validatorsFolderPathForProject;
+    NSMutableDictionary* _validatorsFolderPathsForProject;
 }
 
 #pragma mark - Init&Dealloc
@@ -19,7 +19,7 @@
     self = [super init];
     if (self) {
         _sessionsByProject = @{}.mutableCopy;
-        _validatorsFolderPathForProject = @{}.mutableCopy;
+        _validatorsFolderPathsForProject = @{}.mutableCopy;
     }
 
     return self;
@@ -28,7 +28,7 @@
 - (void)dealloc {
     [_lastActionDate release];
     [_sessionsByProject release];
-    [_validatorsFolderPathForProject release];
+    [_validatorsFolderPathsForProject release];
     [super dealloc];
 }
 
@@ -41,25 +41,31 @@
         return;
 
     [_sessionsByProject removeObjectForKey: projectIdentity];
+    [_validatorsFolderPathsForProject removeObjectForKey: projectIdentity];
 }
 
-- (void) setLintJSValidatorsFolderPath:(NSString*) folderPath forProjectIdentity:(NSString*) projectIdentity {
+- (void)addJSValidatorsFolderPath:(NSString*) folderPath forProjectIdentity:(NSString*) projectIdentity {
     [self updateLastActionDate];
     
     if(!projectIdentity)
         return;
     
-    if(folderPath)
-        _validatorsFolderPathForProject[projectIdentity] = folderPath;
+    if(folderPath) {
+        NSMutableArray* paths = _validatorsFolderPathsForProject[projectIdentity];
+        if(!paths)
+            _validatorsFolderPathsForProject[projectIdentity] = [NSMutableArray array];
+        if(NO == [paths containsObject: folderPath])
+            [paths addObject: folderPath];
+    }
 }
 
-- (NSString*) lintJSValidatorsFolderPathForProjectIdentity:(NSString*) projectIdentity {
+- (NSArray*) JSValidatorsFolderPathsForProjectIdentity:(NSString*) projectIdentity {
     [self updateLastActionDate];
 
     if(!projectIdentity)
         return nil;
     
-    return _validatorsFolderPathForProject[projectIdentity];
+    return _validatorsFolderPathsForProject[projectIdentity];
 }
 
 - (BOOL) checkIfLocation:(NSString*) location wasCheckedForProjectIdentity:(NSString*) projectIdentity {

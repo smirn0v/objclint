@@ -26,8 +26,8 @@
         _projectPath  = [[[NSFileManager defaultManager] currentDirectoryPath] retain];
         _checkedPaths = [[NSMutableDictionary alloc] init];
         
-        NSString* lintsPath = [coordinator lintJSValidatorsFolderPathForProjectIdentity: _projectPath];
-        _jsValidatorsRunner = [[JSValidatorsRunner alloc] initWithLintsFolderPath: lintsPath];
+        NSArray* paths = [coordinator JSValidatorsFolderPathsForProjectIdentity: _projectPath];
+        _jsValidatorsRunner = [[JSValidatorsRunner alloc] initWithLintsFolderPath: paths[0]];
     }
     return self;
 }

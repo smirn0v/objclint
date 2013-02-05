@@ -20,7 +20,7 @@ BOOL setupExistingCoordinator(BOOL check, NSString* projectIdentity, NSString* j
     
     if(NO == check) {
         [coordinator clearSessionForProjectIdentity: projectIdentity];
-        [coordinator setLintJSValidatorsFolderPath: jsValidatorsFolder forProjectIdentity:projectIdentity];
+        [coordinator addJSValidatorsFolderPath:jsValidatorsFolder forProjectIdentity:projectIdentity];
     }
     
     return existingCoordinatorConnection != nil;
@@ -32,8 +32,8 @@ int main(int argc, const char* argv[]) {
         BOOL justCheck = argc==2 && strcmp(argv[1],"--check") == 0;
 
         NSString* projectIdentity = [[NSFileManager defaultManager] currentDirectoryPath];
-        NSString* jsValidatorsFolder = @"/opt/local/share/objclint-validators";
         //TODO: support for '.objclint' configuration for validators folder
+        NSString* jsValidatorsFolder = @"/opt/local/share/objclint-validators";
         
         if(setupExistingCoordinator(justCheck, projectIdentity, jsValidatorsFolder)) {
             if(justCheck)
@@ -60,7 +60,7 @@ int main(int argc, const char* argv[]) {
         }
         
         [coordinator clearSessionForProjectIdentity: projectIdentity];
-        [coordinator setLintJSValidatorsFolderPath:jsValidatorsFolder forProjectIdentity:projectIdentity];
+        [coordinator addJSValidatorsFolderPath:jsValidatorsFolder forProjectIdentity:projectIdentity];
         
         [connection addRunLoop:runLoop];
 
