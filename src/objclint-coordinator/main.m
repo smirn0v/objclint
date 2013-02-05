@@ -42,7 +42,7 @@ int main(int argc, const char* argv[]) {
                 printf("connected to existing %s, prepared for new session\n", argv[0]);
             return 0;
         } else if(justCheck) {
-            //TODO: support for daemonization instead of '--check'
+            fprintf(stderr,"failed to check objclint-coordinator\n");
             return 1;
         }
 

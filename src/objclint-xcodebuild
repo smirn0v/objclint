@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh -e -o pipefail
 
 OBJCLINT_LOCATION=/opt/local/bin/objclint-dispatcher.py
 
@@ -24,11 +24,6 @@ EOL
 /opt/local/bin/objclint-coordinator &>/dev/null&
 sleep 1
 /opt/local/bin/objclint-coordinator --check
-
-if [ $? -gt 0 ]; then
-    echo "Failed to start objclint-coordinator"
-    exit 1
-fi
 
 xcodebuild \
     CC="$OBJCLINT_LOCATION"\
