@@ -52,8 +52,10 @@
     
     if(folderPath) {
         NSMutableArray* paths = _validatorsFolderPathsForProject[projectIdentity];
-        if(!paths)
-            _validatorsFolderPathsForProject[projectIdentity] = [NSMutableArray array];
+        if(!paths) {
+            paths = [NSMutableArray array];
+            _validatorsFolderPathsForProject[projectIdentity] = paths;
+        }
         if(NO == [paths containsObject: folderPath])
             [paths addObject: folderPath];
     }
