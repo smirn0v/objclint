@@ -8,9 +8,12 @@
 
 #import "ObjclintCoordinatorImpl.h"
 
+// TODO: AOP for 'updateLastActionDate'.
+
 @implementation ObjclintCoordinatorImpl {
     NSMutableDictionary* _sessionsByProject;
     NSMutableDictionary* _validatorsFolderPathsForProject;
+    NSMutableDictionary* _issuesByProject;
 }
 
 #pragma mark - Init&Dealloc
@@ -18,17 +21,21 @@
 - (id)init {
     self = [super init];
     if (self) {
-        _sessionsByProject = @{}.mutableCopy;
+        _sessionsByProject               = @{}.mutableCopy;
         _validatorsFolderPathsForProject = @{}.mutableCopy;
+        _issuesByProject                 = @{}.mutableCopy;
     }
 
     return self;
 }
 
 - (void)dealloc {
-    [_lastActionDate release];
-    [_sessionsByProject release];
+    
+    [_lastActionDate                  release];
+    [_sessionsByProject               release];
     [_validatorsFolderPathsForProject release];
+    [_issuesByProject                 release];
+    
     [super dealloc];
 }
 
@@ -94,6 +101,21 @@
     }
 
     [projectLocations addObject: location];
+}
+
+- (void) reportIssue:(ObjclintIssue*) issue forProjectIdentity:(NSString*) projectIdentity {
+    [self updateLastActionDate];
+    
+    if(!issue)
+        return;
+    
+    NSMutableArray* issues = _issuesByProject[projectIdentity];
+    if(!issues) {
+        issues = [NSMutableArray array];
+        _issuesByProject[projectIdentity] = issues;
+    }
+    
+    [issues addObject: issue];
 }
 
 #pragma mark - Private

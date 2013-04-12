@@ -22,6 +22,8 @@
 		B26F854E1675063F00F940F4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B26F85481675063F00F940F4 /* main.m */; };
 		B26F85511675063F00F940F4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B26F854B1675063F00F940F4 /* main.m */; };
 		B273490316879EB40031D877 /* JSValidatorsRunner.m in Sources */ = {isa = PBXBuildFile; fileRef = B273490216879EB40031D877 /* JSValidatorsRunner.m */; };
+		B29A253717188CED0065B533 /* ObjclintIssue.m in Sources */ = {isa = PBXBuildFile; fileRef = B29A253617188CED0065B533 /* ObjclintIssue.m */; };
+		B29A253817188CED0065B533 /* ObjclintIssue.m in Sources */ = {isa = PBXBuildFile; fileRef = B29A253617188CED0065B533 /* ObjclintIssue.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -91,6 +93,8 @@
 		B28760E1168F506000754F42 /* lint-check-delegate-property.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "lint-check-delegate-property.js"; sourceTree = "<group>"; };
 		B28760E7168F616B00754F42 /* lint-check-avoid-get-set-method-names.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "lint-check-avoid-get-set-method-names.js"; sourceTree = "<group>"; };
 		B28760F0168F91BC00754F42 /* lint-check-disallow-retain-count.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "lint-check-disallow-retain-count.js"; sourceTree = "<group>"; };
+		B29A253517188CED0065B533 /* ObjclintIssue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjclintIssue.h; sourceTree = "<group>"; };
+		B29A253617188CED0065B533 /* ObjclintIssue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObjclintIssue.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,6 +120,7 @@
 		B26111EF164ED0F20053F67B /* src */ = {
 			isa = PBXGroup;
 			children = (
+				B29A253417188CD10065B533 /* common */,
 				B27349041687A5970031D877 /* lint-checkers */,
 				B26F85471675063F00F940F4 /* objclint */,
 				B26F854A1675063F00F940F4 /* objclint-coordinator */,
@@ -220,6 +225,15 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		B29A253417188CD10065B533 /* common */ = {
+			isa = PBXGroup;
+			children = (
+				B29A253517188CED0065B533 /* ObjclintIssue.h */,
+				B29A253617188CED0065B533 /* ObjclintIssue.m */,
+			);
+			path = common;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -291,6 +305,7 @@
 			files = (
 				B26F85511675063F00F940F4 /* main.m in Sources */,
 				B22690DB16751C3A005CF60C /* ObjclintCoordinatorImpl.m in Sources */,
+				B29A253817188CED0065B533 /* ObjclintIssue.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -309,6 +324,7 @@
 				B26867CA16AC7CA600742C6D /* ObjCMethodDeclarationBinding.mm in Sources */,
 				B26867CD16AC87FE00742C6D /* DeclarationBinding+Protected.mm in Sources */,
 				B267FB4F16B42BFE00E9FC66 /* clang-utils.c in Sources */,
+				B29A253717188CED0065B533 /* ObjclintIssue.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
