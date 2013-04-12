@@ -118,6 +118,10 @@
     [issues addObject: issue];
 }
 
+- (NSArray*) issuesForProjectIdentity:(NSString*) projectIdentity {
+    return _issuesByProject[projectIdentity] ?: [NSArray array];
+}
+
 #pragma mark - Private
 
 - (void) updateLastActionDate {

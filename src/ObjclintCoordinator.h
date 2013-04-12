@@ -24,4 +24,6 @@
 
 - (void) reportIssue:(ObjclintIssue*) issue forProjectIdentity:(NSString*) projectIdentity;
 
+- (NSArray*) issuesForProjectIdentity:(NSString*) projectIdentity;
+
 @end

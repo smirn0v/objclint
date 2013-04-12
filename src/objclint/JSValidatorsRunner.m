@@ -9,6 +9,7 @@
 #import "JSValidatorsRunner.h"
 
 #import "ClangBindings.h"
+#import "LintBinding.h"
 
 #include "clang-js-utils.h"
 #include "clang-utils.h"
@@ -19,54 +20,6 @@
 /* The class of the global object. */
 static JSClass global_class = { "global", JSCLASS_GLOBAL_FLAGS, JS_PropertyStub, JS_PropertyStub, JS_PropertyStub, JS_StrictPropertyStub, JS_EnumerateStub, JS_ResolveStub, JS_ConvertStub, NULL, JSCLASS_NO_OPTIONAL_MEMBERS };
 
-static JSClass lint_class = { "Lint", JSCLASS_HAS_PRIVATE, JS_PropertyStub, JS_PropertyStub, JS_PropertyStub, JS_StrictPropertyStub, JS_EnumerateStub, JS_ResolveStub, JS_ConvertStub, NULL, JSCLASS_NO_OPTIONAL_MEMBERS };
-
-JSBool lint_log(JSContext *cx, uintN argc, jsval *vp) {
-    
-    JSString* string;
-    if (!JS_ConvertArguments(cx, argc, JS_ARGV(cx, vp), "S", &string))
-        return JS_FALSE;
-    
-    char* stringC = JS_EncodeString(cx, string);
-    
-    printf("%s\n",stringC);
-    
-    JS_free(cx, stringC);
-    JS_SET_RVAL(cx, vp, JSVAL_VOID);
-    return JS_TRUE;
-}
-
-JSBool lint_reportError(JSContext *cx, uintN argc, jsval *vp) {
-    JSString* errorDescription;
-    if (!JS_ConvertArguments(cx, argc, JS_ARGV(cx, vp), "S", &errorDescription))
-        return JS_FALSE;
-    
-    char* errorDescriptionC = JS_EncodeString(cx, errorDescription);
-    
-    JSValidatorsRunner* runtime = (JSValidatorsRunner*)JS_GetContextPrivate(cx);
-
-    //TODO: somehow use CXDiagnostic
-    char* filePathC = copyCursorFilePath(runtime->_cursor);
-    NSString* filePath = [[[NSString alloc] initWithBytesNoCopy: filePathC
-                                                         length: strlen(filePathC)
-                                                       encoding: NSUTF8StringEncoding
-                                                   freeWhenDone: YES] autorelease];
-    NSString* fileName = filePath.lastPathComponent;
-    const char* fileNameC = [fileName UTF8String];
-    
-    CXSourceLocation location = clang_getCursorLocation(runtime->_cursor);
-    
-    unsigned line;
-    unsigned column;
-    
-    clang_getSpellingLocation(location,NULL,&line,&column,NULL);
-    fprintf(stderr,"%s:%u:%u: warning: %s\n", fileNameC, line, column, errorDescriptionC);
-    
-    runtime->_errorsOccured = YES;
-    
-    return JS_TRUE;
-}
-
 /* The error reporter callback. */
 void reportError(JSContext *cx, const char *message, JSErrorReport *report) {
     fprintf(stderr, "%s:%u:%s\n",
@@ -75,19 +28,16 @@ void reportError(JSContext *cx, const char *message, JSErrorReport *report) {
             message);
 }
 
-static JSFunctionSpec lint_methods[] = {
-    JS_FS("log", lint_log, 1, 0),
-    JS_FS("reportError", lint_reportError, 1, 0),
-    JS_FS_END
-};
+@interface JSValidatorsRunner()<LintBindingDelegate>
+@end
 
 @implementation JSValidatorsRunner {
     ClangBindingsCollection* _bindings;
+    LintBinding*             _lintBinding;
     NSString* _folderPath;
     JSRuntime* _runtime;
     JSContext* _context;
     JSObject*  _global;
-    JSObject*  _lintPrototypeObject;
     JSObject*  _lintObject;
     NSMutableArray* _validatorsScripts;
 }
@@ -161,7 +111,7 @@ static JSFunctionSpec lint_methods[] = {
         return NO;
 
     _bindings = [[ClangBindingsCollection alloc] initWithContext:_context runtime:_runtime];
-    [self setupLintObject];
+    [self setupLint];
     [self setupValidators];
     
     return YES;
@@ -169,7 +119,7 @@ static JSFunctionSpec lint_methods[] = {
 
 - (void) teardownSpiderMonkey {
     [_bindings release];
-    [self releaseLintObject];
+    [self releaseLint];
     [self releaseValidators];
     
     if(_context)
@@ -182,24 +132,18 @@ static JSFunctionSpec lint_methods[] = {
     _global  = NULL;
 }
 
-- (void) setupLintObject {
-    _lintPrototypeObject = JS_InitClass(_context, _global, NULL, &lint_class, NULL, 0, NULL, lint_methods, NULL, NULL);
-    _lintObject = JS_DefineObject(_context, _global, "lint", &lint_class, _lintPrototypeObject, 0);
-    
-    JS_AddNamedObjectRoot(_context, &_lintObject, "lint");
-    JS_AddNamedObjectRoot(_context, &_lintPrototypeObject, "lint-prototype");
+- (void) setupLint {
+    _lintBinding = [[LintBinding alloc] initWithContext: _context
+                                                runtime: _runtime];
+    _lintBinding.delegate = self;
+    _lintObject  = [_lintBinding createLintObject];
 }
 
-- (void) releaseLintObject {
-    if(_lintObject)
-        JS_RemoveObjectRoot(_context, &_lintObject);
-    if(_lintPrototypeObject)
-        JS_RemoveObjectRoot(_context, &_lintPrototypeObject);
-    
-    _lintObject          = NULL;
-    _lintPrototypeObject = NULL;
+- (void) releaseLint {
+    [_lintBinding release];
 }
 
+// TODO: extract class
 - (void) setupValidators {
     @autoreleasepool {
         [_validatorsScripts release];
@@ -244,5 +188,18 @@ static JSFunctionSpec lint_methods[] = {
     _validatorsScripts = nil;
 }
 
+#pragma mark - LintBindingDelegate
+
+- (void) lintObject:(JSObject*) lintObject errorReport:(NSString*) errorDescription {
+    NSLog(@"error %@",errorDescription);
+}
+
+- (void) lintObject:(JSObject*) lintObject warningReport:(NSString*) warningDescription {
+    
+}
+
+- (void) lintObject:(JSObject*) lintObject infoReport:(NSString*) infoReport {
+    
+}
 
 @end
