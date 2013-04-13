@@ -8,8 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-#define JS_NO_JSVAL_JSID_STRUCT_TYPES
-#include "js/jsapi.h"
+#include "js.h"
 
 @protocol LintBindingDelegate<NSObject>
 

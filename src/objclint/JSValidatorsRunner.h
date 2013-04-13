@@ -9,6 +9,12 @@
 #import <Foundation/Foundation.h>
 #include "clang-c/Index.h"
 
+@protocol JSValidatorsRunner<NSObject>
+
+
+
+@end
+
 @interface JSValidatorsRunner : NSObject {
 @public
     CXCursor _cursor;

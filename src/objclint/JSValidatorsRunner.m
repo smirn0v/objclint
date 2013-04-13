@@ -14,8 +14,7 @@
 #include "clang-js-utils.h"
 #include "clang-utils.h"
 
-#define JS_NO_JSVAL_JSID_STRUCT_TYPES
-#include "js/jsapi.h"
+#include "js.h"
 
 /* The class of the global object. */
 static JSClass global_class = { "global", JSCLASS_GLOBAL_FLAGS, JS_PropertyStub, JS_PropertyStub, JS_PropertyStub, JS_StrictPropertyStub, JS_EnumerateStub, JS_ResolveStub, JS_ConvertStub, NULL, JSCLASS_NO_OPTIONAL_MEMBERS };
@@ -94,7 +93,7 @@ void reportError(JSContext *cx, const char *message, JSErrorReport *report) {
     _context = JS_NewContext(_runtime, 8192);
     if (_context == NULL)
         return NO;
-
+    
     JS_SetOptions(_context, JSOPTION_VAROBJFIX | JSOPTION_METHODJIT);
     JS_SetVersion(_context, JSVERSION_LATEST);
     JS_SetErrorReporter(_context, reportError);
@@ -191,7 +190,7 @@ void reportError(JSContext *cx, const char *message, JSErrorReport *report) {
 #pragma mark - LintBindingDelegate
 
 - (void) lintObject:(JSObject*) lintObject errorReport:(NSString*) errorDescription {
-    NSLog(@"error %@",errorDescription);
+    
 }
 
 - (void) lintObject:(JSObject*) lintObject warningReport:(NSString*) warningDescription {
