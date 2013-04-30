@@ -38,7 +38,6 @@ void reportError(JSContext *cx, const char *message, JSErrorReport *report) {
     JSContext* _context;
     JSObject*  _global;
     JSObject*  _lintObject;
-    NSMutableArray* _validatorsScripts;
 }
 
 - (id) initWithLintsFolderPath:(NSString*) folderPath {
@@ -72,12 +71,6 @@ void reportError(JSContext *cx, const char *message, JSErrorReport *report) {
     JSObject* cursorObject = [_bindings.cursorBinding JSObjectFromCursor: cursor];
     setJSProperty_JSObject(_context, _global, "cursor", cursorObject);
     
-    for(NSValue* scriptObjValue in _validatorsScripts) {
-        JSObject** scriptObj = (JSObject**)[scriptObjValue pointerValue];
-        jsval result;
-        JS_ExecuteScript(_context, _global, *scriptObj, &result);
-        JS_MaybeGC(_context);
-    }
 }
 
 #pragma mark - Private
@@ -140,51 +133,6 @@ void reportError(JSContext *cx, const char *message, JSErrorReport *report) {
 
 - (void) releaseLint {
     [_lintBinding release];
-}
-
-// TODO: extract class
-- (void) setupValidators {
-    @autoreleasepool {
-        [_validatorsScripts release];
-        _validatorsScripts = [[NSMutableArray array] retain];
-        
-        NSFileManager* fileManager = [NSFileManager defaultManager];
-        NSDirectoryEnumerator* dirEnumerator = [fileManager enumeratorAtPath: _folderPath];
-        
-        NSString *filePath;
-        while (filePath = [dirEnumerator nextObject]) {
-            
-            filePath = [_folderPath stringByAppendingPathComponent: filePath];
-            NSString* fileName = filePath.lastPathComponent;
-            
-            if([fileName hasPrefix:@"lint-check"] && [fileName hasSuffix:@".js"]) {
-                
-                const char* filePathC = [filePath cStringUsingEncoding:NSUTF8StringEncoding];
-
-                // Thanks to Philip from #jsapi irc.mozilla.org
-                // JS_AddObjectRoot stores pointer to scriptObject, so it MUST be on heap
-                JSObject** scriptObj = (JSObject**)malloc(sizeof(JSObject*));
-                *scriptObj = JS_CompileFile(_context, _global, filePathC);
-
-                if(NULL == *scriptObj || !JS_AddObjectRoot(_context, scriptObj)) {
-                    free(scriptObj);
-                    continue;
-                }
-                
-                [_validatorsScripts addObject: [NSValue valueWithPointer: scriptObj]];
-            }
-        }
-    }
-}
-
-- (void) releaseValidators {
-    for(NSValue* scriptObjValue in _validatorsScripts) {
-        JSObject** scriptObj = (JSObject**)[scriptObjValue pointerValue];
-        JS_RemoveObjectRoot(_context, scriptObj);
-        free(scriptObj);
-    }
-    [_validatorsScripts release];
-    _validatorsScripts = nil;
 }
 
 #pragma mark - LintBindingDelegate

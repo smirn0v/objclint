@@ -6,15 +6,33 @@
 //
 
 #import "ObjclintSession.h"
-#import "JSValidatorsRunner.h"
+
+#import "ClangBindingsCollection.h"
+#import "CursorBinding.h"
+#import "ObjclintIssue.h"
+#import "LintBinding.h"
+#import "JSEnvironment.h"
+#import "JSError.h"
+#import "JSScriptsLoader.h"
 
 #include "clang-utils.h"
+#include "clang-js-utils.h"
+
+@interface ObjclintSession()<JSEnvironmentDelegate, LintBindingDelegate>
+
+@end
 
 @implementation ObjclintSession {
     id<ObjclintCoordinator> _coordinator;
-    JSValidatorsRunner*     _jsValidatorsRunner;
-    NSString*               _projectPath;
-    NSMutableDictionary*    _checkedPaths;
+    ClangBindingsCollection* _clangBindings;
+    LintBinding*             _lintBinding;
+    JSEnvironment*           _jsEnvironment;
+    JSScriptsLoader*         _scriptsLoader;
+    JSObject*                _lintObject;
+    CXCursor                 _currentCursor;
+    NSString*                _projectPath;
+    NSMutableDictionary*     _checkedPaths;
+    BOOL                     _errorOccured;
 }
 
 #pragma mark - Init&Dealloc
@@ -27,22 +45,40 @@
         _checkedPaths = [[NSMutableDictionary alloc] init];
         
         NSArray* paths = [coordinator JSValidatorsFolderPathsForProjectIdentity: _projectPath];
-        _jsValidatorsRunner = [[JSValidatorsRunner alloc] initWithLintsFolderPath: paths[0]];
+
+        //TODO: use all paths
+        //TODO: use jsEnv instead of context/runtime. don't use 'runtime' at all
+        _jsEnvironment = [[JSEnvironment alloc] init];
+        
+        _clangBindings = [[ClangBindingsCollection alloc] initWithContext: _jsEnvironment.context
+                                                                  runtime: _jsEnvironment.runtime];
+        
+        _lintBinding   = [[LintBinding alloc] initWithContext: _jsEnvironment.context
+                                                      runtime: _jsEnvironment.runtime];
+        
+        _scriptsLoader = [[JSScriptsLoader alloc] initWithContext: _jsEnvironment.context
+                                                    scriptsFolder: paths[0]];
+        
+        _lintObject = [_lintBinding createLintObject];
     }
     return self;
 }
 
 - (void)dealloc {
+    [_scriptsLoader      release];
+    [_lintBinding        release];
+    [_clangBindings      release];
+    [_jsEnvironment      release];
     [_coordinator        release];
     [_projectPath        release];
     [_checkedPaths       release];
-    [_jsValidatorsRunner release];
     [super dealloc];
 }
 
 #pragma mark - Public
 
 - (BOOL) validateTranslationUnit:(CXTranslationUnit) translationUnit {
+    _errorOccured = NO;
     CXCursor cursor = clang_getTranslationUnitCursor(translationUnit);
     
     clang_visitChildrenWithBlock(cursor, ^enum CXChildVisitResult(CXCursor cursor, CXCursor parent) {
@@ -59,7 +95,28 @@
         }
     });
     
-    return !_jsValidatorsRunner.errorsOccured;
+    return !_errorOccured;
+}
+
+#pragma mark - JSEnvironmentDelegate
+
+- (void) JSEnvironment:(JSEnvironment*) env errorOccured:(JSError*) error {
+    ObjclintIssue* issue = [[ObjclintIssue new] autorelease];
+    issue.issueType   = ObjclintIssueType_JSError;
+    issue.description = error.message;
+    issue.fileName    = error.filename;
+    
+}
+
+#pragma mark - LintBindingDelegate
+
+- (void) lintObject:(JSObject*) lintObject issueReport:(ObjclintIssue*) issue {
+    _errorOccured = YES;
+    [_coordinator reportIssue: issue forProjectIdentity: _projectPath];
+}
+
+- (CXCursor) cursorForLintObject:(JSObject*) lintObject {
+    return _currentCursor;
 }
 
 #pragma mark - Private
@@ -97,7 +154,11 @@
     *visitChilds = !alreadyChecked.boolValue;
     
     if(!alreadyChecked.boolValue) {
-        [_jsValidatorsRunner runValidatorsForCursor: cursor];
+        _currentCursor = cursor;
+        JSObject* cursorObject = [_clangBindings.cursorBinding JSObjectFromCursor: cursor];
+        setJSProperty_JSObject(_jsEnvironment.context, _jsEnvironment.global, "cursor", cursorObject);
+        [_scriptsLoader runScriptsWithResultHandler:^(jsval value) {
+        }];
     }
 }
 

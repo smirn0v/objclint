@@ -11,12 +11,13 @@
 typedef enum: NSUInteger {
     ObjclintIssueType_Warning,
     ObjclintIssueType_Error,
+    ObjclintIssueType_JSError,
     ObjclintIssueType_Info
 } ObjclintIssueType;
 
 @interface ObjclintIssue : NSObject
 
-@property(nonatomic, copy)   NSString*  filePath;
+@property(nonatomic, copy)   NSString*  fileName;
 @property(nonatomic, assign) NSUInteger line;
 @property(nonatomic, assign) NSUInteger column;
 @property(nonatomic, assign) ObjclintIssueType issueType;

@@ -8,6 +8,13 @@
 
 #import <Foundation/Foundation.h>
 
+#include "js.h"
+
 @interface JSScriptsLoader : NSObject
+
+- (instancetype) initWithContext:(JSContext*) context
+                   scriptsFolder:(NSString*) folder;
+
+- (void) runScriptsWithResultHandler:(void(^)(jsval))handler;
 
 @end

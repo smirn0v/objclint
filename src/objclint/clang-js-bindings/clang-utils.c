@@ -43,3 +43,9 @@ char* copyCursorFilePath(CXCursor cursor) {
 
     return result;
 }
+
+void cursorLocation(CXCursor cursor, unsigned* line, unsigned* column) {
+    CXSourceLocation location = clang_getCursorLocation(cursor);
+    
+    clang_getSpellingLocation(location, NULL, line, column, NULL);
+}

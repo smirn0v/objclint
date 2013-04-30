@@ -7,6 +7,7 @@
 //
 
 #import "LintBinding.h"
+#import "ObjclintIssue.h"
 #import <objc/message.h>
 
 #include "clang-utils.h"
@@ -40,7 +41,7 @@ JSBool lint_log(JSContext *cx, uintN argc, jsval *vp) {
     return JS_TRUE;
 }
 
-JSBool common_report(SEL reportSelector, JSContext *cx, uintN argc, jsval *vp) {
+JSBool common_report(SEL reportSelector, ObjclintIssueType issueType, JSContext *cx, uintN argc, jsval *vp) {
     JSString* descriptionS;
     if (!JS_ConvertArguments(cx, argc, JS_ARGV(cx, vp), "S", &descriptionS))
         return JS_FALSE;
@@ -54,46 +55,33 @@ JSBool common_report(SEL reportSelector, JSContext *cx, uintN argc, jsval *vp) {
                                                           encoding: NSUTF8StringEncoding
                                                       freeWhenDone: YES] autorelease];
     
+//    NSString* fileName = lint_pvt_fileName()
+    
     if([binding.delegate respondsToSelector: reportSelector])
         objc_msgSend(binding.delegate, reportSelector, lintObject, description);
     
     return JS_TRUE;
 }
 
-JSBool lint_reportError(JSContext *cx, uintN argc, jsval *vp) {
-    return common_report(@selector(lintObject:errorReport:), cx, argc, vp);
-    
-#if 0
-    JSValidatorsRunner* runtime = (JSValidatorsRunner*)JS_GetContextPrivate(cx);
-    
-    //TODO: somehow use CXDiagnostic
-    char* filePathC = copyCursorFilePath(runtime->_cursor);
+NSString* lint_pvt_fileName(CXCursor cursor) {
+    char* filePathC = copyCursorFilePath(cursor);
     NSString* filePath = [[[NSString alloc] initWithBytesNoCopy: filePathC
                                                          length: strlen(filePathC)
                                                        encoding: NSUTF8StringEncoding
                                                    freeWhenDone: YES] autorelease];
-    NSString* fileName = filePath.lastPathComponent;
-    const char* fileNameC = [fileName UTF8String];
-    
-    CXSourceLocation location = clang_getCursorLocation(runtime->_cursor);
-    
-    unsigned line;
-    unsigned column;
-    
-    clang_getSpellingLocation(location,NULL,&line,&column,NULL);
-    fprintf(stderr,"%s:%u:%u: warning: %s\n", fileNameC, line, column, errorDescriptionC);
-    
-    runtime->_errorsOccured = YES;
-#endif
-    return JS_TRUE;
+    return filePath.lastPathComponent;
+}
+
+JSBool lint_reportError(JSContext *cx, uintN argc, jsval *vp) {
+    return common_report(@selector(lintObject:errorReport:), ObjclintIssueType_Error, cx, argc, vp);
 }
 
 JSBool lint_reportWarning(JSContext *cx, uintN argc, jsval *vp) {
-    return common_report(@selector(lintObject:warningReport:), cx, argc, vp);
+    return common_report(@selector(lintObject:warningReport:), ObjclintIssueType_Warning, cx, argc, vp);
 }
 
 JSBool lint_reportInfo(JSContext *cx, uintN argc, jsval *vp) {
-    return common_report(@selector(lintObject:infoReport:), cx, argc, vp);
+    return common_report(@selector(lintObject:infoReport:), ObjclintIssueType_Info, cx, argc, vp);
 }
 
 static JSFunctionSpec lint_methods[] = {

@@ -12,7 +12,7 @@
 
 - (void)dealloc
 {
-    [_filePath    release];
+    [_fileName    release];
     [_description release];
     [super dealloc];
 }

@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		B22690DB16751C3A005CF60C /* ObjclintCoordinatorImpl.m in Sources */ = {isa = PBXBuildFile; fileRef = B22690DA16751C3A005CF60C /* ObjclintCoordinatorImpl.m */; };
+		B25515AC171DD99F00F18E03 /* JSEnvironment.m in Sources */ = {isa = PBXBuildFile; fileRef = B25515AB171DD99F00F18E03 /* JSEnvironment.m */; };
+		B25515AF171DDD6900F18E03 /* JSError.m in Sources */ = {isa = PBXBuildFile; fileRef = B25515AE171DDD6900F18E03 /* JSError.m */; };
 		B267FB4F16B42BFE00E9FC66 /* clang-utils.c in Sources */ = {isa = PBXBuildFile; fileRef = B267FB4E16B42BFE00E9FC66 /* clang-utils.c */; };
 		B26867B416AB1F5E00742C6D /* ObjclintSession.m in Sources */ = {isa = PBXBuildFile; fileRef = B26867B316AB1F5E00742C6D /* ObjclintSession.m */; };
 		B26867B816AC009800742C6D /* CursorBinding.m in Sources */ = {isa = PBXBuildFile; fileRef = B26867B716AC009800742C6D /* CursorBinding.m */; };
@@ -25,7 +27,7 @@
 		B29A253717188CED0065B533 /* ObjclintIssue.m in Sources */ = {isa = PBXBuildFile; fileRef = B29A253617188CED0065B533 /* ObjclintIssue.m */; };
 		B29A253817188CED0065B533 /* ObjclintIssue.m in Sources */ = {isa = PBXBuildFile; fileRef = B29A253617188CED0065B533 /* ObjclintIssue.m */; };
 		B29A253C171898B00065B533 /* LintBinding.m in Sources */ = {isa = PBXBuildFile; fileRef = B29A253B171898B00065B533 /* LintBinding.m */; };
-		B29A253F171952970065B533 /* JSScriptsLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = B29A253E171952960065B533 /* JSScriptsLoader.m */; };
+		B29A25461719542C0065B533 /* JSScriptsLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = B29A25451719542C0065B533 /* JSScriptsLoader.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -52,6 +54,10 @@
 /* Begin PBXFileReference section */
 		B22690D916751C3A005CF60C /* ObjclintCoordinatorImpl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjclintCoordinatorImpl.h; sourceTree = "<group>"; };
 		B22690DA16751C3A005CF60C /* ObjclintCoordinatorImpl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObjclintCoordinatorImpl.m; sourceTree = "<group>"; };
+		B25515AA171DD99F00F18E03 /* JSEnvironment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSEnvironment.h; sourceTree = "<group>"; };
+		B25515AB171DD99F00F18E03 /* JSEnvironment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSEnvironment.m; sourceTree = "<group>"; };
+		B25515AD171DDD6900F18E03 /* JSError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSError.h; sourceTree = "<group>"; };
+		B25515AE171DDD6900F18E03 /* JSError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSError.m; sourceTree = "<group>"; };
 		B267FB4C16B4271500E9FC66 /* ClangBindings.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ClangBindings.h; sourceTree = "<group>"; };
 		B267FB4E16B42BFE00E9FC66 /* clang-utils.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "clang-utils.c"; sourceTree = "<group>"; };
 		B267FB5016B42C0A00E9FC66 /* clang-utils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "clang-utils.h"; sourceTree = "<group>"; };
@@ -99,9 +105,9 @@
 		B29A253617188CED0065B533 /* ObjclintIssue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObjclintIssue.m; sourceTree = "<group>"; };
 		B29A253A171898B00065B533 /* LintBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LintBinding.h; sourceTree = "<group>"; };
 		B29A253B171898B00065B533 /* LintBinding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LintBinding.m; sourceTree = "<group>"; };
-		B29A253D171952960065B533 /* JSScriptsLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSScriptsLoader.h; sourceTree = "<group>"; };
-		B29A253E171952960065B533 /* JSScriptsLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSScriptsLoader.m; sourceTree = "<group>"; };
-		B29A2541171953160065B533 /* js.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = js.h; sourceTree = "<group>"; };
+		B29A25431719542C0065B533 /* js.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = js.h; sourceTree = "<group>"; };
+		B29A25441719542C0065B533 /* JSScriptsLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSScriptsLoader.h; sourceTree = "<group>"; };
+		B29A25451719542C0065B533 /* JSScriptsLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSScriptsLoader.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -174,7 +180,7 @@
 		B26F85471675063F00F940F4 /* objclint */ = {
 			isa = PBXGroup;
 			children = (
-				B29A2540171952FB0065B533 /* js */,
+				B29A25421719542B0065B533 /* js */,
 				B29A25391718987F0065B533 /* lint-bindings */,
 				B26867B516AC007500742C6D /* clang-js-bindings */,
 				B26F85481675063F00F940F4 /* main.m */,
@@ -182,8 +188,6 @@
 				B26F85521675074000F940F4 /* objclint-Prefix.pch */,
 				B273490116879EB30031D877 /* JSValidatorsRunner.h */,
 				B273490216879EB40031D877 /* JSValidatorsRunner.m */,
-				B29A253D171952960065B533 /* JSScriptsLoader.h */,
-				B29A253E171952960065B533 /* JSScriptsLoader.m */,
 				B26867B216AB1F5D00742C6D /* ObjclintSession.h */,
 				B26867B316AB1F5E00742C6D /* ObjclintSession.m */,
 			);
@@ -254,14 +258,19 @@
 			path = "lint-bindings";
 			sourceTree = "<group>";
 		};
-		B29A2540171952FB0065B533 /* js */ = {
+		B29A25421719542B0065B533 /* js */ = {
 			isa = PBXGroup;
 			children = (
-				B29A2541171953160065B533 /* js.h */,
+				B29A25431719542C0065B533 /* js.h */,
+				B29A25441719542C0065B533 /* JSScriptsLoader.h */,
+				B29A25451719542C0065B533 /* JSScriptsLoader.m */,
+				B25515AA171DD99F00F18E03 /* JSEnvironment.h */,
+				B25515AB171DD99F00F18E03 /* JSEnvironment.m */,
+				B25515AD171DDD6900F18E03 /* JSError.h */,
+				B25515AE171DDD6900F18E03 /* JSError.m */,
 			);
-			name = js;
-			path = src/js;
-			sourceTree = SOURCE_ROOT;
+			path = js;
+			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
@@ -355,7 +364,9 @@
 				B267FB4F16B42BFE00E9FC66 /* clang-utils.c in Sources */,
 				B29A253717188CED0065B533 /* ObjclintIssue.m in Sources */,
 				B29A253C171898B00065B533 /* LintBinding.m in Sources */,
-				B29A253F171952970065B533 /* JSScriptsLoader.m in Sources */,
+				B29A25461719542C0065B533 /* JSScriptsLoader.m in Sources */,
+				B25515AC171DD99F00F18E03 /* JSEnvironment.m in Sources */,
+				B25515AF171DDD6900F18E03 /* JSError.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -9,12 +9,14 @@
 #import <Foundation/Foundation.h>
 
 #include "js.h"
+#include <clang-c/Index.h>
+
+@class ObjclintIssue;
 
 @protocol LintBindingDelegate<NSObject>
 
-- (void) lintObject:(JSObject*) lintObject errorReport:(NSString*) errorDescription;
-- (void) lintObject:(JSObject*) lintObject warningReport:(NSString*) warningDescription;
-- (void) lintObject:(JSObject*) lintObject infoReport:(NSString*) infoReport;
+- (void) lintObject:(JSObject*) lintObject issueReport:(ObjclintIssue*) issue;
+- (CXCursor) cursorForLintObject:(JSObject*) lintObject;
 
 @end
 

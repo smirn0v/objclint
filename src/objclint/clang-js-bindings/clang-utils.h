@@ -17,6 +17,7 @@ extern "C" {
 
     const char* getTokenKindSpelling(CXTokenKind tokenKind);
     char* copyCursorFilePath(CXCursor cursor);
+    void cursorLocation(CXCursor cursor, unsigned* line, unsigned* column);
     
 #ifdef __cplusplus
 }
