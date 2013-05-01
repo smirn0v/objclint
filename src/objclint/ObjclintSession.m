@@ -60,6 +60,8 @@
                                                     scriptsFolder: paths[0]];
         
         _lintObject = [_lintBinding createLintObject];
+        
+        _lintBinding.delegate = self;
     }
     return self;
 }
