@@ -19,6 +19,7 @@
 		B26867C716AC714700742C6D /* DeclarationBinding.mm in Sources */ = {isa = PBXBuildFile; fileRef = B26867C616AC714700742C6D /* DeclarationBinding.mm */; };
 		B26867CA16AC7CA600742C6D /* ObjCMethodDeclarationBinding.mm in Sources */ = {isa = PBXBuildFile; fileRef = B26867C916AC7CA600742C6D /* ObjCMethodDeclarationBinding.mm */; };
 		B26867CD16AC87FE00742C6D /* DeclarationBinding+Protected.mm in Sources */ = {isa = PBXBuildFile; fileRef = B26867CC16AC87FE00742C6D /* DeclarationBinding+Protected.mm */; };
+		B26EB6EC1731650B006B372D /* TextReportGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = B26EB6EB1731650B006B372D /* TextReportGenerator.m */; };
 		B26F85311674F9DA00F940F4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B26F85301674F9DA00F940F4 /* Foundation.framework */; };
 		B26F85461675007D00F940F4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B26F85301674F9DA00F940F4 /* Foundation.framework */; };
 		B26F854E1675063F00F940F4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B26F85481675063F00F940F4 /* main.m */; };
@@ -78,6 +79,9 @@
 		B26867C916AC7CA600742C6D /* ObjCMethodDeclarationBinding.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ObjCMethodDeclarationBinding.mm; sourceTree = "<group>"; };
 		B26867CB16AC87FE00742C6D /* DeclarationBinding+Protected.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DeclarationBinding+Protected.h"; sourceTree = "<group>"; };
 		B26867CC16AC87FE00742C6D /* DeclarationBinding+Protected.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "DeclarationBinding+Protected.mm"; sourceTree = "<group>"; };
+		B26EB6E91731642F006B372D /* ObjclintReportGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjclintReportGenerator.h; sourceTree = "<group>"; };
+		B26EB6EA1731650B006B372D /* TextReportGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextReportGenerator.h; sourceTree = "<group>"; };
+		B26EB6EB1731650B006B372D /* TextReportGenerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextReportGenerator.m; sourceTree = "<group>"; };
 		B26F85301674F9DA00F940F4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		B26F85371675006C00F940F4 /* objclint-coordinator */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "objclint-coordinator"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B26F85481675063F00F940F4 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -166,6 +170,16 @@
 			path = "clang-js-bindings";
 			sourceTree = "<group>";
 		};
+		B26EB6E81731642F006B372D /* report-generators */ = {
+			isa = PBXGroup;
+			children = (
+				B26EB6E91731642F006B372D /* ObjclintReportGenerator.h */,
+				B26EB6EA1731650B006B372D /* TextReportGenerator.h */,
+				B26EB6EB1731650B006B372D /* TextReportGenerator.m */,
+			);
+			path = "report-generators";
+			sourceTree = "<group>";
+		};
 		B26F85321674F9E200F940F4 /* frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -192,6 +206,7 @@
 		B26F854A1675063F00F940F4 /* objclint-coordinator */ = {
 			isa = PBXGroup;
 			children = (
+				B26EB6E81731642F006B372D /* report-generators */,
 				B26F854B1675063F00F940F4 /* main.m */,
 				B26F854C1675063F00F940F4 /* objclint-coordinator-Prefix.pch */,
 				B22690D916751C3A005CF60C /* ObjclintCoordinatorImpl.h */,
@@ -339,6 +354,7 @@
 				B26F85511675063F00F940F4 /* main.m in Sources */,
 				B22690DB16751C3A005CF60C /* ObjclintCoordinatorImpl.m in Sources */,
 				B29A253817188CED0065B533 /* ObjclintIssue.m in Sources */,
+				B26EB6EC1731650B006B372D /* TextReportGenerator.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
