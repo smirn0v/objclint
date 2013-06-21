@@ -15,7 +15,7 @@ id<ObjclintCoordinator> aquireObjclintCoordinator() {
 int main(int argc, char *argv[]) {
     // immediately flush stdout
     setvbuf(stdout, NULL, _IONBF, 0);
-    
+
     @autoreleasepool {
             
         id<ObjclintCoordinator> coordinator = aquireObjclintCoordinator();
@@ -32,7 +32,6 @@ int main(int argc, char *argv[]) {
         }
         clang_disposeIndex(index);
             
-        
         return successfullValidation ? 0 : 1;
     }
 }

@@ -108,6 +108,7 @@
     issue.description = error.message;
     issue.fileName    = error.filename;
     
+    [_coordinator reportIssue: issue forProjectIdentity: _projectPath];
 }
 
 #pragma mark - LintBindingDelegate

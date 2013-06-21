@@ -64,7 +64,7 @@
             NSString* fileName = filePath.lastPathComponent;
             
             if([fileName hasSuffix:@".js"]) {
-                
+
                 const char* filePathC = [filePath cStringUsingEncoding:NSUTF8StringEncoding];
                 
                 // Thanks to Philip from #jsapi irc.mozilla.org
