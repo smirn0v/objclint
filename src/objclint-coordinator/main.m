@@ -10,8 +10,6 @@
 #import "TextReportGenerator.h"
 #include <stdlib.h>
 
-static NSString* const kObjclintServiceName = @"ru.smirn0v.objclint.coordinator";
-
 static NSString* const kObjclintConfigurationFile = @".objclint";
 
 static NSString* const kObjclintStart  = @"-start";
@@ -78,8 +76,8 @@ ObjclintCoordinatorImpl* createCoordinator(BOOL createIfNeeded, NSConnection** c
     if(!connection)
         connection = &tmpConnection;
     
-    *connection = [[NSConnection connectionWithRegisteredName: kObjclintServiceName
-                                                         host: nil] autorelease];
+    *connection = [NSConnection connectionWithRegisteredName: kObjclintServiceName
+                                                        host: nil];
     
     [(*connection).rootProxy setProtocolForProxy: @protocol(ObjclintCoordinator)];
     id<ObjclintCoordinator> coordinator = (id<ObjclintCoordinator>) (*connection).rootProxy;

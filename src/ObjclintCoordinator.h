@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+static NSString* const kObjclintServiceName = @"ru.smirn0v.objclint.coordinator";
+
 static NSString* const kObjclintConfigurationLintsDirs = @"lints-directories";
 
 @class ObjclintIssue;

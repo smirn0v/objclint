@@ -5,8 +5,8 @@
 #import "ObjclintSession.h"
 
 id<ObjclintCoordinator> aquireObjclintCoordinator() {
-    NSConnection* connection = [[NSConnection connectionWithRegisteredName: @"ru.borsch-lab.objclint.coordinator"
-                                                                      host: nil] autorelease];
+    NSConnection* connection = [NSConnection connectionWithRegisteredName: kObjclintServiceName
+                                                                     host: nil];
     
     [connection.rootProxy setProtocolForProxy:@protocol(ObjclintCoordinator)];
     return (id<ObjclintCoordinator>) connection.rootProxy;
@@ -19,7 +19,7 @@ int main(int argc, char *argv[]) {
     @autoreleasepool {
             
         id<ObjclintCoordinator> coordinator = aquireObjclintCoordinator();
-        ObjclintSession* session = [[ObjclintSession alloc] initWithCoordinator: coordinator];
+        ObjclintSession* session = [[[ObjclintSession alloc] initWithCoordinator: coordinator] autorelease];
         
         BOOL successfullValidation = NO;
                

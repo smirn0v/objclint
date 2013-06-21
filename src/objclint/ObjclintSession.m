@@ -124,6 +124,7 @@
 #pragma mark - Private
 
 - (void) validateCursor:(CXCursor) cursor visitChilds:(BOOL*) visitChilds {
+
     BOOL safetyTempVar;
     if(!visitChilds)
         visitChilds = &safetyTempVar;
