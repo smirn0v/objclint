@@ -16,7 +16,7 @@
 
 - (void) generateReportForProjectIdentity:(NSString*) identity
                         withinCoordinator:(id<ObjclintCoordinator>) coordinator {
-    
+
     NSArray* issues = [coordinator issuesForProjectIdentity: identity];
 
     issues = [issues sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {

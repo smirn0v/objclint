@@ -7,7 +7,7 @@
 //
 
 #import "ObjclintCoordinatorImpl.h"
-#import "NSUserDefaults+OCL.h"
+#import "TextReportGenerator.h"
 #include <stdlib.h>
 
 static NSString* const kObjclintServiceName = @"ru.smirn0v.objclint.coordinator";
@@ -145,7 +145,14 @@ void objclintCheck() {
 }
 
 void objclintReport() {
-    printf("Report!\n");
+    id<ObjclintReportGenerator> reportGenerator = [[[TextReportGenerator alloc] init] autorelease];
+    
+    ObjclintCoordinatorImpl* coordinator =
+    createCoordinator(/* createIfNeeded */ NO,
+                      /* connection */ nil);
+    if(coordinator)
+        [reportGenerator generateReportForProjectIdentity: projectIdentity()
+                                        withinCoordinator: coordinator];
 }
 
 int main(int argc, const char* argv[]) {
