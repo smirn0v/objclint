@@ -12,18 +12,20 @@
 
 static NSString* const kObjclintServiceName = @"ru.smirn0v.objclint.coordinator";
 
-static NSString* const kObjclintStart  = @"start";
-static NSString* const kObjclintCheck  = @"check";
-static NSString* const kObjclintReport = @"report";
+static NSString* const kObjclintConfigurationFile = @".objclint";
+
+static NSString* const kObjclintStart  = @"-start";
+static NSString* const kObjclintCheck  = @"-check";
+static NSString* const kObjclintReport = @"-report";
 
 void usage() {
     fprintf(
             stderr,
-            "usage: %s [-%s|-%s|-%s]\n\n"
+            "usage: %s [%s|%s|%s]\n\n"
             "Arguments are exclusive.\n"
-            "-%s  – start objclint session in current directory\n"
-            "-%s  – check if objclint stared\n"
-            "-%s – print report for current session\n",
+            "%s  – start objclint session in current directory\n"
+            "%s  – check if objclint stared\n"
+            "%s – print report for current session\n",
             [[NSProcessInfo processInfo].processName UTF8String],
             kObjclintStart.UTF8String,
             kObjclintCheck.UTF8String,
@@ -36,7 +38,7 @@ void usage() {
 
 NSDictionary* defaultConfiguration() {
     return @{
-             @"lints-directory": @[@"./lints"]
+             kObjclintConfigurationLintsDirs: @[@"./lints"]
              };
 }
 
@@ -45,15 +47,19 @@ NSString* projectIdentity() {
 }
 
 NSDictionary* readObjclintConfiguration() {
-    NSError* error = nil;
-    NSData* configurationData = [NSData dataWithContentsOfFile: @".objclint"];
-    id jsonConfiguration = [NSJSONSerialization JSONObjectWithData: configurationData
-                                                           options: 0
-                                                             error: &error];
+    NSError* error             = nil;
+    NSData*  configurationData = [NSData dataWithContentsOfFile: kObjclintConfigurationFile];
+    id       jsonConfiguration = nil;
+    
+    if(configurationData) {
+        jsonConfiguration = [NSJSONSerialization JSONObjectWithData: configurationData
+                                                            options: 0
+                                                              error: &error];
+    }
     
     if(configurationData && error != nil) {
         fprintf(stderr,
-                "failed to read .objclint configuration file, ignoring it.\n%s",
+                "failed to read .objclint configuration file, ignoring it.\n%s\n",
                 error.localizedDescription.UTF8String);
     }
     
@@ -61,7 +67,7 @@ NSDictionary* readObjclintConfiguration() {
         jsonConfiguration = defaultConfiguration();
     
     if(NO == [jsonConfiguration isKindOfClass:[NSDictionary class]]) {
-        fprintf(stderr,"wrong configuration file format, ignoring it");
+        fprintf(stderr,"wrong configuration file format, ignoring it\n");
     }
     
     return jsonConfiguration;
@@ -94,7 +100,7 @@ ObjclintCoordinatorImpl* createCoordinator(BOOL createIfNeeded, NSConnection** c
     if([*connection registerName: kObjclintServiceName])
         return coordinator;
     
-    fprintf(stderr, "failed to register service %s", kObjclintServiceName.UTF8String);
+    fprintf(stderr, "failed to register service %s\n", kObjclintServiceName.UTF8String);
     
     return nil;
 }
@@ -102,6 +108,10 @@ ObjclintCoordinatorImpl* createCoordinator(BOOL createIfNeeded, NSConnection** c
 
 void objclintStart() {
     NSDictionary* objclintConfiguration = readObjclintConfiguration();
+    NSArray* lintsDirs = objclintConfiguration[kObjclintConfigurationLintsDirs];
+    if(lintsDirs.count == 0) {
+        fprintf(stderr, "no lint directories provided. at least one directory must be provided\n");
+    }
     
     NSConnection* connection = nil;
     
@@ -135,32 +145,35 @@ void objclintCheck() {
 }
 
 void objclintReport() {
+    printf("Report!\n");
 }
 
 int main(int argc, const char* argv[]) {
     @autoreleasepool {
         
-        NSUserDefaults* arguments = [NSUserDefaults standardUserDefaults];
-
-        NSDictionary* argumentsAndActions = @{
-                                              kObjclintStart:  [[^{objclintStart();}  copy] autorelease],
-                                              kObjclintCheck:  [[^{objclintCheck();}  copy] autorelease],
-                                              kObjclintReport: [[^{objclintReport();} copy] autorelease]
-                                            };
-
-        __block NSUInteger exclusiveArgumentsCount = 0;
-        [argumentsAndActions.allKeys enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            if(arguments[obj] != nil)
-                exclusiveArgumentsCount++;
-        }];
+        NSDictionary* argumentsAndActions = nil;
+        argumentsAndActions = @{
+                                kObjclintStart:  [[^{objclintStart();}  copy] autorelease],
+                                kObjclintCheck:  [[^{objclintCheck();}  copy] autorelease],
+                                kObjclintReport: [[^{objclintReport();} copy] autorelease]
+                                };
         
-        if(exclusiveArgumentsCount != 1) {
+        NSMutableSet* passedArgs = [NSMutableSet set];
+        for(int i = 1; i < argc; ++i) {
+            NSString* arg = [NSString stringWithUTF8String:argv[i]];
+            [passedArgs addObject: arg];
+        }   
+
+        NSMutableSet* intersection = [NSMutableSet setWithArray: argumentsAndActions.allKeys];
+        [intersection intersectSet: passedArgs];
+
+        if(intersection.count != 1 || passedArgs.count != 1) {
             usage();
             return 1;
         }
         
         for(NSString* key in argumentsAndActions.allKeys) {
-            if(arguments[key] != nil) {
+            if([passedArgs containsObject: key]) {
                 ((void(^)())argumentsAndActions[key])();
                 break;
             }

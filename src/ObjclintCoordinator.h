@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+static NSString* const kObjclintConfigurationLintsDirs = @"lints-directories";
+
 @class ObjclintIssue;
 
 @protocol ObjclintCoordinator <NSObject>

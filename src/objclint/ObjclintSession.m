@@ -44,7 +44,7 @@
         _projectPath  = [[[NSFileManager defaultManager] currentDirectoryPath] retain];
         _checkedPaths = [[NSMutableDictionary alloc] init];
         
-        NSArray* paths = [coordinator JSValidatorsFolderPathsForProjectIdentity: _projectPath];
+        NSArray* paths = [coordinator configurationForProjectIdentity: _projectPath][kObjclintConfigurationLintsDirs];
 
         //TODO: use all paths
         //TODO: use jsEnv instead of context/runtime. don't use 'runtime' at all
