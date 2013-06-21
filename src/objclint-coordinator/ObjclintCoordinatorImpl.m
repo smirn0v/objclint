@@ -12,7 +12,7 @@
 
 @implementation ObjclintCoordinatorImpl {
     NSMutableDictionary* _sessionsByProject;
-    NSMutableDictionary* _validatorsFolderPathsForProject;
+    NSMutableDictionary* _configurationByProject;
     NSMutableDictionary* _issuesByProject;
 }
 
@@ -22,7 +22,7 @@
     self = [super init];
     if (self) {
         _sessionsByProject               = @{}.mutableCopy;
-        _validatorsFolderPathsForProject = @{}.mutableCopy;
+        _configurationByProject          = @{}.mutableCopy;
         _issuesByProject                 = @{}.mutableCopy;
     }
 
@@ -33,7 +33,7 @@
     
     [_lastActionDate                  release];
     [_sessionsByProject               release];
-    [_validatorsFolderPathsForProject release];
+    [_configurationByProject          release];
     [_issuesByProject                 release];
     
     [super dealloc];
@@ -47,34 +47,8 @@
     if(!projectIdentity)
         return;
 
-    [_sessionsByProject removeObjectForKey: projectIdentity];
-    [_validatorsFolderPathsForProject removeObjectForKey: projectIdentity];
-}
-
-- (void)addJSValidatorsFolderPath:(NSString*) folderPath forProjectIdentity:(NSString*) projectIdentity {
-    [self updateLastActionDate];
-    
-    if(!projectIdentity)
-        return;
-    
-    if(folderPath) {
-        NSMutableArray* paths = _validatorsFolderPathsForProject[projectIdentity];
-        if(!paths) {
-            paths = [NSMutableArray array];
-            _validatorsFolderPathsForProject[projectIdentity] = paths;
-        }
-        if(NO == [paths containsObject: folderPath])
-            [paths addObject: folderPath];
-    }
-}
-
-- (NSArray*) JSValidatorsFolderPathsForProjectIdentity:(NSString*) projectIdentity {
-    [self updateLastActionDate];
-
-    if(!projectIdentity)
-        return nil;
-    
-    return _validatorsFolderPathsForProject[projectIdentity];
+    [_sessionsByProject      removeObjectForKey: projectIdentity];
+    [_configurationByProject removeObjectForKey: projectIdentity];
 }
 
 - (BOOL) checkIfLocation:(NSString*) location wasCheckedForProjectIdentity:(NSString*) projectIdentity {
@@ -101,6 +75,21 @@
     }
 
     [projectLocations addObject: location];
+}
+
+- (void) setConfiguration:(NSDictionary*) configuration forProjectIdentity:(NSString*) projectIdentity {
+    [self updateLastActionDate];
+    
+    if(!configuration)
+        return;
+    
+    _configurationByProject[projectIdentity] = configuration;
+}
+
+- (NSDictionary*) configurationForProjectIdentity:(NSString*) projectIdentity {
+    [self updateLastActionDate];
+    
+    return _configurationByProject[projectIdentity];
 }
 
 - (void) reportIssue:(ObjclintIssue*) issue forProjectIdentity:(NSString*) projectIdentity {

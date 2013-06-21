@@ -14,13 +14,13 @@
 
 - (void) clearSessionForProjectIdentity:(NSString*) projectIdentity;
 
-- (void) addJSValidatorsFolderPath:(NSString*) folderPath forProjectIdentity:(NSString*) projectIdentity;
-
-- (NSArray*) JSValidatorsFolderPathsForProjectIdentity:(NSString*) projectIdentity;
-
 - (BOOL) checkIfLocation:(NSString*) location wasCheckedForProjectIdentity:(NSString*) projectIdentity;
 
 - (void) markLocation:(NSString*) location checkedForProjectIdentity:(NSString*) projectIdentity;
+
+- (void) setConfiguration:(NSDictionary*) configuration forProjectIdentity:(NSString*) projectIdentity;
+
+- (NSDictionary*) configurationForProjectIdentity:(NSString*) projectIdentity;
 
 - (void) reportIssue:(ObjclintIssue*) issue forProjectIdentity:(NSString*) projectIdentity;
 

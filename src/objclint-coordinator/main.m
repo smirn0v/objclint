@@ -7,72 +7,165 @@
 //
 
 #import "ObjclintCoordinatorImpl.h"
+#import "NSUserDefaults+OCL.h"
 #include <stdlib.h>
 
-static NSString* serviceName = @"ru.borsch-lab.objclint.coordinator";
+static NSString* const kObjclintServiceName = @"ru.smirn0v.objclint.coordinator";
 
-BOOL setupExistingCoordinator(BOOL check, NSString* projectIdentity, NSString* jsValidatorsFolder) {
-    NSConnection* existingCoordinatorConnection = [[NSConnection connectionWithRegisteredName: serviceName
-                                                                                         host: nil] autorelease];
+static NSString* const kObjclintStart  = @"start";
+static NSString* const kObjclintCheck  = @"check";
+static NSString* const kObjclintReport = @"report";
+
+void usage() {
+    fprintf(
+            stderr,
+            "usage: %s [-%s|-%s|-%s]\n\n"
+            "Arguments are exclusive.\n"
+            "-%s  – start objclint session in current directory\n"
+            "-%s  – check if objclint stared\n"
+            "-%s – print report for current session\n",
+            [[NSProcessInfo processInfo].processName UTF8String],
+            kObjclintStart.UTF8String,
+            kObjclintCheck.UTF8String,
+            kObjclintReport.UTF8String,
+            kObjclintStart.UTF8String,
+            kObjclintCheck.UTF8String,
+            kObjclintReport.UTF8String
+        );
+}
+
+NSDictionary* defaultConfiguration() {
+    return @{
+             @"lints-directory": @[@"./lints"]
+             };
+}
+
+NSString* projectIdentity() {
+    return [[NSFileManager defaultManager] currentDirectoryPath];
+}
+
+NSDictionary* readObjclintConfiguration() {
+    NSError* error = nil;
+    NSData* configurationData = [NSData dataWithContentsOfFile: @".objclint"];
+    id jsonConfiguration = [NSJSONSerialization JSONObjectWithData: configurationData
+                                                           options: 0
+                                                             error: &error];
     
-    [existingCoordinatorConnection.rootProxy setProtocolForProxy:@protocol(ObjclintCoordinator)];
-    id<ObjclintCoordinator> coordinator = (id<ObjclintCoordinator>) existingCoordinatorConnection.rootProxy;
-    
-    if(NO == check) {
-        [coordinator clearSessionForProjectIdentity: projectIdentity];
-        [coordinator addJSValidatorsFolderPath:jsValidatorsFolder forProjectIdentity:projectIdentity];
+    if(configurationData && error != nil) {
+        fprintf(stderr,
+                "failed to read .objclint configuration file, ignoring it.\n%s",
+                error.localizedDescription.UTF8String);
     }
     
-    return existingCoordinatorConnection != nil;
+    if(!jsonConfiguration)
+        jsonConfiguration = defaultConfiguration();
+    
+    if(NO == [jsonConfiguration isKindOfClass:[NSDictionary class]]) {
+        fprintf(stderr,"wrong configuration file format, ignoring it");
+    }
+    
+    return jsonConfiguration;
+}
+
+ObjclintCoordinatorImpl* createCoordinator(BOOL createIfNeeded, NSConnection** connection) {
+    NSConnection* tmpConnection;
+    if(!connection)
+        connection = &tmpConnection;
+    
+    *connection = [[NSConnection connectionWithRegisteredName: kObjclintServiceName
+                                                         host: nil] autorelease];
+    
+    [(*connection).rootProxy setProtocolForProxy: @protocol(ObjclintCoordinator)];
+    id<ObjclintCoordinator> coordinator = (id<ObjclintCoordinator>) (*connection).rootProxy;
+
+    if(NO == createIfNeeded)
+        return coordinator;
+    
+    *connection = [[[NSConnection alloc] init] autorelease];
+    
+    NSProtocolChecker* rootObject = nil;
+    
+    coordinator = [[ObjclintCoordinatorImpl new] autorelease];
+    rootObject  = [NSProtocolChecker protocolCheckerWithTarget: coordinator
+                                                      protocol: @protocol(ObjclintCoordinator)];
+    
+    [*connection setRootObject: rootObject];
+    
+    if([*connection registerName: kObjclintServiceName])
+        return coordinator;
+    
+    fprintf(stderr, "failed to register service %s", kObjclintServiceName.UTF8String);
+    
+    return nil;
+}
+
+
+void objclintStart() {
+    NSDictionary* objclintConfiguration = readObjclintConfiguration();
+    
+    NSConnection* connection = nil;
+    
+    ObjclintCoordinatorImpl* coordinator =
+    createCoordinator(/* createIfNeeded */ YES, &connection);
+    
+    if(!coordinator || !connection)
+        exit(1);
+
+    [coordinator clearSessionForProjectIdentity: projectIdentity()];
+    [coordinator setConfiguration: objclintConfiguration forProjectIdentity: projectIdentity()];
+    
+    NSRunLoop* runLoop = [NSRunLoop currentRunLoop];
+    [connection addRunLoop:runLoop];
+    
+    // die after 5 minutes of inactivity
+    while (1) {
+        @autoreleasepool {
+            NSDate* boundaryDate = [NSDate dateWithTimeInterval:1*60 sinceDate:[NSDate date]];
+            [runLoop runMode:NSDefaultRunLoopMode beforeDate: boundaryDate];
+            
+            if([[NSDate date] timeIntervalSinceDate: coordinator.lastActionDate] > 5*60)
+                break;
+        }
+    }
+}
+
+void objclintCheck() {
+    if(nil == createCoordinator(/* createIfNeeded */NO, nil))
+        exit(1);
+}
+
+void objclintReport() {
 }
 
 int main(int argc, const char* argv[]) {
     @autoreleasepool {
         
-        BOOL justCheck = argc==2 && strcmp(argv[1],"--check") == 0;
+        NSUserDefaults* arguments = [NSUserDefaults standardUserDefaults];
 
-        NSString* projectIdentity = [[NSFileManager defaultManager] currentDirectoryPath];
-        //TODO: support for '.objclint' configuration for validators folder
-        NSString* jsValidatorsFolder = @"/opt/local/share/objclint-validators";
-        
-        if(setupExistingCoordinator(justCheck, projectIdentity, jsValidatorsFolder)) {
-            if(justCheck)
-                printf("...%s started...\n",argv[0]);
-            else
-                printf("connected to existing %s, prepared for new session\n", argv[0]);
-            return 0;
-        } else if(justCheck) {
-            fprintf(stderr,"failed to check objclint-coordinator\n");
-            return 1;
-        }
+        NSDictionary* argumentsAndActions = @{
+                                              kObjclintStart:  [[^{objclintStart();}  copy] autorelease],
+                                              kObjclintCheck:  [[^{objclintCheck();}  copy] autorelease],
+                                              kObjclintReport: [[^{objclintReport();} copy] autorelease]
+                                            };
 
-        NSRunLoop* runLoop = [NSRunLoop currentRunLoop];
-
-        ObjclintCoordinatorImpl* coordinator = [[ObjclintCoordinatorImpl new] autorelease];
+        __block NSUInteger exclusiveArgumentsCount = 0;
+        [argumentsAndActions.allKeys enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            if(arguments[obj] != nil)
+                exclusiveArgumentsCount++;
+        }];
         
-        NSConnection* connection = [[[NSConnection alloc] init] autorelease];
-        
-        [connection setRootObject: [NSProtocolChecker protocolCheckerWithTarget:coordinator protocol:@protocol(ObjclintCoordinator)]];
-        
-        if(NO == [connection registerName:serviceName]) {
-            printf("failed to register local service\n");
+        if(exclusiveArgumentsCount != 1) {
+            usage();
             return 1;
         }
         
-        [coordinator clearSessionForProjectIdentity: projectIdentity];
-        [coordinator addJSValidatorsFolderPath:jsValidatorsFolder forProjectIdentity:projectIdentity];
-        
-        [connection addRunLoop:runLoop];
-
-        while (1) {
-            @autoreleasepool {
-                NSDate* boundaryDate = [NSDate dateWithTimeInterval:1*60 sinceDate:[NSDate date]];
-                [runLoop runMode:NSDefaultRunLoopMode beforeDate: boundaryDate];
-                
-                if([[NSDate date] timeIntervalSinceDate: coordinator.lastActionDate] > 5*60)
-                    break;
+        for(NSString* key in argumentsAndActions.allKeys) {
+            if(arguments[key] != nil) {
+                ((void(^)())argumentsAndActions[key])();
+                break;
             }
         }
+
     }
     return 0;
 }
