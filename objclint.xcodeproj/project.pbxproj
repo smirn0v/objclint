@@ -28,7 +28,6 @@
 		B29A253817188CED0065B533 /* ObjclintIssue.m in Sources */ = {isa = PBXBuildFile; fileRef = B29A253617188CED0065B533 /* ObjclintIssue.m */; };
 		B29A253C171898B00065B533 /* LintBinding.m in Sources */ = {isa = PBXBuildFile; fileRef = B29A253B171898B00065B533 /* LintBinding.m */; };
 		B29A25461719542C0065B533 /* JSScriptsLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = B29A25451719542C0065B533 /* JSScriptsLoader.m */; };
-		B2F7A33F17743419001CFE12 /* NSUserDefaults+OCL.m in Sources */ = {isa = PBXBuildFile; fileRef = B2F7A33E17743419001CFE12 /* NSUserDefaults+OCL.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -110,8 +109,6 @@
 		B29A25431719542C0065B533 /* js.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = js.h; sourceTree = "<group>"; };
 		B29A25441719542C0065B533 /* JSScriptsLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSScriptsLoader.h; sourceTree = "<group>"; };
 		B29A25451719542C0065B533 /* JSScriptsLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSScriptsLoader.m; sourceTree = "<group>"; };
-		B2F7A33D17743419001CFE12 /* NSUserDefaults+OCL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSUserDefaults+OCL.h"; sourceTree = "<group>"; };
-		B2F7A33E17743419001CFE12 /* NSUserDefaults+OCL.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSUserDefaults+OCL.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -209,7 +206,6 @@
 		B26F854A1675063F00F940F4 /* objclint-coordinator */ = {
 			isa = PBXGroup;
 			children = (
-				B2F7A33C177433FC001CFE12 /* categories */,
 				B26EB6E81731642F006B372D /* report-generators */,
 				B26F854B1675063F00F940F4 /* main.m */,
 				B26F854C1675063F00F940F4 /* objclint-coordinator-Prefix.pch */,
@@ -286,15 +282,6 @@
 			path = js;
 			sourceTree = "<group>";
 		};
-		B2F7A33C177433FC001CFE12 /* categories */ = {
-			isa = PBXGroup;
-			children = (
-				B2F7A33D17743419001CFE12 /* NSUserDefaults+OCL.h */,
-				B2F7A33E17743419001CFE12 /* NSUserDefaults+OCL.m */,
-			);
-			path = categories;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -368,7 +355,6 @@
 				B22690DB16751C3A005CF60C /* ObjclintCoordinatorImpl.m in Sources */,
 				B29A253817188CED0065B533 /* ObjclintIssue.m in Sources */,
 				B26EB6EC1731650B006B372D /* TextReportGenerator.m in Sources */,
-				B2F7A33F17743419001CFE12 /* NSUserDefaults+OCL.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
