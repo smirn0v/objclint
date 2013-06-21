@@ -8,12 +8,12 @@
 
 #import <Foundation/Foundation.h>
 
-typedef enum: NSUInteger {
+typedef NS_ENUM(NSUInteger, ObjclintIssueType) {
     ObjclintIssueType_Warning,
     ObjclintIssueType_Error,
     ObjclintIssueType_JSError,
     ObjclintIssueType_Info
-} ObjclintIssueType;
+};
 
 @interface ObjclintIssue : NSObject
 
@@ -22,5 +22,7 @@ typedef enum: NSUInteger {
 @property(nonatomic, assign) NSUInteger column;
 @property(nonatomic, assign) ObjclintIssueType issueType;
 @property(nonatomic, copy)   NSString* description;
+
+- (NSString*) issueTypeDescription;
 
 @end

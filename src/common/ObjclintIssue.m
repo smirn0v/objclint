@@ -10,11 +10,31 @@
 
 @implementation ObjclintIssue
 
+#pragma mark - Init&Dealloc
+
 - (void)dealloc
 {
     [_fileName    release];
     [_description release];
     [super dealloc];
+}
+
+#pragma mark - Public
+
+- (NSString*) issueTypeDescription {
+    static NSDictionary* issueTypes = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        issueTypes = @{
+                       @(ObjclintIssueType_Error):   @"Error",
+                       @(ObjclintIssueType_Info):    @"Info",
+                       @(ObjclintIssueType_JSError): @"JSError",
+                       @(ObjclintIssueType_Warning): @"Warning"
+                    };
+        [issueTypes retain];
+    });
+    
+    return issueTypes[@(_issueType)]?:@"<Unknown issue type>";
 }
 
 @end
