@@ -1,4 +1,4 @@
-#!/bin/sh -e -o pipefail
+#!/bin/sh 
 
 OBJCLINT_LOCATION=/opt/local/bin/objclint-dispatcher.py
 
@@ -25,8 +25,6 @@ EOL
 sleep 1
 /opt/local/bin/objclint-coordinator -check
 
-set +e
-
 xcodebuild \
     CC="$OBJCLINT_LOCATION"\
     CXX="$OBJCLINT_LOCATION"\
@@ -42,7 +40,5 @@ xcodebuild \
     -PBXBuildsContinueAfterErrors=YES\
     -jobs 1\
     "$@"
-
-set -e
 
 /opt/local/bin/objclint-coordinator -report

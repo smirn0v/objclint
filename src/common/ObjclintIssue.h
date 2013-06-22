@@ -15,13 +15,15 @@ typedef NS_ENUM(NSUInteger, ObjclintIssueType) {
     ObjclintIssueType_Info
 };
 
-@interface ObjclintIssue : NSObject
+@interface ObjclintIssue : NSObject<NSCopying>
 
 @property(nonatomic, copy)   NSString*  fileName;
 @property(nonatomic, assign) NSUInteger line;
 @property(nonatomic, assign) NSUInteger column;
 @property(nonatomic, assign) ObjclintIssueType issueType;
 @property(nonatomic, copy)   NSString* description;
+
+- (instancetype) initWithObjclintIssue:(ObjclintIssue*) issue;
 
 - (NSString*) issueTypeDescription;
 

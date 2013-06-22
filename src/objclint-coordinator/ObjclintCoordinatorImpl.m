@@ -7,6 +7,7 @@
 //
 
 #import "ObjclintCoordinatorImpl.h"
+#import "ObjclintIssue.h"
 
 // TODO: AOP for 'updateLastActionDate'.
 
@@ -93,8 +94,9 @@
 }
 
 - (void) reportIssue:(ObjclintIssue*) issue forProjectIdentity:(NSString*) projectIdentity {
+
     [self updateLastActionDate];
-    
+
     if(!issue)
         return;
     
@@ -104,7 +106,8 @@
         _issuesByProject[projectIdentity] = issues;
     }
     
-    [issues addObject: issue];
+    ObjclintIssue* issueCopy = [[[ObjclintIssue alloc] initWithObjclintIssue: issue] autorelease];
+    [issues addObject: issueCopy];
 }
 
 - (NSArray*) issuesForProjectIdentity:(NSString*) projectIdentity {

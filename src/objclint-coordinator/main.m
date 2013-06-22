@@ -82,18 +82,14 @@ ObjclintCoordinatorImpl* createCoordinator(BOOL createIfNeeded, NSConnection** c
     [(*connection).rootProxy setProtocolForProxy: @protocol(ObjclintCoordinator)];
     id<ObjclintCoordinator> coordinator = (id<ObjclintCoordinator>) (*connection).rootProxy;
 
-    if(NO == createIfNeeded)
+    if(coordinator || NO == createIfNeeded)
         return coordinator;
     
     *connection = [[[NSConnection alloc] init] autorelease];
     
-    NSProtocolChecker* rootObject = nil;
-    
     coordinator = [[ObjclintCoordinatorImpl new] autorelease];
-    rootObject  = [NSProtocolChecker protocolCheckerWithTarget: coordinator
-                                                      protocol: @protocol(ObjclintCoordinator)];
     
-    [*connection setRootObject: rootObject];
+    [*connection setRootObject: coordinator];
     
     if([*connection registerName: kObjclintServiceName])
         return coordinator;
@@ -118,7 +114,7 @@ void objclintStart() {
     
     if(!coordinator || !connection)
         exit(1);
-
+    
     [coordinator clearSessionForProjectIdentity: projectIdentity()];
     [coordinator setConfiguration: objclintConfiguration forProjectIdentity: projectIdentity()];
     
@@ -128,9 +124,8 @@ void objclintStart() {
     // die after 5 minutes of inactivity
     while (1) {
         @autoreleasepool {
-            NSDate* boundaryDate = [NSDate dateWithTimeInterval:1*60 sinceDate:[NSDate date]];
+            NSDate* boundaryDate = [NSDate dateWithTimeInterval:60 sinceDate:[NSDate date]];
             [runLoop runMode:NSDefaultRunLoopMode beforeDate: boundaryDate];
-            
             if([[NSDate date] timeIntervalSinceDate: coordinator.lastActionDate] > 5*60)
                 break;
         }
@@ -148,6 +143,7 @@ void objclintReport() {
     ObjclintCoordinatorImpl* coordinator =
     createCoordinator(/* createIfNeeded */ NO,
                       /* connection */ nil);
+    
     if(coordinator)
         [reportGenerator generateReportForProjectIdentity: projectIdentity()
                                         withinCoordinator: coordinator];

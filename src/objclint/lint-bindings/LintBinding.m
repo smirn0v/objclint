@@ -27,13 +27,12 @@ static JSClass lint_class = {
 };
 
 JSBool lint_log(JSContext *cx, uintN argc, jsval *vp) {
-    
+
     JSString* string;
     if (!JS_ConvertArguments(cx, argc, JS_ARGV(cx, vp), "S", &string))
         return JS_FALSE;
     
     char* stringC = JS_EncodeString(cx, string);
-    
     printf("%s\n",stringC);
     
     JS_free(cx, stringC);
@@ -41,7 +40,8 @@ JSBool lint_log(JSContext *cx, uintN argc, jsval *vp) {
     return JS_TRUE;
 }
 
-JSBool common_report(SEL reportSelector, ObjclintIssueType issueType, JSContext *cx, uintN argc, jsval *vp) {
+JSBool common_report(ObjclintIssueType issueType, JSContext *cx, uintN argc, jsval *vp) {
+
     JSString* descriptionS;
     if (!JS_ConvertArguments(cx, argc, JS_ARGV(cx, vp), "S", &descriptionS))
         return JS_FALSE;
@@ -49,39 +49,49 @@ JSBool common_report(SEL reportSelector, ObjclintIssueType issueType, JSContext 
     JSObject* lintObject = JS_THIS_OBJECT(cx, vp);
     LintBinding* binding = JS_GetPrivate(cx, lintObject);
     
+    if(!binding)
+        return JS_TRUE;
+    
+    CXCursor cursor = [binding.delegate cursorForLintObject: lintObject];
+    
     char* descriptionC = JS_EncodeString(cx, descriptionS);
     NSString* description = [[[NSString alloc] initWithBytesNoCopy: descriptionC
                                                             length: strlen(descriptionC)
                                                           encoding: NSUTF8StringEncoding
                                                       freeWhenDone: YES] autorelease];
     
-//    NSString* fileName = lint_pvt_fileName()
-    
-    if([binding.delegate respondsToSelector: reportSelector])
-        objc_msgSend(binding.delegate, reportSelector, lintObject, description);
-    
-    return JS_TRUE;
-}
-
-NSString* lint_pvt_fileName(CXCursor cursor) {
     char* filePathC = copyCursorFilePath(cursor);
     NSString* filePath = [[[NSString alloc] initWithBytesNoCopy: filePathC
                                                          length: strlen(filePathC)
                                                        encoding: NSUTF8StringEncoding
                                                    freeWhenDone: YES] autorelease];
-    return filePath.lastPathComponent;
+    
+    unsigned int line, column;
+    cursorLocation(cursor, &line, &column);
+    
+    ObjclintIssue* issue = [[[ObjclintIssue alloc] init] autorelease];
+    issue.description = description;
+    issue.fileName    = filePath;
+    issue.line        = line;
+    issue.column      = column;
+    issue.issueType   = issueType;
+
+    if([binding.delegate respondsToSelector: @selector(lintObject:issue:)])
+        [binding.delegate lintObject: lintObject issue: issue];
+    
+    return JS_TRUE;
 }
 
 JSBool lint_reportError(JSContext *cx, uintN argc, jsval *vp) {
-    return common_report(@selector(lintObject:errorReport:), ObjclintIssueType_Error, cx, argc, vp);
+    return common_report(ObjclintIssueType_Error, cx, argc, vp);
 }
 
 JSBool lint_reportWarning(JSContext *cx, uintN argc, jsval *vp) {
-    return common_report(@selector(lintObject:warningReport:), ObjclintIssueType_Warning, cx, argc, vp);
+    return common_report(ObjclintIssueType_Warning, cx, argc, vp);
 }
 
 JSBool lint_reportInfo(JSContext *cx, uintN argc, jsval *vp) {
-    return common_report(@selector(lintObject:infoReport:), ObjclintIssueType_Info, cx, argc, vp);
+    return common_report(ObjclintIssueType_Info, cx, argc, vp);
 }
 
 static JSFunctionSpec lint_methods[] = {
@@ -91,7 +101,6 @@ static JSFunctionSpec lint_methods[] = {
     JS_FS("reportInfo",    lint_reportInfo,    1, 0),
     JS_FS_END
 };
-
 
 @implementation LintBinding
 

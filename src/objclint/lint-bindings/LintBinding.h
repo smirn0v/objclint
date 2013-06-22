@@ -15,7 +15,8 @@
 
 @protocol LintBindingDelegate<NSObject>
 
-- (void) lintObject:(JSObject*) lintObject issueReport:(ObjclintIssue*) issue;
+- (void) lintObject:(JSObject*) lintObject issue:(ObjclintIssue*) issue;
+
 - (CXCursor) cursorForLintObject:(JSObject*) lintObject;
 
 @end

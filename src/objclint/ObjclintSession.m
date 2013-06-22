@@ -113,7 +113,7 @@
 
 #pragma mark - LintBindingDelegate
 
-- (void) lintObject:(JSObject*) lintObject issueReport:(ObjclintIssue*) issue {
+- (void) lintObject:(JSObject*) lintObject issue:(ObjclintIssue*) issue {
     _errorOccured = YES;
     [_coordinator reportIssue: issue forProjectIdentity: _projectPath];
 }
@@ -156,12 +156,13 @@
     NSNumber* alreadyChecked = _checkedPaths[filePath];
     
     *visitChilds = !alreadyChecked.boolValue;
-    
+
     if(!alreadyChecked.boolValue) {
         _currentCursor = cursor;
         JSObject* cursorObject = [_clangBindings.cursorBinding JSObjectFromCursor: cursor];
         setJSProperty_JSObject(_jsEnvironment.context, _jsEnvironment.global, "cursor", cursorObject);
         [_scriptsLoader runScriptsWithResultHandler:^(jsval value) {
+            
         }];
     }
 }
