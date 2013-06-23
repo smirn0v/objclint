@@ -31,8 +31,8 @@ JSBool objc_method_declaration_is_synthesized(JSContext* context, uintN argc, js
     ObjCMethodDeclarationBinding* declarationBinding =
         (ObjCMethodDeclarationBinding*)JS_GetPrivate(context, declarationObject);
     clang::ObjCMethodDecl* declaration = (clang::ObjCMethodDecl*)[declarationBinding extractDeclarationFromJSObject: declarationObject];
-    
-    bool isSynthesized = declaration->isSynthesized();
+
+    bool isSynthesized = declaration->isImplicit();
     JS_SET_RVAL(context, parameters, BOOLEAN_TO_JSVAL(isSynthesized));
     
     return JS_TRUE;
@@ -40,6 +40,7 @@ JSBool objc_method_declaration_is_synthesized(JSContext* context, uintN argc, js
 
 static JSFunctionSpec objc_method_declaration_methods[] = {
     JS_FS("isSynthesized", objc_method_declaration_is_synthesized,0,0),
+    JS_FS("isImplicit", objc_method_declaration_is_synthesized,0,0),
     JS_FS_END
 };
 

@@ -144,9 +144,12 @@ void objclintReport() {
     createCoordinator(/* createIfNeeded */ NO,
                       /* connection */ nil);
     
-    if(coordinator)
+    if(coordinator) {
+        BOOL errors =
         [reportGenerator generateReportForProjectIdentity: projectIdentity()
                                         withinCoordinator: coordinator];
+        exit(errors);
+    }
 }
 
 int main(int argc, const char* argv[]) {

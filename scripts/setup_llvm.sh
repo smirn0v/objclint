@@ -1,6 +1,6 @@
 #!/bin/sh -e -o pipefail
 
-LLVM_CHECKOUT_DIR="${THIRDPARTY_DIR}/llvm-3.1"
+LLVM_CHECKOUT_DIR="${THIRDPARTY_DIR}/llvm-3.3"
 LLVM_CLANG_BUILD_DIR="${LLVM_CHECKOUT_DIR}/llvm-clang-build/"
 
 function indented_status {
@@ -16,17 +16,17 @@ mkdir -p "$LLVM_CLANG_BUILD_DIR"
 
 pushd . > /dev/null
 
-indented_status 0 "Settings up LLVM 3.1 and clang"
+indented_status 0 "Settings up LLVM 3.3 and clang"
 
 indented_status 2 "Checking out LLVM"
 
-svn --force export http://llvm.org/svn/llvm-project/llvm/tags/RELEASE_31/final/ "$LLVM_CHECKOUT_DIR" > /dev/null
+svn --force export http://llvm.org/svn/llvm-project/llvm/tags/RELEASE_33/final/ "$LLVM_CHECKOUT_DIR" > /dev/null
 
 cd "${LLVM_CHECKOUT_DIR}/tools"
 
 indented_status 2 "Checking out clang"
 
-svn export http://llvm.org/svn/llvm-project/cfe/tags/RELEASE_31/final/ clang > /dev/null
+svn export http://llvm.org/svn/llvm-project/cfe/tags/RELEASE_33/final/ clang > /dev/null
 
 cd "${LLVM_CHECKOUT_DIR}"
 

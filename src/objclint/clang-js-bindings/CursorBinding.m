@@ -269,9 +269,9 @@ static JSFunctionSpec cursor_methods[] = {
     
     setJSProperty_Int(_bindings.context, object, "_kind", cursor.kind);
     setJSProperty_Int(_bindings.context, object, "_xdata", cursor.xdata);
-    setJSProperty_Ptr(_bindings.context, object, "_data0", cursor.data[0]);
-    setJSProperty_Ptr(_bindings.context, object, "_data1", cursor.data[1]);
-    setJSProperty_Ptr(_bindings.context, object, "_data2", cursor.data[2]);
+    setJSProperty_Ptr(_bindings.context, object, "_data0", (void*)cursor.data[0]);
+    setJSProperty_Ptr(_bindings.context, object, "_data1", (void*)cursor.data[1]);
+    setJSProperty_Ptr(_bindings.context, object, "_data2", (void*)cursor.data[2]);
 
 }
 

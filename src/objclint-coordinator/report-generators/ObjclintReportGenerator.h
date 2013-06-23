@@ -12,7 +12,7 @@
 
 @protocol ObjclintReportGenerator <NSObject>
 
-- (void) generateReportForProjectIdentity:(NSString*) identity
+- (BOOL) generateReportForProjectIdentity:(NSString*) identity
                         withinCoordinator:(id<ObjclintCoordinator>) coordinator;
 
 @end

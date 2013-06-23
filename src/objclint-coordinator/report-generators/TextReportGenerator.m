@@ -14,7 +14,7 @@
 
 #pragma mark - ObjclintReportGenerator
 
-- (void) generateReportForProjectIdentity:(NSString*) identity
+- (BOOL) generateReportForProjectIdentity:(NSString*) identity
                         withinCoordinator:(id<ObjclintCoordinator>) coordinator {
     
     NSArray* issues = [coordinator issuesForProjectIdentity: identity];
@@ -63,6 +63,8 @@
             printf("%s",reportLine.UTF8String);
         }
     }
+    
+    return issues.count == 0;
 }
 
 

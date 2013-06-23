@@ -1,4 +1,4 @@
-#!/bin/sh 
+#!/bin/sh -e 
 
 OBJCLINT_LOCATION=/opt/local/bin/objclint-dispatcher.py
 
@@ -25,6 +25,9 @@ EOL
 sleep 1
 /opt/local/bin/objclint-coordinator -check
 
+set +e
+
+export OBJCLINT=YES
 xcodebuild \
     CC="$OBJCLINT_LOCATION"\
     CXX="$OBJCLINT_LOCATION"\
@@ -36,9 +39,13 @@ xcodebuild \
     GCC_GENERATE_DEBUGGING_SYMBOLS=NO\
     GCC_PRECOMPILE_PREFIX_HEADER=NO\
     ONLY_ACTIVE_ARCH=YES\
+    CODE_SIGN_IDENTITY=""\
+    CODE_SIGNING_REQUIRED=NO\
     --resource-rules=/tmp/ObjclintResourceRules.plist\
     -PBXBuildsContinueAfterErrors=YES\
     -jobs 1\
     "$@"
+
+set -e
 
 /opt/local/bin/objclint-coordinator -report
