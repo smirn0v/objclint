@@ -38,13 +38,14 @@ xcodebuild \
     LIBTOOL="true"\
     GCC_GENERATE_DEBUGGING_SYMBOLS=NO\
     GCC_PRECOMPILE_PREFIX_HEADER=NO\
-    ONLY_ACTIVE_ARCH=YES\
     CODE_SIGN_IDENTITY=""\
     CODE_SIGNING_REQUIRED=NO\
     --resource-rules=/tmp/ObjclintResourceRules.plist\
     -PBXBuildsContinueAfterErrors=YES\
-    -jobs 1\
     "$@"
+
+# ommiting '-job 1' here may cause multiple analyzis of header files
+# but lack of it significantly increases build time
 
 set -e
 
