@@ -1,6 +1,10 @@
 #!/bin/sh -e 
 
-OBJCLINT_LOCATION=/opt/local/bin/objclint-dispatcher.py
+CURRENT_PATH="`dirname \"$0\"`"
+CURRENT_PATH="`( cd \"$CURRENT_PATH\" && pwd )`"
+
+DISPATCHER="$CURRENT_PATH/objclint-dispatcher.py"
+COORDINATOR="$CURRENT_PATH/objclint-coordinator"
 
 cat > /tmp/ObjclintResourceRules.plist << EOL
 <?xml version="1.0" encoding="UTF-8"?>
@@ -21,16 +25,16 @@ cat > /tmp/ObjclintResourceRules.plist << EOL
 </plist>
 EOL
 
-/opt/local/bin/objclint-coordinator -start &>/dev/null&
+"$COORDINATOR" -start &>/dev/null&
 sleep 1
-/opt/local/bin/objclint-coordinator -check
+"$COORDINATOR" -check
 
 set +e
 
 export OBJCLINT=YES
 xcodebuild \
-    CC="$OBJCLINT_LOCATION"\
-    CXX="$OBJCLINT_LOCATION"\
+    CC="$DISPATCHER"\
+    CXX="$DISPATCHER"\
     CCFLAGS="-objclint-fake-cc"\
     CXXFLAGS="-objclint-fake-cxx"\
     LD="true"\
@@ -49,4 +53,4 @@ xcodebuild \
 
 set -e
 
-/opt/local/bin/objclint-coordinator -report
+"$COORDINATOR" -report
