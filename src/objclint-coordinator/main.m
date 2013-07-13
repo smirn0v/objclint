@@ -150,10 +150,11 @@ void objclintReport() {
                       /* connection */ nil);
     
     if(coordinator) {
-        BOOL errors =
+        BOOL errorsFound = NO;
         [reportGenerator generateReportForProjectIdentity: projectIdentity()
-                                        withinCoordinator: coordinator];
-        exit(errors);
+                                        withinCoordinator: coordinator
+                                              errorsFound: &errorsFound];
+        exit(errorsFound);
     }
 }
 
