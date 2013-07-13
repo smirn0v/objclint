@@ -11,11 +11,10 @@
 
 #pragma mark - Init&Dealloc
 
-- (id) initWithContext:(JSContext*) context runtime:(JSRuntime*) runtime {
+- (id) initWithContext:(JSContext*) context{
     self = [super init];
     if (self) {
         _context = context;
-        _runtime = runtime;
         
         _cursorBinding      = [[CursorBinding alloc] initWithBindingsCollection: self];
         _tokenBinding       = [[TokenBinding alloc] initWithBindingsCollection: self];

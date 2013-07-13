@@ -18,13 +18,12 @@
 @interface ClangBindingsCollection : NSObject
 
 @property(nonatomic,readonly) JSContext* context;
-@property(nonatomic,readonly) JSRuntime* runtime;
 
 @property(nonatomic,readonly) CursorBinding* cursorBinding;
 @property(nonatomic,readonly) TokenBinding* tokenBinding;
 @property(nonatomic,readonly) DeclarationBinding* declarationBinding;
 @property(nonatomic,readonly) ObjCMethodDeclarationBinding* objCMethodDeclarationBinding;
 
-- (id) initWithContext:(JSContext*) context runtime:(JSRuntime*) runtime;
+- (id) initWithContext:(JSContext*) context;
 
 @end

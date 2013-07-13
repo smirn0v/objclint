@@ -106,11 +106,10 @@ static JSFunctionSpec lint_methods[] = {
 
 #pragma mark - Init&Dealloc
 
-- (id) initWithContext:(JSContext*) context runtime:(JSRuntime*) runtime {
+- (id) initWithContext:(JSContext*) context{
     self = [super init];
     if (self) {
         _context = context;
-        _runtime = runtime;
         
         _jsClass  = &lint_class;
         _jsFunctionSpec = lint_methods;

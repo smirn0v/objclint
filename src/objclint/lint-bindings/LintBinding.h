@@ -24,7 +24,6 @@
 @interface LintBinding : NSObject
 
 @property(nonatomic,readonly) JSContext* context;
-@property(nonatomic,readonly) JSRuntime* runtime;
 
 @property(nonatomic,readonly) JSClass* jsClass;
 @property(nonatomic,readonly) JSFunctionSpec* jsFunctionSpec;
@@ -32,7 +31,7 @@
 
 @property(nonatomic,assign) id<LintBindingDelegate> delegate;
 
-- (id) initWithContext:(JSContext*) context runtime:(JSRuntime*) runtime;
+- (id) initWithContext:(JSContext*) context;
 
 - (JSObject*) createLintObject;
 

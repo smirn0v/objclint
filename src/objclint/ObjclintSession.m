@@ -50,11 +50,9 @@
         //TODO: use jsEnv instead of context/runtime. don't use 'runtime' at all
         _jsEnvironment = [[JSEnvironment alloc] init];
         
-        _clangBindings = [[ClangBindingsCollection alloc] initWithContext: _jsEnvironment.context
-                                                                  runtime: _jsEnvironment.runtime];
+        _clangBindings = [[ClangBindingsCollection alloc] initWithContext: _jsEnvironment.context];
         
-        _lintBinding   = [[LintBinding alloc] initWithContext: _jsEnvironment.context
-                                                      runtime: _jsEnvironment.runtime];
+        _lintBinding   = [[LintBinding alloc] initWithContext: _jsEnvironment.context];
         
         _scriptsLoader = [[JSScriptsLoader alloc] initWithContext: _jsEnvironment.context
                                                     scriptsFolder: paths[0]];
