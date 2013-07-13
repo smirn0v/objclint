@@ -12,7 +12,7 @@
 
 #include <clang-c/Index.h>
 
-@interface ObjCMethodDeclarationBinding : DeclarationBinding
+@interface ObjCMethodDeclarationBinding : NSObject<ClangBinding>
 
 - (JSObject*) declarationJSObjectFromCursor:(CXCursor) cursor;
 

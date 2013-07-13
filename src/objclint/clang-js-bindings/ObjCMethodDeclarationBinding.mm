@@ -7,7 +7,7 @@
 //
 
 #import "ObjCMethodDeclarationBinding.h"
-#import "DeclarationBinding+Protected.h"
+#import "DeclarationBinding+Internal.h"
 
 #include "clang-cpp-api.h"
 
@@ -28,9 +28,9 @@ static JSClass objc_method_declaration_class = {
 JSBool objc_method_declaration_is_synthesized(JSContext* context, uintN argc, jsval* parameters) {
     
     JSObject* declarationObject = JS_THIS_OBJECT(context, parameters);
-    ObjCMethodDeclarationBinding* declarationBinding =
-        (ObjCMethodDeclarationBinding*)JS_GetPrivate(context, declarationObject);
-    clang::ObjCMethodDecl* declaration = (clang::ObjCMethodDecl*)[declarationBinding extractDeclarationFromJSObject: declarationObject];
+    clang::ObjCMethodDecl* declaration = NULL;
+    declaration = (clang::ObjCMethodDecl*)[DeclarationBinding extractDeclarationFromJSObject: declarationObject
+                                                                                   inContext: context];
 
     bool isSynthesized = declaration->isImplicit();
     JS_SET_RVAL(context, parameters, BOOLEAN_TO_JSVAL(isSynthesized));
@@ -82,6 +82,7 @@ static JSFunctionSpec objc_method_declaration_methods[] = {
 }
 
 - (void)dealloc {
+    JS_RemoveObjectRoot(_bindings.context, &_jsPrototype);
     [super dealloc];
 }
 
@@ -99,8 +100,9 @@ static JSFunctionSpec objc_method_declaration_methods[] = {
     
     JSObject* methodDeclJSObject = JS_NewObject(_bindings.context, _jsClass, _jsPrototype, NULL);
     
-    [self storeDeclaration: methodDecl
-              intoJSObject: methodDeclJSObject];
+    [DeclarationBinding storeDeclaration: methodDecl
+                            intoJSObject: methodDeclJSObject
+                               inContext: _bindings.context];
     
     return methodDeclJSObject;
 }

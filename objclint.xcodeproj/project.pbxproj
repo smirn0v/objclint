@@ -18,7 +18,7 @@
 		B26867C316AC48AA00742C6D /* clang-js-utils.c in Sources */ = {isa = PBXBuildFile; fileRef = B26867C216AC48AA00742C6D /* clang-js-utils.c */; };
 		B26867C716AC714700742C6D /* DeclarationBinding.mm in Sources */ = {isa = PBXBuildFile; fileRef = B26867C616AC714700742C6D /* DeclarationBinding.mm */; };
 		B26867CA16AC7CA600742C6D /* ObjCMethodDeclarationBinding.mm in Sources */ = {isa = PBXBuildFile; fileRef = B26867C916AC7CA600742C6D /* ObjCMethodDeclarationBinding.mm */; };
-		B26867CD16AC87FE00742C6D /* DeclarationBinding+Protected.mm in Sources */ = {isa = PBXBuildFile; fileRef = B26867CC16AC87FE00742C6D /* DeclarationBinding+Protected.mm */; };
+		B26867CD16AC87FE00742C6D /* DeclarationBinding+Internal.mm in Sources */ = {isa = PBXBuildFile; fileRef = B26867CC16AC87FE00742C6D /* DeclarationBinding+Internal.mm */; };
 		B26EB6EC1731650B006B372D /* TextReportGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = B26EB6EB1731650B006B372D /* TextReportGenerator.m */; };
 		B26F85311674F9DA00F940F4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B26F85301674F9DA00F940F4 /* Foundation.framework */; };
 		B26F85461675007D00F940F4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B26F85301674F9DA00F940F4 /* Foundation.framework */; };
@@ -79,8 +79,8 @@
 		B26867C616AC714700742C6D /* DeclarationBinding.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DeclarationBinding.mm; sourceTree = "<group>"; };
 		B26867C816AC7CA500742C6D /* ObjCMethodDeclarationBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjCMethodDeclarationBinding.h; sourceTree = "<group>"; };
 		B26867C916AC7CA600742C6D /* ObjCMethodDeclarationBinding.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ObjCMethodDeclarationBinding.mm; sourceTree = "<group>"; };
-		B26867CB16AC87FE00742C6D /* DeclarationBinding+Protected.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DeclarationBinding+Protected.h"; sourceTree = "<group>"; };
-		B26867CC16AC87FE00742C6D /* DeclarationBinding+Protected.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "DeclarationBinding+Protected.mm"; sourceTree = "<group>"; };
+		B26867CB16AC87FE00742C6D /* DeclarationBinding+Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DeclarationBinding+Internal.h"; sourceTree = "<group>"; };
+		B26867CC16AC87FE00742C6D /* DeclarationBinding+Internal.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "DeclarationBinding+Internal.mm"; sourceTree = "<group>"; };
 		B26EB6E91731642F006B372D /* ObjclintReportGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjclintReportGenerator.h; sourceTree = "<group>"; };
 		B26EB6EA1731650B006B372D /* TextReportGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextReportGenerator.h; sourceTree = "<group>"; };
 		B26EB6EB1731650B006B372D /* TextReportGenerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextReportGenerator.m; sourceTree = "<group>"; };
@@ -163,8 +163,8 @@
 				B26867C616AC714700742C6D /* DeclarationBinding.mm */,
 				B26867C816AC7CA500742C6D /* ObjCMethodDeclarationBinding.h */,
 				B26867C916AC7CA600742C6D /* ObjCMethodDeclarationBinding.mm */,
-				B26867CB16AC87FE00742C6D /* DeclarationBinding+Protected.h */,
-				B26867CC16AC87FE00742C6D /* DeclarationBinding+Protected.mm */,
+				B26867CB16AC87FE00742C6D /* DeclarationBinding+Internal.h */,
+				B26867CC16AC87FE00742C6D /* DeclarationBinding+Internal.mm */,
 				B267FB4C16B4271500E9FC66 /* ClangBindings.h */,
 				B267FB5016B42C0A00E9FC66 /* clang-utils.h */,
 				B267FB4E16B42BFE00E9FC66 /* clang-utils.c */,
@@ -373,7 +373,7 @@
 				B26867C316AC48AA00742C6D /* clang-js-utils.c in Sources */,
 				B26867C716AC714700742C6D /* DeclarationBinding.mm in Sources */,
 				B26867CA16AC7CA600742C6D /* ObjCMethodDeclarationBinding.mm in Sources */,
-				B26867CD16AC87FE00742C6D /* DeclarationBinding+Protected.mm in Sources */,
+				B26867CD16AC87FE00742C6D /* DeclarationBinding+Internal.mm in Sources */,
 				B267FB4F16B42BFE00E9FC66 /* clang-utils.c in Sources */,
 				B29A253717188CED0065B533 /* ObjclintIssue.m in Sources */,
 				B29A253C171898B00065B533 /* LintBinding.m in Sources */,

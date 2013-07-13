@@ -7,7 +7,7 @@
 //
 
 #import "DeclarationBinding.h"
-#import "DeclarationBinding+Protected.h"
+#import "DeclarationBinding+Internal.h"
 
 #include "clang-js-utils.h"
 
@@ -28,8 +28,8 @@ static JSClass declaration_class = {
 JSBool declaration_has_body(JSContext* context, uintN argc, jsval* parameters) {
 
     JSObject* declarationObject = JS_THIS_OBJECT(context, parameters);
-    DeclarationBinding* declarationBinding = (DeclarationBinding*)JS_GetPrivate(context, declarationObject);
-    clang::Decl* declaration = [declarationBinding extractDeclarationFromJSObject: declarationObject];
+    clang::Decl* declaration = [DeclarationBinding extractDeclarationFromJSObject: declarationObject
+                                                                        inContext: context];
     
     bool hasBody = declaration->hasBody();
     JS_SET_RVAL(context, parameters, BOOLEAN_TO_JSVAL(hasBody));

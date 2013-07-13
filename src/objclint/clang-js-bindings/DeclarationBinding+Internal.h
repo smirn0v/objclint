@@ -11,9 +11,10 @@
 #include <clang-c/Index.h>
 #include "clang-cpp-api.h"
 
-@interface DeclarationBinding (Protected)
+@interface DeclarationBinding (Internal)
 
-- (clang::Decl*) extractDeclarationFromJSObject:(JSObject*) object;
-- (void) storeDeclaration:(clang::Decl*) declaration intoJSObject:(JSObject*) object;
++ (clang::Decl*) extractDeclarationFromJSObject:(JSObject*) object inContext:(JSContext*) context;
++ (void) storeDeclaration:(clang::Decl*) declaration intoJSObject:(JSObject*) object inContext:(JSContext*) context;
 
 @end
+
