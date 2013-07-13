@@ -50,6 +50,7 @@
 
     [_sessionsByProject      removeObjectForKey: projectIdentity];
     [_configurationByProject removeObjectForKey: projectIdentity];
+    [_issuesByProject        removeObjectForKey: projectIdentity];
 }
 
 - (BOOL) checkIfLocation:(NSString*) location wasCheckedForProjectIdentity:(NSString*) projectIdentity {

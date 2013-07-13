@@ -82,7 +82,7 @@ ObjclintCoordinatorImpl* createCoordinator(BOOL createIfNeeded, NSConnection** c
     [(*connection).rootProxy setProtocolForProxy: @protocol(ObjclintCoordinator)];
     id<ObjclintCoordinator> coordinator = (id<ObjclintCoordinator>) (*connection).rootProxy;
 
-    if(coordinator || NO == createIfNeeded)
+    if(coordinator || !createIfNeeded)
         return coordinator;
     
     *connection = [[[NSConnection alloc] init] autorelease];
@@ -110,10 +110,15 @@ void objclintStart() {
     NSConnection* connection = nil;
     
     ObjclintCoordinatorImpl* coordinator =
-    createCoordinator(/* createIfNeeded */ YES, &connection);
+    createCoordinator(/* createIfNeeded */ NO, &connection);
+    
+    BOOL coordinatorAlreadyStarted = !!coordinator && !!connection;
+    
+    if(!coordinatorAlreadyStarted)
+        coordinator = createCoordinator(/* createIfNeeded */ YES, &connection);
     
     if(!coordinator || !connection)
-        exit(1);
+        exit(!coordinatorAlreadyStarted);
     
     [coordinator clearSessionForProjectIdentity: projectIdentity()];
     [coordinator setConfiguration: objclintConfiguration forProjectIdentity: projectIdentity()];
