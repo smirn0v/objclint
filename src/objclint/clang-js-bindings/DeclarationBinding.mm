@@ -78,8 +78,7 @@ static JSFunctionSpec declaration_methods[] = {
 }
 
 - (void)dealloc {
-    if(_jsPrototype)
-        JS_RemoveObjectRoot(_bindings.context, &_jsPrototype);
+    JS_RemoveObjectRoot(_bindings.context, &_jsPrototype);
     [super dealloc];
 }
 
