@@ -31,6 +31,8 @@ sleep 1
 
 set +e
 
+TEMP_FILE=`mktemp -t "xcodebuild-"`
+
 export OBJCLINT=YES
 xcodebuild \
     CC="$DISPATCHER"\
@@ -46,10 +48,14 @@ xcodebuild \
     CODE_SIGNING_REQUIRED=NO\
     --resource-rules=/tmp/ObjclintResourceRules.plist\
     -PBXBuildsContinueAfterErrors=YES\
-    "$@"
+    "$@" &> "$TEMP_FILE"
 
 # ommiting '-job 1' here may cause multiple analyzis of header files
 # but lack of it significantly increases build time
+
+if [ $? != 0 ]; then
+    echo "Got errors while running xcodebuild. See '$TEMP_FILE' for details" >&2
+fi
 
 set -e
 
