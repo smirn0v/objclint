@@ -11,8 +11,6 @@ import string
 from subprocess import call,check_output
 
 def main():
-#    sys.stdout = open('log', 'a')
-#    sys.stderr = sys.stdout
 
     objclint_fake_cc="-objclint-fake-cc"
     objclint_fake_cxx="-objclint-fake-cxx"
@@ -32,7 +30,7 @@ def main():
         dependencies_file = sys.argv[sys.argv.index("-MF")+1]
     except: pass
 
-    sys.argv[0] = "/opt/local/bin/objclint-fake-compiler"
+    sys.argv[0] = os.path.dirname(os.path.realpath(__file__))+"/objclint-pseudo-compiler"
 
     if input_file == "/dev/null": 
         sys.argv[0] = "clang"
