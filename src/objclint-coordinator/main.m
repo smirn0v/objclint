@@ -117,11 +117,11 @@ void objclintStart() {
     if(!coordinatorAlreadyStarted)
         coordinator = createCoordinator(/* createIfNeeded */ YES, &connection);
     
-    if(!coordinator || !connection)
-        exit(!coordinatorAlreadyStarted);
-    
     [coordinator clearSessionForProjectIdentity: projectIdentity()];
     [coordinator setConfiguration: objclintConfiguration forProjectIdentity: projectIdentity()];
+    
+    if(!coordinator || !connection || coordinatorAlreadyStarted)
+        exit(!coordinatorAlreadyStarted);
     
     NSRunLoop* runLoop = [NSRunLoop currentRunLoop];
     [connection addRunLoop:runLoop];

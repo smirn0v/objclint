@@ -319,7 +319,8 @@ static JSFunctionSpec cursor_methods[] = {
     if(!predecessors)
         predecessors = [[[CursorArray alloc] init] autorelease];
 
-    objc_setAssociatedObject(self,predecessors,predecessors,OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    // TODO: make sure predecessors array lives as long as cursor
+    //    objc_setAssociatedObject(self,predecessors,predecessors,OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     JS_SetPrivate(_bindings.context, cursorJSObject, @{
                   kCursorBindingKey: self,
                   kCursorPredecessorsKey: predecessors
