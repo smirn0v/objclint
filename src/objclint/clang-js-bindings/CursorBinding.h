@@ -8,12 +8,14 @@
 
 #import <Foundation/Foundation.h>
 #import "ClangBinding.h"
+#import "CursorArray.h"
 
 #include <clang-c/Index.h>
 
 @interface CursorBinding : NSObject<ClangBinding>
 
 - (CXCursor) cursorFromJSObject:(JSObject*) object;
-- (JSObject*) JSObjectFromCursor:(CXCursor) cursor;
+- (JSObject*) JSObjectFromCursor:(CXCursor) cursor
+                withPredecessors:(CursorArray*) predecessors;
 
 @end

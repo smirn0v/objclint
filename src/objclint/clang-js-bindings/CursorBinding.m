@@ -11,7 +11,11 @@
 #import "TokenBinding.h"
 #import "ObjCMethodDeclarationBinding.h"
 
+#include <objc/runtime.h>
 #include "clang-js-utils.h"
+
+static NSString* const kCursorBindingKey = @"kCursorBindingKey";
+static NSString* const kCursorPredecessorsKey = @"kCursorPredecessorsKey";
 
 static JSClass cursor_class = {
     .name        = "Cursor",
@@ -27,11 +31,31 @@ static JSClass cursor_class = {
     JSCLASS_NO_OPTIONAL_MEMBERS
 };
 
-JSBool cursor_get_lexical_parent(JSContext* context, uintN argc, jsval* parameters) {
+void extract_privates(JSContext* context,
+                      jsval* parameters,
+                      CursorBinding** cursorBinding,
+                      CursorArray** predecessors,
+                      CXCursor* cursor) {
     
     JSObject* cursorObject = JS_THIS_OBJECT(context, parameters);
-    CursorBinding* cursorBinding = JS_GetPrivate(context, cursorObject);
-    CXCursor cursor = [cursorBinding cursorFromJSObject: cursorObject];
+    NSDictionary* dict = JS_GetPrivate(context, cursorObject);
+    CursorBinding* binding = dict[kCursorBindingKey];
+    CursorArray*   cursorPredecessors = dict[kCursorPredecessorsKey];
+    
+    if(cursorBinding)
+        *cursorBinding = binding;
+    
+    if(predecessors)
+        *predecessors = cursorPredecessors;
+    
+    if(cursor)
+        *cursor = [binding cursorFromJSObject: cursorObject];
+}
+
+JSBool cursor_get_lexical_parent(JSContext* context, uintN argc, jsval* parameters) {
+    CursorBinding* cursorBinding;
+    CXCursor cursor;
+    extract_privates(context, parameters, &cursorBinding, NULL, &cursor);
     
     CXCursor lexicalParentCursor = clang_getCursorLexicalParent(cursor);
     if(clang_Cursor_isNull(lexicalParentCursor)) {
@@ -39,7 +63,8 @@ JSBool cursor_get_lexical_parent(JSContext* context, uintN argc, jsval* paramete
         return JS_TRUE;
     }
     
-    JSObject* lexicalParentCursorObj = [cursorBinding JSObjectFromCursor: lexicalParentCursor];
+    JSObject* lexicalParentCursorObj = [cursorBinding JSObjectFromCursor: lexicalParentCursor
+                                                        withPredecessors: nil];
     
     jsval result = OBJECT_TO_JSVAL(lexicalParentCursorObj);
     JS_SET_RVAL(context, parameters, result);
@@ -48,9 +73,9 @@ JSBool cursor_get_lexical_parent(JSContext* context, uintN argc, jsval* paramete
 }
 
 JSBool cursor_get_semantic_parent(JSContext* context, uintN argc, jsval* parameters) {
-    JSObject* cursorObject = JS_THIS_OBJECT(context, parameters);
-    CursorBinding* cursorBinding = JS_GetPrivate(context, cursorObject);
-    CXCursor cursor = [cursorBinding cursorFromJSObject: cursorObject];
+    CursorBinding* cursorBinding;
+    CXCursor cursor;
+    extract_privates(context, parameters, &cursorBinding, NULL, &cursor);
     
     CXCursor semanticParentCursor = clang_getCursorSemanticParent(cursor);
     if(clang_Cursor_isNull(semanticParentCursor)) {
@@ -58,7 +83,8 @@ JSBool cursor_get_semantic_parent(JSContext* context, uintN argc, jsval* paramet
         return JS_TRUE;
     }
     
-    JSObject* semanticParentCursorObj = [cursorBinding JSObjectFromCursor: semanticParentCursor];
+    JSObject* semanticParentCursorObj = [cursorBinding JSObjectFromCursor: semanticParentCursor
+                                                         withPredecessors: nil];
     
     jsval result = OBJECT_TO_JSVAL(semanticParentCursorObj);
     JS_SET_RVAL(context, parameters, result);
@@ -75,13 +101,14 @@ JSBool cursor_visit_children(JSContext* context, uintN argc, jsval* parameters) 
     if (!JS_ConvertArguments(context, argc, JS_ARGV(cx, parameters), "f", &ignoreFunction))
         return JS_FALSE;
     
-    JSObject* cursorObject = JS_THIS_OBJECT(context, parameters);
-    CursorBinding* cursorBinding = JS_GetPrivate(context, cursorObject);
-    CXCursor cursor = [cursorBinding cursorFromJSObject: cursorObject];
+    CursorBinding* cursorBinding;
+    CXCursor cursor;
+    extract_privates(context, parameters, &cursorBinding, NULL, &cursor);
     
     clang_visitChildrenWithBlock(cursor, ^enum CXChildVisitResult(CXCursor childCursor, CXCursor parent) {
         
-        JSObject* childCursorObject = [cursorBinding JSObjectFromCursor: childCursor];
+        JSObject* childCursorObject = [cursorBinding JSObjectFromCursor: childCursor
+                                                       withPredecessors: nil];
         
         jsval retVal;
         jsval childVal = OBJECT_TO_JSVAL(childCursorObject);
@@ -95,9 +122,9 @@ JSBool cursor_visit_children(JSContext* context, uintN argc, jsval* parameters) 
 }
 
 JSBool cursor_get_tokens(JSContext* context, uintN argc, jsval* parameters) {
-    JSObject* cursorObject = JS_THIS_OBJECT(context, parameters);
-    CursorBinding* cursorBinding = JS_GetPrivate(context, cursorObject);
-    CXCursor cursor = [cursorBinding cursorFromJSObject: cursorObject];
+    CursorBinding* cursorBinding;
+    CXCursor cursor;
+    extract_privates(context, parameters, &cursorBinding, NULL, &cursor);
     
     JSObject* tokens = [cursorBinding.bindings.tokenBinding tokensJSArrayFromCursor: cursor];
     JS_SET_RVAL(context, parameters, OBJECT_TO_JSVAL(tokens));
@@ -105,9 +132,9 @@ JSBool cursor_get_tokens(JSContext* context, uintN argc, jsval* parameters) {
 }
 
 JSBool cursor_is_declaration(JSContext* context, uintN argc, jsval* parameters) {
-    JSObject* cursorObject = JS_THIS_OBJECT(context, parameters);
-    CursorBinding* cursorBinding = JS_GetPrivate(context, cursorObject);
-    CXCursor cursor = [cursorBinding cursorFromJSObject: cursorObject];
+    CursorBinding* cursorBinding;
+    CXCursor cursor;
+    extract_privates(context, parameters, &cursorBinding, NULL, &cursor);
     
     bool isDeclaration = clang_isDeclaration(clang_getCursorKind(cursor));
     JS_SET_RVAL(context, parameters, BOOLEAN_TO_JSVAL(isDeclaration));
@@ -115,9 +142,9 @@ JSBool cursor_is_declaration(JSContext* context, uintN argc, jsval* parameters) 
 }
 
 JSBool cursor_get_objc_method_declaration(JSContext* context, uintN argc, jsval* parameters) {
-    JSObject* cursorObject = JS_THIS_OBJECT(context, parameters);
-    CursorBinding* cursorBinding = JS_GetPrivate(context, cursorObject);
-    CXCursor cursor = [cursorBinding cursorFromJSObject: cursorObject];
+    CursorBinding* cursorBinding;
+    CXCursor cursor;
+    extract_privates(context, parameters, &cursorBinding, NULL, &cursor);
     
     ObjCMethodDeclarationBinding* binding = cursorBinding.bindings.objCMethodDeclarationBinding;
     JSObject* declarationObj = [binding declarationJSObjectFromCursor: cursor];
@@ -129,9 +156,9 @@ JSBool cursor_get_objc_method_declaration(JSContext* context, uintN argc, jsval*
 }
 
 JSBool cursor_equal(JSContext* context, uintN argc, jsval* parameters) {
-    JSObject* cursorObject = JS_THIS_OBJECT(context, parameters);
-    CursorBinding* cursorBinding = JS_GetPrivate(context, cursorObject);
-    CXCursor cursor = [cursorBinding cursorFromJSObject: cursorObject];
+    CursorBinding* cursorBinding;
+    CXCursor cursor;
+    extract_privates(context, parameters, &cursorBinding, NULL, &cursor);
     
     JSObject* anotherCursorObject;
     if (!JS_ConvertArguments(context, argc, JS_ARGV(context, parameters), "o", &anotherCursorObject))
@@ -145,7 +172,37 @@ JSBool cursor_equal(JSContext* context, uintN argc, jsval* parameters) {
     return JS_TRUE;
 }
 
+JSBool cursor_get_predecessor(JSContext* context, uintN argc, jsval* parameters) {
+    CursorBinding* cursorBinding;
+    CursorArray* predecessors;
+    CXCursor cursor;
+    extract_privates(context, parameters, &cursorBinding, &predecessors, &cursor);
+
+    uint32_t distance;
+    if (!JS_ConvertArguments(context, argc, JS_ARGV(context, parameters), "u", &distance))
+        return JS_FALSE;
+
+    jsval returnValue;
+    if(!predecessors || predecessors.length <= distance)
+        returnValue = JSVAL_NULL;
+    else {
+        CXCursor precedingCursor = [predecessors cursorAtIndex: predecessors.length - distance - 1];
+        if(clang_Cursor_isNull(precedingCursor))
+            returnValue = JSVAL_NULL;
+        else {
+            JSObject* precedingCursorJS = [cursorBinding JSObjectFromCursor: precedingCursor
+                                                           withPredecessors: nil];
+            returnValue = OBJECT_TO_JSVAL(precedingCursorJS);
+        }
+    }
+    
+    JS_SET_RVAL(context, parameters, returnValue);
+    
+    return JS_TRUE;
+}
+
 static JSFunctionSpec cursor_methods[] = {
+    JS_FS("getPredecessor",   cursor_get_predecessor,1,0),
     JS_FS("getLexicalParent", cursor_get_lexical_parent,0,0),
     JS_FS("getSemanticParent",cursor_get_semantic_parent,0,0),
     JS_FS("visitChildren",    cursor_visit_children,1,0),
@@ -220,7 +277,8 @@ static JSFunctionSpec cursor_methods[] = {
     return cursorObj;
 }
 
-- (JSObject*) JSObjectFromCursor:(CXCursor) cursor {
+- (JSObject*) JSObjectFromCursor:(CXCursor) cursor
+                withPredecessors:(CursorArray*) predecessors {
     
     JSObject* cursorJSObject = JS_NewObject(_bindings.context, _jsClass, _jsPrototype, NULL);
     
@@ -258,14 +316,21 @@ static JSFunctionSpec cursor_methods[] = {
     setJSProperty_CXString(_bindings.context, cursorJSObject, "kind", kind);
     clang_disposeString(kind);
     
-    JS_SetPrivate(_bindings.context, cursorJSObject, self);
+    if(!predecessors)
+        predecessors = [[[CursorArray alloc] init] autorelease];
+
+    objc_setAssociatedObject(self,predecessors,predecessors,OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    JS_SetPrivate(_bindings.context, cursorJSObject, @{
+                  kCursorBindingKey: self,
+                  kCursorPredecessorsKey: predecessors
+                  });
     
     return cursorJSObject;
 }
 
 #pragma mark - Private
 
-- (void) storeClangCursorEssentials:(CXCursor)cursor intoJSObject:(JSObject*) object{
+- (void) storeClangCursorEssentials:(CXCursor)cursor intoJSObject:(JSObject*) object {
     
     setJSProperty_Int(_bindings.context, object, "_kind", cursor.kind);
     setJSProperty_Int(_bindings.context, object, "_xdata", cursor.xdata);
@@ -276,3 +341,5 @@ static JSFunctionSpec cursor_methods[] = {
 }
 
 @end
+
+

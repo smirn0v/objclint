@@ -1,14 +1,20 @@
-var wrongNames = ["btn","nc","vc","zabor","skrepa","tmp","temp"];
+var wrongNames = ["btn","btn1","nc","vc","vc1","zabor","skrepa","tmp","temp","tmp1","temp1"];
 
 function validateName(varName) {
     if(varName.length==1) {
-        lint.reportError("Invalid variable name '"+varName+"'. Var name should not be 1 character long");
-        return;
-    }
-    for(var i=0; i<wrongNames.length; i++) {
-        if(varName.indexOf(wrongNames[i]) == 0) {
-            lint.reportError("Ivalid variable name '"+varName+"'. Var name should not be in the following list ("+ wrongNames+")");
+        // ForStmt(DeclStmt(VarDecl))
+        //    1         0
+        var parentCursor = cursor.getPredecessor(1);
+        if(cursor.kind == "VarDecl" && parentCursor != null && parentCursor.kind == "ForStmt")
             return;
+        lint.reportError("Invalid variable name '"+varName+"'. Var name should not be 1 character long");
+    }
+    else {
+        for(var i=0; i<wrongNames.length; i++) {
+            if(varName == wrongNames[i]) {
+                lint.reportError("Ivalid variable name '"+varName+"'. Var name should not be in the following list ("+ wrongNames+")");
+                return;
+            }
         }
     }
 }

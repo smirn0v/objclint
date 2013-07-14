@@ -80,22 +80,33 @@
 - (BOOL) validateTranslationUnit:(CXTranslationUnit) translationUnit {
     _errorOccured = NO;
     CXCursor cursor = clang_getTranslationUnitCursor(translationUnit);
+    CursorArray* predecessors = [[[CursorArray alloc] init] autorelease];
     
-    clang_visitChildrenWithBlock(cursor, ^enum CXChildVisitResult(CXCursor cursor, CXCursor parent) {
-        @autoreleasepool {
-            
-            BOOL visitChilds = NO;
-            [self validateCursor: cursor visitChilds: &visitChilds];
-            
-            if(visitChilds)
-                return CXChildVisit_Recurse;
-            
-            return CXChildVisit_Continue;
-            
-        }
-    });
+    [self visitCursor: cursor withPredecessors:predecessors visitCurrentCursor:NO];
     
     return !_errorOccured;
+}
+
+- (void) visitCursor:(CXCursor) cursor
+    withPredecessors:(CursorArray*) predecessors
+  visitCurrentCursor:(BOOL) visitCurrentCursor {
+    
+    BOOL visitChilds = YES;
+
+    if(visitCurrentCursor)
+        [self validateCursor: cursor withPredecessors: predecessors visitChilds: &visitChilds];
+    
+    if(!visitChilds)
+        return;
+    
+    [predecessors addCursor: cursor];
+    clang_visitChildrenWithBlock(cursor, ^enum CXChildVisitResult(CXCursor child, CXCursor currentCursor) {
+        @autoreleasepool {
+            [self visitCursor:child withPredecessors:predecessors visitCurrentCursor:YES];
+            return CXChildVisit_Continue;
+        }
+    });
+    [predecessors removeCursor: cursor];
 }
 
 #pragma mark - JSEnvironmentDelegate
@@ -122,7 +133,9 @@
 
 #pragma mark - Private
 
-- (void) validateCursor:(CXCursor) cursor visitChilds:(BOOL*) visitChilds {
+- (void) validateCursor:(CXCursor) cursor
+       withPredecessors:(CursorArray*) predecessors
+            visitChilds:(BOOL*) visitChilds {
 
     BOOL safetyTempVar;
     if(!visitChilds)
@@ -157,7 +170,8 @@
 
     if(!alreadyChecked.boolValue) {
         _currentCursor = cursor;
-        JSObject* cursorObject = [_clangBindings.cursorBinding JSObjectFromCursor: cursor];
+        JSObject* cursorObject = [_clangBindings.cursorBinding JSObjectFromCursor: cursor
+                                                                 withPredecessors: predecessors];
         setJSProperty_JSObject(_jsEnvironment.context, _jsEnvironment.global, "cursor", cursorObject);
         [_scriptsLoader runScriptsWithResultHandler:^(jsval value) {
             

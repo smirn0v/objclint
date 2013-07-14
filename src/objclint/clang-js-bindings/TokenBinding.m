@@ -133,7 +133,8 @@ static JSFunctionSpec token_methods[] = {
     setJSProperty_UInt(_bindings.context, tokenObject, "lineNumber", line);
     setJSProperty_UInt(_bindings.context, tokenObject, "column", column);
     
-    JSObject* cursorObj = [_bindings.cursorBinding JSObjectFromCursor: cursor];
+    JSObject* cursorObj = [_bindings.cursorBinding JSObjectFromCursor: cursor
+                                                     withPredecessors: nil];
     setJSProperty_JSObject(_bindings.context, tokenObject, "cursor", cursorObj);
     
     clang_disposeString(tokenSpelling);
