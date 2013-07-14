@@ -11,6 +11,7 @@
 static NSString* const kObjclintServiceName = @"ru.smirn0v.objclint.coordinator";
 
 static NSString* const kObjclintConfigurationLintsDirs = @"lints-directories";
+static NSString* const kObjclintConfigurationIgnores   = @"ignores";
 
 @class ObjclintIssue;
 

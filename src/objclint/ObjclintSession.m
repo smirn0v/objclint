@@ -149,10 +149,20 @@
     }
     
     if(!_checkedPaths[filePath]) {
-        BOOL coordinatorStatus = [_coordinator checkIfLocation: filePath
-                                  wasCheckedForProjectIdentity: _projectPath];
+        BOOL coordinatorAlreadyChecked = [_coordinator checkIfLocation: filePath
+                                          wasCheckedForProjectIdentity: _projectPath];
+        __block BOOL ignored = NO;
         
-        if(coordinatorStatus) {
+        NSDictionary* configuration = [_coordinator configurationForProjectIdentity: _projectPath];
+        NSArray* ignores = configuration[kObjclintConfigurationIgnores];
+        [ignores enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            NSString* ignoredPath = [_projectPath stringByAppendingPathComponent: obj];
+            NSLog(@"ignored %@, current %@",ignoredPath,filePath);
+            ignored = ignored || [ignoredPath isEqualToString: filePath];
+            *stop = ignored;
+        }];
+        
+        if(coordinatorAlreadyChecked || ignored) {
             _checkedPaths[filePath] = @YES;
         } else {
             // mark as checked globally
