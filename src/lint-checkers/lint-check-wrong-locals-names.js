@@ -1,7 +1,8 @@
 var wrongNames = ["btn","btn1","nc","vc","vc1","zabor","skrepa","tmp","temp","tmp1","temp1"];
+var exceptions = ["x","y","z"];
 
 function validateName(varName) {
-    if(varName.length==1) {
+    if(varName.length==1 && exceptions.indexOf(varName) == -1) {
         // ForStmt(DeclStmt(VarDecl))
         //    1         0
         var parentCursor = cursor.getPredecessor(1);
