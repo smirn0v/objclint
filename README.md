@@ -20,3 +20,7 @@ objclint is a clang based tool for performing code style guidelines check.
 * pragma objclint ignore
 * support for '#import' in js validators
 * ...
+
+## TODO checkers
+
+* disallow retains in arc mode
