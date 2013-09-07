@@ -50,13 +50,16 @@ xcodebuild \
     -PBXBuildsContinueAfterErrors=YES\
     "$@" &> "$TEMP_FILE"
 
+XCODE_RESULT=$?
+
 # ommiting '-job 1' here may cause multiple analyzis of header files
 # but lack of it significantly increases build time
 
-if [ $? != 0 ]; then
+if [ $XCODE_RESULT != 0 ]; then
     echo "Got errors while running xcodebuild. See '$TEMP_FILE' for details" >&2
 fi
 
 set -e
 
 "$COORDINATOR" -report
+exit $XCODE_RESULT||$?
