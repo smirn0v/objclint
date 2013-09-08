@@ -2,13 +2,11 @@ if(cursor.kind == "ObjCPropertyDecl") {
 
     var tokens = cursor.getTokens();
     var propertyName = tokens[tokens.length-2].spelling.toLowerCase();
+    var propertyDecl = cursor.getObjCPropertyDeclaration();
 
-    if(propertyName.indexOf("delegate")!=-1) {
-
-        var retainKeywords = tokens.filter(function(token) {return token.kind=="Identifier" && token.spelling=="retain"});
-
-        if(retainKeywords.length != 0) {
-            lint.reportError("Delegate property '"+tokens[tokens.length-2].spelling+"' must not be declared with 'retain' qualifier");
+    if(propertyDecl != null && propertyName.indexOf("delegate")!=-1) {
+        if(propertyDecl.isRetaining()) {
+            lint.reportError("Delegate property '"+tokens[tokens.length-2].spelling+"' must not be declared with 'retain' or 'strong' qualifier");
         }
         
     }
