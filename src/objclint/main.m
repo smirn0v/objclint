@@ -13,19 +13,21 @@ id<ObjclintCoordinator> aquireObjclintCoordinator() {
 }
 
 int main(int argc, char *argv[]) {
+
     // immediately flush stdout
     setvbuf(stdout, NULL, _IONBF, 0);
 
     @autoreleasepool {
             
         id<ObjclintCoordinator> coordinator = aquireObjclintCoordinator();
+
         ObjclintSession* session = [[[ObjclintSession alloc] initWithCoordinator: coordinator] autorelease];
-               
+
         CXIndex index = clang_createIndex(0, 0);
         CXTranslationUnit translationUnit = NULL;
-               
-        translationUnit = clang_parseTranslationUnit(index, 0,(const char**) argv, argc, 0, 0, CXTranslationUnit_None);
         
+        translationUnit = clang_parseTranslationUnit(index, 0,(const char**) argv, argc, 0, 0, CXTranslationUnit_DetailedPreprocessingRecord);
+
         if(translationUnit) {
             [session validateTranslationUnit: translationUnit];
             clang_disposeTranslationUnit(translationUnit);
