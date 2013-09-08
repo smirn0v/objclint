@@ -3,12 +3,15 @@ objclint
 
 objclint is a clang based tool for performing code style guidelines check.
 
+See http://objclint.ru for installation/usage.
+
 ## DONE
 
 * Works with recent version of XCode
 * Installation script
 * JavaScript based validators
 * Text reports generator
+* Disable objclint with ``__objclint`` macro
 * Configuration file
  * Support for multiple lints directories
  * Support for ignored files
@@ -17,7 +20,6 @@ objclint is a clang based tool for performing code style guidelines check.
 
 * do not interpret JS scripts for each translation unit. do it once. 
 * support for Unicode in JS
-* pragma objclint ignore
 * support for '#import' in js validators
 * ...
 
