@@ -46,6 +46,7 @@ xcodebuild \
     GCC_PRECOMPILE_PREFIX_HEADER=NO\
     CODE_SIGN_IDENTITY=""\
     CODE_SIGNING_REQUIRED=NO\
+    GCC_PREPROCESSOR_DEFINITIONS='${inherited} __objclint'\
     --resource-rules=/tmp/ObjclintResourceRules.plist\
     -PBXBuildsContinueAfterErrors=YES\
     "$@" &> "$TEMP_FILE"
