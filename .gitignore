@@ -16,6 +16,10 @@ xcuserdata
 # AppCode
 .idea
 
+# Docs
+
+docs/build
+
 # Etc
 objclint-setup-error.log
 
