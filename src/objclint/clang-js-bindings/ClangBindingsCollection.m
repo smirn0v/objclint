@@ -19,17 +19,18 @@
         _cursorBinding      = [[CursorBinding alloc] initWithBindingsCollection: self];
         _tokenBinding       = [[TokenBinding alloc] initWithBindingsCollection: self];
         _declarationBinding = [[DeclarationBinding alloc] initWithBindingsCollection: self];
-        _objCMethodDeclarationBinding = [[ObjCMethodDeclarationBinding alloc] initWithBindingsCollection: self];
+        _objCMethodDeclarationBinding   = [[ObjCMethodDeclarationBinding alloc] initWithBindingsCollection: self];
+        _objCPropertyDeclarationBinding = [[ObjCPropertyDeclarationBinding alloc] initWithBindingsCollection: self];
     }
     return self;
 }
 
-- (void)dealloc
-{
-    [_cursorBinding release];
-    [_tokenBinding release];
-    [_declarationBinding release];
-    [_objCMethodDeclarationBinding release];
+- (void)dealloc {
+    [_cursorBinding                  release];
+    [_tokenBinding                   release];
+    [_declarationBinding             release];
+    [_objCMethodDeclarationBinding   release];
+    [_objCPropertyDeclarationBinding release];
     [super dealloc];
 }
 

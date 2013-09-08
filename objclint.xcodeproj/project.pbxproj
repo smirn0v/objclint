@@ -29,6 +29,7 @@
 		B29A253817188CED0065B533 /* ObjclintIssue.m in Sources */ = {isa = PBXBuildFile; fileRef = B29A253617188CED0065B533 /* ObjclintIssue.m */; };
 		B29A253C171898B00065B533 /* LintBinding.m in Sources */ = {isa = PBXBuildFile; fileRef = B29A253B171898B00065B533 /* LintBinding.m */; };
 		B29A25461719542C0065B533 /* JSScriptsLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = B29A25451719542C0065B533 /* JSScriptsLoader.m */; };
+		B2EF235317DCE2AF00ECEF86 /* ObjCPropertyDeclarationBinding.mm in Sources */ = {isa = PBXBuildFile; fileRef = B2EF235217DCE2AF00ECEF86 /* ObjCPropertyDeclarationBinding.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -114,6 +115,8 @@
 		B29A25431719542C0065B533 /* js.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = js.h; sourceTree = "<group>"; };
 		B29A25441719542C0065B533 /* JSScriptsLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSScriptsLoader.h; sourceTree = "<group>"; };
 		B29A25451719542C0065B533 /* JSScriptsLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSScriptsLoader.m; sourceTree = "<group>"; };
+		B2EF235117DCE2AE00ECEF86 /* ObjCPropertyDeclarationBinding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjCPropertyDeclarationBinding.h; sourceTree = "<group>"; };
+		B2EF235217DCE2AF00ECEF86 /* ObjCPropertyDeclarationBinding.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ObjCPropertyDeclarationBinding.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -168,6 +171,8 @@
 				B26867C616AC714700742C6D /* DeclarationBinding.mm */,
 				B26867C816AC7CA500742C6D /* ObjCMethodDeclarationBinding.h */,
 				B26867C916AC7CA600742C6D /* ObjCMethodDeclarationBinding.mm */,
+				B2EF235117DCE2AE00ECEF86 /* ObjCPropertyDeclarationBinding.h */,
+				B2EF235217DCE2AF00ECEF86 /* ObjCPropertyDeclarationBinding.mm */,
 				B26867CB16AC87FE00742C6D /* DeclarationBinding+Internal.h */,
 				B26867CC16AC87FE00742C6D /* DeclarationBinding+Internal.mm */,
 				B267FB4C16B4271500E9FC66 /* ClangBindings.h */,
@@ -386,6 +391,7 @@
 				B25515AC171DD99F00F18E03 /* JSEnvironment.m in Sources */,
 				B25515AF171DDD6900F18E03 /* JSError.m in Sources */,
 				B23A853017929A1A00C08E1B /* CursorArray.m in Sources */,
+				B2EF235317DCE2AF00ECEF86 /* ObjCPropertyDeclarationBinding.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

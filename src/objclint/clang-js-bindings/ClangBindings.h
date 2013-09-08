@@ -11,3 +11,4 @@
 #import "TokenBinding.h"
 #import "DeclarationBinding.h"
 #import "ObjCMethodDeclarationBinding.h"
+#import "ObjCPropertyDeclarationBinding.h"

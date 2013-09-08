@@ -76,7 +76,7 @@ static JSFunctionSpec objc_method_declaration_methods[] = {
         
         // not sure if must to, but it's definetely safer to 'retain' prototype here.
         // please correct me if we can ommit this.
-        JS_AddNamedObjectRoot(_bindings.context, &_jsPrototype, "objc-declaration-prototype");
+        JS_AddNamedObjectRoot(_bindings.context, &_jsPrototype, "objc-method-declaration-prototype");
     }
     return self;
 }

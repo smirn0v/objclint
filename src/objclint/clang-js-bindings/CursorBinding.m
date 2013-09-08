@@ -155,6 +155,21 @@ JSBool cursor_get_objc_method_declaration(JSContext* context, uintN argc, jsval*
     return JS_TRUE;
 }
 
+JSBool cursor_get_objc_property_declaration(JSContext* context, uintN argc, jsval* parameters) {
+    CursorBinding* cursorBinding;
+    CXCursor cursor;
+    extract_privates(context, parameters, &cursorBinding, NULL, &cursor);
+    
+    ObjCPropertyDeclarationBinding* binding = cursorBinding.bindings.objCPropertyDeclarationBinding;
+    JSObject* declarationObj = [binding declarationJSObjectFromCursor: cursor];
+    
+    jsval returnValue = OBJECT_TO_JSVAL(declarationObj);
+    JS_SET_RVAL(context, parameters, returnValue);
+    
+    return JS_TRUE;
+
+}
+
 JSBool cursor_equal(JSContext* context, uintN argc, jsval* parameters) {
     CursorBinding* cursorBinding;
     CXCursor cursor;
@@ -209,6 +224,7 @@ static JSFunctionSpec cursor_methods[] = {
     JS_FS("getTokens",        cursor_get_tokens,0,0),
     JS_FS("isDeclaration",    cursor_is_declaration,0,0),
     JS_FS("getObjCMethodDeclaration", cursor_get_objc_method_declaration,0,0),
+    JS_FS("getObjCPropertyDeclaration", cursor_get_objc_property_declaration,0,0),
     JS_FS("equal",            cursor_equal,1,0),
     JS_FS_END
 };

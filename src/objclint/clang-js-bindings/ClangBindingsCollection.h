@@ -14,6 +14,7 @@
 @class TokenBinding;
 @class DeclarationBinding;
 @class ObjCMethodDeclarationBinding;
+@class ObjCPropertyDeclarationBinding;
 
 @interface ClangBindingsCollection : NSObject
 
@@ -23,6 +24,7 @@
 @property(nonatomic,readonly) TokenBinding* tokenBinding;
 @property(nonatomic,readonly) DeclarationBinding* declarationBinding;
 @property(nonatomic,readonly) ObjCMethodDeclarationBinding* objCMethodDeclarationBinding;
+@property(nonatomic,readonly) ObjCPropertyDeclarationBinding* objCPropertyDeclarationBinding;
 
 - (id) initWithContext:(JSContext*) context;
 
