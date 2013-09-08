@@ -8,6 +8,13 @@ Welcome to Objclint's documentation!
 
 Objclint is clang based tool to perform code style checking on Objective-C projects. Each rule is just JS script.
 
+:Author:
+    Alexander Smirnov. alexander [at] smirn0v.ru
+:Version:
+    0.1 Alpha. Try on your own risk.
+:Github:
+    https://github.com/smirn0v/objclint
+
 Contents:
 
 .. toctree::
