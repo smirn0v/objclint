@@ -30,6 +30,7 @@
     JSScriptsLoader*         _scriptsLoader;
     JSObject*                _lintObject;
     CXCursor                 _currentCursor;
+    NSDictionary*            _configuration;
     NSString*                _projectPath;
     NSMutableDictionary*     _checkedPaths;
     BOOL                     _errorOccured;
@@ -40,9 +41,10 @@
 - (id) initWithCoordinator:(id<ObjclintCoordinator>) coordinator {
     self = [super init];
     if (self) {
-        _coordinator  = [coordinator retain];
-        _projectPath  = [[[NSFileManager defaultManager] currentDirectoryPath] retain];
-        _checkedPaths = [[NSMutableDictionary alloc] init];
+        _coordinator    = [coordinator retain];
+        _projectPath    = [[[NSFileManager defaultManager] currentDirectoryPath] retain];
+        _configuration  = [[_coordinator configurationForProjectIdentity: _projectPath] retain];
+        _checkedPaths   = [[NSMutableDictionary alloc] init];
         
         NSArray* paths = [coordinator configurationForProjectIdentity: _projectPath][kObjclintConfigurationLintsDirs];
 
@@ -70,6 +72,7 @@
     [_clangBindings      release];
     [_jsEnvironment      release];
     [_coordinator        release];
+    [_configuration      release];
     [_projectPath        release];
     [_checkedPaths       release];
     [super dealloc];
@@ -151,16 +154,8 @@
     if(!_checkedPaths[filePath]) {
         BOOL coordinatorAlreadyChecked = [_coordinator checkIfLocation: filePath
                                           wasCheckedForProjectIdentity: _projectPath];
-        __block BOOL ignored = NO;
         
-        NSDictionary* configuration = [_coordinator configurationForProjectIdentity: _projectPath];
-        NSArray* ignores = configuration[kObjclintConfigurationIgnores];
-        [ignores enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            NSString* ignoredPath = [_projectPath stringByAppendingPathComponent: obj];
-            NSLog(@"ignored %@, current %@",ignoredPath,filePath);
-            ignored = ignored || [ignoredPath isEqualToString: filePath];
-            *stop = ignored;
-        }];
+        BOOL ignored = [self isIgnoredFilePath: filePath];
         
         if(coordinatorAlreadyChecked || ignored) {
             _checkedPaths[filePath] = @YES;
@@ -187,6 +182,23 @@
             
         }];
     }
+}
+
+- (BOOL) isIgnoredFilePath:(NSString*) filePath {
+    __block BOOL ignored = NO;
+    
+    NSArray* ignores = _configuration[kObjclintConfigurationIgnores];
+
+    [ignores enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        
+        NSString* ignoredPathRegex = [_projectPath stringByAppendingPathComponent: obj];
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", ignoredPathRegex];
+
+        ignored = ignored || [predicate evaluateWithObject: filePath];
+        *stop = ignored;
+    }];
+    
+    return ignored;
 }
 
 - (BOOL) cursorBelongsToProject:(CXCursor) cursor {
