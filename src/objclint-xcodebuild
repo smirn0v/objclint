@@ -3,27 +3,7 @@
 CURRENT_PATH="`dirname \"$0\"`"
 CURRENT_PATH="`( cd \"$CURRENT_PATH\" && pwd )`"
 
-DISPATCHER="$CURRENT_PATH/objclint-dispatcher.py"
 COORDINATOR="$CURRENT_PATH/objclint-coordinator"
-
-cat > /tmp/ObjclintResourceRules.plist << EOL
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-    <dict>
-        <key>rules</key>
-        <dict>
-            <key>.*</key>
-            <dict>
-                <key>omit</key>
-                <true/>
-                <key>weight</key>
-                <real>10</real>
-            </dict>
-        </dict>
-    </dict>
-</plist>
-EOL
 
 "$COORDINATOR" -start &>/dev/null&
 sleep 1
@@ -33,23 +13,10 @@ set +e
 
 TEMP_FILE=`mktemp -t "xcodebuild-"`
 
+d
+
 export OBJCLINT=YES
-xcodebuild \
-    CC="$DISPATCHER"\
-    CXX="$DISPATCHER"\
-    CCFLAGS="-objclint-fake-cc"\
-    CXXFLAGS="-objclint-fake-cxx"\
-    LD="true"\
-    LDPLUSPLUS="true"\
-    LIBTOOL="true"\
-    GCC_GENERATE_DEBUGGING_SYMBOLS=NO\
-    GCC_PRECOMPILE_PREFIX_HEADER=NO\
-    CODE_SIGN_IDENTITY=""\
-    CODE_SIGNING_REQUIRED=NO\
-    GCC_PREPROCESSOR_DEFINITIONS='${inherited} __objclint'\
-    --resource-rules=/tmp/ObjclintResourceRules.plist\
-    -PBXBuildsContinueAfterErrors=YES\
-    "$@" &> "$TEMP_FILE"
+xcodebuild -PBXBuildsContinueAfterErrors=YES "$@" &> "$TEMP_FILE"
 
 XCODE_RESULT=$?
 
